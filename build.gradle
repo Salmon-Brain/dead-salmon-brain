@@ -32,6 +32,10 @@ dependencies {
     implementation "org.apache.spark:spark-sql_$scalaVersionShort:$sparkVersion"
     implementation "org.apache.spark:spark-mllib_$scalaVersionShort:$sparkVersion"
     implementation "org.apache.commons:commons-math3:3.6.1"
+    implementation 'com.frugalmechanic:scala-optparse_2.12:1.1.3'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.3'
+    implementation 'com.github.housepower:clickhouse-native-jdbc:2.5.6'
+
     testImplementation "org.scalatest:scalatest_$scalaVersionShort:3.1.0"
     testImplementation "com.vladsch.flexmark:flexmark-all:0.35.10"
     testImplementation "org.mockito:mockito-scala_$scalaVersionShort:1.16.42"
@@ -39,4 +43,5 @@ dependencies {
 
 shadowJar {
     zip64 true
+    mergeServiceFiles("META-INF/services/org.apache.spark.sql.sources.DataSourceRegister")
 }

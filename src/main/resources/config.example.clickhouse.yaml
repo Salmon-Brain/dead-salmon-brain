@@ -1,0 +1,17 @@
+input: "Clickhouse"
+accessLog:
+  metricName: "case when regexp_extract(path, '^(/click/)') = '/click/' then 'clicks' else case when regexp_extract(path, '^(/view/)') = '/view/' then 'views' else 'none' end end "
+  metricValue: "1.0"
+  expUid: "'exp1'"
+  variantId: "case when regexp_extract(entityUid, '([0-4])$') != '' then 'treatment' else 'control' end"
+clickhouse:
+  driver: "com.github.housepower.jdbc.ClickHouseDriver"
+  url: "jdbc:clickhouse://127.0.0.1:9000"
+  user: "default"
+  password: "123"
+  dbtable: "salmon.nginx_logs"
+  filter: "timestamp >= '2021-09-29 00:00:00' AND timestamp <= '2021-10-03 00:00:00'"
+  mapping:
+    userId: "entityUid"
+    timestamp: "timestamp"
+    path: "path"
