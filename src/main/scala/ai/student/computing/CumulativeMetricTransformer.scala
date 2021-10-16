@@ -9,6 +9,7 @@ import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 
 import scala.collection.mutable
+import scala.util.hashing.MurmurHash3
 
 class CumulativeMetricTransformer(override val uid: String)
     extends Transformer
@@ -23,6 +24,13 @@ class CumulativeMetricTransformer(override val uid: String)
     "Data structure to compute ratio metrics"
   )
   setDefault(ratioMetricData, Seq[RatioMetricData]())
+
+  val numBuckets: Param[Int] = new Param[Int](
+    this,
+    "numBuckets",
+    "Change entity uid to synth buckets"
+  )
+  setDefault(numBuckets, -1)
 
   val isUseDate: Param[Boolean] = new Param[Boolean](
     this,
@@ -43,13 +51,18 @@ class CumulativeMetricTransformer(override val uid: String)
         $(entityIdColumn),
         $(experimentColumn),
         $(metricNameColumn),
-        $(entityCategoriesColumn),
         $(metricSourceColumn),
         $(additiveColumn)
       )
 
     val cumulativeMetrics = dataset
       .filter($(additiveColumn))
+      .withColumn(
+        $(entityIdColumn),
+        if ($(numBuckets) > 0)
+          uidToBucket($(numBuckets))(col($(entityIdColumn)), col($(experimentColumn)))
+        else col($(entityIdColumn))
+      )
       .groupBy(
         columns.head,
         columns.tail: _*
@@ -68,7 +81,6 @@ class CumulativeMetricTransformer(override val uid: String)
             $(variantColumn),
             $(entityIdColumn),
             $(experimentColumn),
-            $(entityCategoriesColumn),
             $(metricSourceColumn)
           )
         val cumulativeRatioMetrics = cumulativeMetrics
@@ -100,6 +112,10 @@ class CumulativeMetricTransformer(override val uid: String)
   override def transformSchema(schema: StructType): StructType = schema
 
   /** @group setParam */
+  def setNumBuckets(value: Int): this.type =
+    set(numBuckets, value)
+
+  /** @group setParam */
   def setRatioMetricsData(value: Seq[RatioMetricData]): this.type =
     set(ratioMetricData, value)
 
@@ -127,5 +143,11 @@ class CumulativeMetricTransformer(override val uid: String)
           case None => Metric(pair.newName, 0)
         }
       })
+  }
+
+  def uidToBucket(numBuckets: Int): UserDefinedFunction = udf {
+    (entityUid: String, experimentUid: String) =>
+      val hash = MurmurHash3.stringHash(entityUid ++ experimentUid)
+      math.abs(math.max(Int.MinValue + 1, hash) % numBuckets).toString
   }
 }

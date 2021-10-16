@@ -10,27 +10,27 @@ import org.scalatest.matchers.must.Matchers
 class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
   "ComputingFlow" should "be" in {
     import spark.implicits._
-    val metrics = seqExpDataToDataFrame(experimentDataGenerator(withAggregation = false))
+    val metrics =
+      seqExpDataToDataFrame(experimentDataGenerator(uplift = 0, withAggregation = false))
     val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
 
     val cumulativeDataByDateToVisualize = new CumulativeMetricTransformer()
       .setRatioMetricsData(ratioMetrics)
+      .setNumBuckets(256)
       .setIsUseDate(true)
       .transform(metrics)
       .groupBy(
         "date",
         "expUid",
         "metricName",
-        "entityCategory",
-        "categoryType",
-        "dataProvider",
+        "metricSource",
         "variantId"
       )
       .agg(
         mean($"metricValue") as "meanMetricValue",
         callUDF("approx_percentile", $"metricValue", lit(0.5)) as "medianMetricValue"
       )
-      .groupBy("expUid", "metricName", "entityCategory", "categoryType", "dataProvider")
+      .groupBy("expUid", "metricName", "metricSource")
       .pivot("variantId")
       .agg(collect_list(struct($"date", $"meanMetricValue", $"medianMetricValue")))
 
@@ -47,7 +47,7 @@ class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
     val result = statResult
       .join(
         cumulativeDataByDateToVisualize,
-        Seq("expUid", "metricName", "entityCategory", "categoryType", "dataProvider")
+        Seq("expUid", "metricName", "metricSource")
       )
 
     result.select($"statisticsData.srm").collect().map(_.getAs[Boolean]("srm")).foreach { srm =>

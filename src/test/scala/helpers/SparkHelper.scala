@@ -1,10 +1,13 @@
 package helpers
 
-import org.apache.spark.sql.{SQLContext, SparkSession}
-import org.apache.spark.{SparkConf, SparkContext}
-
+import org.apache.log4j.{ Level, Logger }
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
 
 trait SparkHelper {
+  Logger.getLogger("org").setLevel(Level.ERROR)
+  Logger.getLogger("akka").setLevel(Level.ERROR)
+
   lazy val conf = SparkHelper._sparkConf
   lazy val spark = SparkHelper._spark
   lazy val sc = SparkHelper._sc

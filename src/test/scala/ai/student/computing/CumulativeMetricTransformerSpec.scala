@@ -14,6 +14,7 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
 
     val cumulativeDataByDate = new CumulativeMetricTransformer()
       .setRatioMetricsData(ratioMetrics)
+      .setNumBuckets(256)
       .setIsUseDate(true)
       .transform(metrics)
 
@@ -33,7 +34,6 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
     assert(
       cumulativeDataByDate.columns.sorted sameElements Array(
         "metricSource",
-        "entityCategories",
         "entityUid",
         "expUid",
         "isAdditive",

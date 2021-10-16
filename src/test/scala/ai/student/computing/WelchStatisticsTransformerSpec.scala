@@ -15,8 +15,11 @@ class WelchStatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with M
   import spark.implicits._
   val epsilon = 1e-4f
   val stat = new WelchStatisticsTransformer()
-  val cum = new CumulativeMetricTransformer()
+  val cum: CumulativeMetricTransformer = new CumulativeMetricTransformer()
     .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
+  val cumWithBuckets: CumulativeMetricTransformer = new CumulativeMetricTransformer()
+    .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
+    .setNumBuckets(256)
 
   implicit val doubleEq = TolerantNumerics.tolerantDoubleEquality(epsilon)
 
@@ -51,7 +54,7 @@ class WelchStatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with M
           beta = 1000
         )
       )
-    val metrics = cum
+    val metrics = cumWithBuckets
       .transform(data)
 
     val result = stat.transform(metrics)
@@ -74,14 +77,15 @@ class WelchStatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with M
         experimentDataGenerator(
           uplift = 0.0,
           controlSize = 10000,
-          treatmentSize = 10000,
-          beta = 1000
+          treatmentSize = 10000
         )
       )
-    val metrics = cum
+    val metrics = cumWithBuckets
       .transform(data)
 
     val result = stat.transform(metrics)
+
+    result.write.mode("overwrite").parquet("/tmp/noUplift")
 
     val pValues = result
       .groupBy($"metricName")
