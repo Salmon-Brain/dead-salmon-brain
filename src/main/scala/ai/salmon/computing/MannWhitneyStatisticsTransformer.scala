@@ -1,20 +1,22 @@
-package ai.student.computing
+package ai.salmon.computing
 
-import org.apache.commons.math3.stat.inference.TestUtils
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.{ DefaultParamsWritable, Identifiable }
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{ collect_list, udf }
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{ DataFrame, Dataset, Row }
+import org.apache.spark.sql.{ DataFrame, Dataset }
 
-class WelchStatisticsTransformer(override val uid: String)
+import scala.collection.mutable
+
+class MannWhitneyStatisticsTransformer(override val uid: String)
     extends Transformer
     with DefaultParamsWritable
     with BaseStatisticTransformerParameters
+    with BaseStatisticTransformer
     with BasicStatInferenceParameters {
-  def this() = this(Identifiable.randomUID("welchStatisticsTransformer"))
+  def this() = this(Identifiable.randomUID("mannWhitneyStatisticsTransformer"))
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sqlContext.implicits._
@@ -27,11 +29,7 @@ class WelchStatisticsTransformer(override val uid: String)
       )
       .pivot($(variantColumn))
       .agg(
-        struct(
-          avg(col($(valueColumn))) as "mean",
-          variance(col($(valueColumn))) as "variance",
-          count(col($(valueColumn))) as "length"
-        )
+        collect_list($(valueColumn))
       )
       .withColumn("statisticsData", doStatistic($(alpha))($"control", $"treatment"))
       .drop("control", "treatment")
@@ -43,25 +41,18 @@ class WelchStatisticsTransformer(override val uid: String)
 
   def doStatistic(alpha: Double): UserDefinedFunction = udf {
     (
-        control: Row,
-        treatment: Row
+        control: mutable.WrappedArray[Double],
+        treatment: mutable.WrappedArray[Double]
     ) =>
-      val statResult = WelchTTest.welchTTest(control, treatment, alpha)
-      val controlSize = control.getAs[Long]("length")
-      val treatmentSize = treatment.getAs[Long]("length")
-      val uniform = (treatmentSize + controlSize).toDouble / 2
-      val srm = TestUtils.chiSquareTest(
-        Array(uniform, uniform),
-        Array(controlSize, treatmentSize),
-        $(srmAlpha)
-      )
-
+      val statResult = MannWhitneyTest.mannWhitneyTest(control.toArray, treatment.toArray, alpha)
+      val controlSize = control.length
+      val treatmentSize = treatment.length
       StatisticsReport(
         statResult,
-        srm,
+        srm(controlSize, treatmentSize, $(srmAlpha)),
         controlSize,
         treatmentSize,
-        "welch"
+        "mannWhitney"
       )
   }
 }

@@ -1,4 +1,4 @@
-package ai.student.inputs
+package ai.salmon.inputs
 
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.{ Param, ParamMap }

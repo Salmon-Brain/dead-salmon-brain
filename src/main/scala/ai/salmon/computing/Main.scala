@@ -1,6 +1,6 @@
-package ai.student.computing
+package ai.salmon.computing
 
-import ai.student.inputs.{
+import ai.salmon.inputs.{
   AccessLogTransformer,
   ClickhouseDataSource,
   CsvHelper,

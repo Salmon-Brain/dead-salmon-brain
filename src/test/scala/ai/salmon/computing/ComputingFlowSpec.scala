@@ -1,4 +1,4 @@
-package ai.student.computing
+package ai.salmon.computing
 
 import helpers.ExperimentDataGenerator.{ experimentDataGenerator, seqExpDataToDataFrame }
 import helpers.SparkHelper

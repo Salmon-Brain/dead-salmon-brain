@@ -1,9 +1,9 @@
-package ai.student.computing
+package ai.salmon.computing
 
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.spark.sql.Row
 
-object WelchTTest {
+object WelchTTest extends BaseStat {
   val EPS = 1e-10
 
   def welchTTest(control: Array[Double], treatment: Array[Double], alpha: Double): StatResult = {
@@ -83,19 +83,6 @@ object WelchTTest {
     )
     welchTTest(controlData, treatmentData, alpha)
   }
-
-  def square[T](x: T)(implicit num: Numeric[T]): T = {
-    import num._
-    x * x
-  }
-
-  def count[A](a: Seq[A])(implicit num: Fractional[A]): A =
-    a.foldLeft(num.zero) { case (cnt, _) => num.plus(cnt, num.one) }
-
-  def mean[A](a: Seq[A])(implicit num: Fractional[A]): A = num.div(a.sum, count(a))
-
-  def variance[A](a: Seq[A])(implicit num: Fractional[A]): A =
-    num.div(a.map(xs => square(num.minus(xs, mean(a)))).sum, num.minus(count(a), num.one))
 }
 
 case class DescriptiveStat(mean: Double, variance: Double, length: Long)

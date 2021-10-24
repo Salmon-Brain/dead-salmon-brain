@@ -1,4 +1,4 @@
-package ai.student.inputs
+package ai.salmon.inputs
 
 import helpers.SparkHelper
 import org.apache.spark.sql.DataFrame

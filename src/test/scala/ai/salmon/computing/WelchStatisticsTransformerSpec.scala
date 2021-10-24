@@ -1,4 +1,4 @@
-package ai.student.computing
+package ai.salmon.computing
 
 import helpers.ExperimentDataGenerator.{
   experimentDataGenerator,
@@ -7,7 +7,7 @@ import helpers.ExperimentDataGenerator.{
 }
 import helpers.SparkHelper
 import org.apache.spark.sql.functions.first
-import org.scalactic.TolerantNumerics
+import org.scalactic.{ Equality, TolerantNumerics }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
@@ -21,7 +21,7 @@ class WelchStatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with M
     .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
     .setNumBuckets(256)
 
-  implicit val doubleEq = TolerantNumerics.tolerantDoubleEquality(epsilon)
+  implicit val doubleEq: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(epsilon)
 
   "StatisticsTransformer" should "be" in {
 
@@ -84,8 +84,6 @@ class WelchStatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with M
       .transform(data)
 
     val result = stat.transform(metrics)
-
-    result.write.mode("overwrite").parquet("/tmp/noUplift")
 
     val pValues = result
       .groupBy($"metricName")

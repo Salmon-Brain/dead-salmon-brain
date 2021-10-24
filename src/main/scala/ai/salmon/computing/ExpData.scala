@@ -1,4 +1,6 @@
-package ai.student.computing
+package ai.salmon.computing
+
+import ai.salmon.computing.CentralTendency.CentralTendency
 
 case class ExpData(
     timestamp: Long,
@@ -34,14 +36,20 @@ case class StatResult(
     statistic: Double,
     degreesOfFreedom: Double,
     pValue: Double,
-    controlMean: Double,
-    treatmentMean: Double,
+    controlCentralTendency: Double,
+    treatmentCentralTendency: Double,
     absoluteEffect: Double,
     delta: Double,
     percentageEffect: Double,
     percentageLeft: Double,
-    percentageRight: Double
+    percentageRight: Double,
+    centralTendency: CentralTendency = CentralTendency.MEAN
 )
 
 case class Metric(metricName: String, metricValue: Double)
 case class RatioMetricData(metricNominator: String, metricDenominator: String, newName: String)
+
+object CentralTendency extends Enumeration {
+  type CentralTendency = Value
+  val MEAN, MEDIAN, MODE = Value
+}

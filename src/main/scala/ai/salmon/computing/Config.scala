@@ -1,4 +1,4 @@
-package ai.student.computing
+package ai.salmon.computing
 
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration

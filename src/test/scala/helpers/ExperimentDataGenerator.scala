@@ -1,6 +1,6 @@
 package helpers
 
-import ai.student.computing.ExpData
+import ai.salmon.computing.ExpData
 import org.apache.commons.math3.distribution.{
   BetaDistribution,
   BinomialDistribution,
