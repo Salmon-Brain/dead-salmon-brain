@@ -23,10 +23,17 @@ case class StatisticsReport(
     testType: String
 )
 
-case class ConfidenceInterval(left: Double, right: Double, denominator: Double) {
-  def absoluteEffect: Double = 0.5 * (right + left)
-  def range: Double = right - left
-  def delta: Double = 0.5 * range
+case class ConfidenceInterval(
+    left: Double,
+    effect: Option[Double],
+    right: Double,
+    denominator: Double
+) {
+  def absoluteEffect: Double = effect match {
+    case Some(x) => x
+    case None    => 0.5 * (right + left)
+  }
+  def delta: Double = 0.5 * (right - left)
   def percentageEffect: Double = absoluteEffect / denominator * 100.0
   def percentageLeft: Double = left / denominator * 100.0
   def percentageRight: Double = right / denominator * 100.0
@@ -34,7 +41,7 @@ case class ConfidenceInterval(left: Double, right: Double, denominator: Double) 
 
 case class StatResult(
     statistic: Double,
-    degreesOfFreedom: Double,
+    degreesOfFreedom: Option[Double],
     pValue: Double,
     controlCentralTendency: Double,
     treatmentCentralTendency: Double,

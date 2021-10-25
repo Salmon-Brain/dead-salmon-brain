@@ -29,10 +29,10 @@ object WelchTTest extends BaseStat {
       case x if x._1 < EPS || x._2 < EPS =>
         StatResult(
           Double.NaN,
-          Double.NaN,
-          Double.NaN,
+          None,
           controlMean,
           treatmentMean,
+          Double.NaN,
           Double.NaN,
           Double.NaN,
           Double.NaN,
@@ -51,13 +51,14 @@ object WelchTTest extends BaseStat {
         val effect = treatmentMean - controlMean
         val ci = ConfidenceInterval(
           effect + tDistribution.inverseCumulativeProbability(alpha / 2) * std,
+          None,
           effect + tDistribution.inverseCumulativeProbability(1 - alpha / 2) * std,
           controlMean
         )
 
         StatResult(
           t,
-          df,
+          Option(df),
           p,
           controlMean,
           treatmentMean,
