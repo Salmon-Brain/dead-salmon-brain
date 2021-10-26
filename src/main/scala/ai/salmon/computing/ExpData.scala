@@ -25,32 +25,21 @@ case class StatisticsReport(
 
 case class ConfidenceInterval(
     left: Double,
-    effect: Option[Double],
     right: Double,
     denominator: Double
 ) {
-  def absoluteEffect: Double = effect match {
-    case Some(x) => x
-    case None    => 0.5 * (right + left)
-  }
-  def delta: Double = 0.5 * (right - left)
-  def percentageEffect: Double = absoluteEffect / denominator * 100.0
   def percentageLeft: Double = left / denominator * 100.0
   def percentageRight: Double = right / denominator * 100.0
 }
 
 case class StatResult(
     statistic: Double,
-    degreesOfFreedom: Option[Double],
     pValue: Double,
     controlCentralTendency: Double,
     treatmentCentralTendency: Double,
-    absoluteEffect: Double,
-    delta: Double,
-    percentageEffect: Double,
     percentageLeft: Double,
     percentageRight: Double,
-    centralTendency: CentralTendency = CentralTendency.MEAN
+    centralTendencyType: String = CentralTendency.MEAN.toString
 )
 
 case class Metric(metricName: String, metricValue: Double)
