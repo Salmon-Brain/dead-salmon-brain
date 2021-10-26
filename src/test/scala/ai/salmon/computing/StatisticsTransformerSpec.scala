@@ -68,7 +68,6 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
 
   "Welch detection uplift" should "be" in {
     val pValues = pValuesFromResult(statWelch.transform(metricsWithUplift))
-    statWelch.transform(metricsWithUplift).write.mode("overwrite").parquet("/tmp/welchUplift")
     assert(pValues("views") > 0.05)
     assert(pValues("clicks") < 0.05)
     assert(pValues("ctr") < 0.05)
@@ -76,7 +75,6 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
 
   "Welch detection equality" should "be" in {
     val pValues = pValuesFromResult(statWelch.transform(metricsWithoutUplift))
-
     assert(pValues("views") > 0.05)
     assert(pValues("clicks") > 0.05)
     assert(pValues("ctr") > 0.05)
@@ -91,8 +89,6 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
 
   "MannWhitney detection equality" should "be" in {
     val pValues = pValuesFromResult(mannStat.transform(metricsWithoutUplift))
-    mannStat.transform(metricsWithUplift).write.mode("overwrite").parquet("/tmp/mannUplift")
-
     assert(pValues("views") > 0.05)
     assert(pValues("clicks") > 0.05)
     assert(pValues("ctr") > 0.05)
