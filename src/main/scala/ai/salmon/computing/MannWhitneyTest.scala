@@ -38,6 +38,9 @@ object MannWhitneyTest {
     )
   }
 
+  /*
+   * https://www.researchgate.net/publication/11148358_Statistical_inference_for_a_linear_function_of_medians_Confidence_intervals_hypothesis_testing_and_sample_size_requirements
+   */
   def medianVariance(values: Array[Double]): Double = {
     val sorted = values.sorted
     val y1 = sorted(
