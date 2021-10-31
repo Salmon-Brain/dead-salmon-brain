@@ -5,8 +5,8 @@ import org.apache.spark.ml.param.{ Param, ParamMap }
 import org.apache.spark.ml.util.{ DefaultParamsWritable, Identifiable }
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{ BooleanType, DoubleType, StringType, StructField, StructType }
-import org.apache.spark.sql.{ DataFrame, Dataset, Encoders, Row, types }
+import org.apache.spark.sql.types.{ DoubleType, StringType, StructField, StructType }
+import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 
 import scala.collection.mutable
 import scala.util.hashing.MurmurHash3
