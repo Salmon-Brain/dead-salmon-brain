@@ -5,7 +5,7 @@ import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.DefaultParamsWritable
 import org.apache.spark.sql.Encoders
-import org.apache.spark.sql.types.{ BooleanType, DoubleType, StringType, StructField, StructType }
+import org.apache.spark.sql.types.{ BooleanType, StringType, StructField, StructType }
 
 trait BaseStatisticTransformer
     extends Transformer
