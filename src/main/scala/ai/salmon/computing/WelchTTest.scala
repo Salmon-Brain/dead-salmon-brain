@@ -1,15 +1,23 @@
 package ai.salmon.computing
 
 import org.apache.commons.math3.distribution.TDistribution
+import org.apache.commons.math3.stat.descriptive.moment.{ Mean, Variance }
 import org.apache.spark.sql.Row
 
-object WelchTTest extends BaseStat {
+object WelchTTest {
   val EPS = 1e-10
+  lazy val mean = new Mean()
+  lazy val variance = new Variance()
 
   def welchTTest(control: Array[Double], treatment: Array[Double], alpha: Double): StatResult = {
-    val controlData = DescriptiveStat(mean(control), variance(control), control.length.toLong)
+    val controlData =
+      DescriptiveStat(mean.evaluate(control), variance.evaluate(control), control.length.toLong)
     val treatmentData =
-      DescriptiveStat(mean(treatment), variance(treatment), treatment.length.toLong)
+      DescriptiveStat(
+        mean.evaluate(treatment),
+        variance.evaluate(treatment),
+        treatment.length.toLong
+      )
     welchTTest(controlData, treatmentData, alpha)
   }
 
@@ -38,7 +46,6 @@ object WelchTTest extends BaseStat {
       case _ =>
         val qt = vx / nx + vy / ny
         val std = math.sqrt(qt)
-
         val t = (controlMean - treatmentMean) / std
         val df =
           square(qt) / (square(vx) / (square(nx) * (nx - 1)) + square(vy) / (square(ny) * (ny - 1)))
@@ -74,6 +81,10 @@ object WelchTTest extends BaseStat {
       treatment.getAs[Long]("length")
     )
     welchTTest(controlData, treatmentData, alpha)
+  }
+
+  def square(x: Double): Double = {
+    x * x
   }
 }
 

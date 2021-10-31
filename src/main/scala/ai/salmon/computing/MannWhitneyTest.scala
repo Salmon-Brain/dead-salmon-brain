@@ -4,7 +4,7 @@ import org.apache.commons.math3.distribution.{ BinomialDistribution, NormalDistr
 import org.apache.commons.math3.stat.descriptive.rank.Median
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest
 
-object MannWhitneyTest extends BaseStat {
+object MannWhitneyTest {
   val median = new Median()
   val normal = new NormalDistribution()
 

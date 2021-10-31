@@ -5,8 +5,8 @@ import org.apache.spark.ml.param.{ Param, ParamMap }
 import org.apache.spark.ml.util.{ DefaultParamsWritable, Identifiable }
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{ DataFrame, Dataset, Row }
+import org.apache.spark.sql.types.{ BooleanType, DoubleType, StringType, StructField, StructType }
+import org.apache.spark.sql.{ DataFrame, Dataset, Encoders, Row, types }
 
 import scala.collection.mutable
 import scala.util.hashing.MurmurHash3
@@ -43,17 +43,7 @@ class CumulativeMetricTransformer(override val uid: String)
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sparkSession.implicits._
 
-    val columns =
-      (if ($(isUseDate)) Seq("date")
-       else
-         Seq()) ++ Seq(
-        $(variantColumn),
-        $(entityIdColumn),
-        $(experimentColumn),
-        $(metricNameColumn),
-        $(metricSourceColumn),
-        $(additiveColumn)
-      )
+    val columns = constructColumnsToAggregate(withName = true, withAdditive = true)
 
     val cumulativeMetrics = dataset
       .filter($(additiveColumn))
@@ -74,15 +64,7 @@ class CumulativeMetricTransformer(override val uid: String)
 
     ratioValues match {
       case values if values.nonEmpty => {
-        val ratioColumns =
-          (if ($(isUseDate)) Seq("date")
-           else
-             Seq()) ++ Seq(
-            $(variantColumn),
-            $(entityIdColumn),
-            $(experimentColumn),
-            $(metricSourceColumn)
-          )
+        val ratioColumns = constructColumnsToAggregate(withName = false, withAdditive = false)
         val cumulativeRatioMetrics = cumulativeMetrics
           .filter(col($(metricNameColumn)).isin(values: _*))
           .groupBy(ratioColumns.head, ratioColumns.tail: _*)
@@ -109,7 +91,14 @@ class CumulativeMetricTransformer(override val uid: String)
 
   override def copy(extra: ParamMap): Transformer = defaultCopy(extra)
 
-  override def transformSchema(schema: StructType): StructType = schema
+  override def transformSchema(schema: StructType): StructType = {
+    StructType(
+      constructColumnsToAggregate(withName = true, withAdditive = true)
+        .map(value => StructField(value, StringType, nullable = false)) ++ Array(
+        StructField($(valueColumn), DoubleType, nullable = true)
+      )
+    )
+  }
 
   /** @group setParam */
   def setNumBuckets(value: Int): this.type =
@@ -149,5 +138,12 @@ class CumulativeMetricTransformer(override val uid: String)
     (entityUid: String, experimentUid: String) =>
       val hash = MurmurHash3.stringHash(entityUid ++ experimentUid)
       math.abs(math.max(Int.MinValue + 1, hash) % numBuckets).toString
+  }
+
+  def constructColumnsToAggregate(withName: Boolean, withAdditive: Boolean): Seq[String] = {
+    Seq($(variantColumn), $(entityIdColumn), $(experimentColumn), $(metricSourceColumn)) ++
+      (if ($(isUseDate)) Seq("date") else Seq[String]()) ++
+      (if (withName) Seq($(metricNameColumn)) else Seq[String]()) ++
+      (if (withAdditive) Seq($(additiveColumn)) else Seq[String]())
   }
 }

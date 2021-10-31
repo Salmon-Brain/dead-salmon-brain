@@ -2,7 +2,7 @@ package ai.salmon.computing
 
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
-import org.apache.spark.ml.util.{ DefaultParamsWritable, Identifiable }
+import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.{ collect_list, udf }
 import org.apache.spark.sql.types.StructType
@@ -10,12 +10,7 @@ import org.apache.spark.sql.{ DataFrame, Dataset }
 
 import scala.collection.mutable
 
-class MannWhitneyStatisticsTransformer(override val uid: String)
-    extends Transformer
-    with DefaultParamsWritable
-    with BaseStatisticTransformerParameters
-    with BaseStatisticTransformer
-    with BasicStatInferenceParameters {
+class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseStatisticTransformer {
   def this() = this(Identifiable.randomUID("mannWhitneyStatisticsTransformer"))
 
   override def transform(dataset: Dataset[_]): DataFrame = {

@@ -1,19 +1,11 @@
 package ai.salmon.computing
 
-import org.apache.spark.ml.Transformer
-import org.apache.spark.ml.param.ParamMap
-import org.apache.spark.ml.util.{ DefaultParamsWritable, Identifiable }
+import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 
-class WelchStatisticsTransformer(override val uid: String)
-    extends Transformer
-    with DefaultParamsWritable
-    with BaseStatisticTransformerParameters
-    with BaseStatisticTransformer
-    with BasicStatInferenceParameters {
+class WelchStatisticsTransformer(override val uid: String) extends BaseStatisticTransformer {
   def this() = this(Identifiable.randomUID("welchStatisticsTransformer"))
 
   override def transform(dataset: Dataset[_]): DataFrame = {
@@ -36,10 +28,6 @@ class WelchStatisticsTransformer(override val uid: String)
       .withColumn("statisticsData", doStatistic($(alpha))($"control", $"treatment"))
       .drop("control", "treatment")
   }
-
-  override def copy(extra: ParamMap): Transformer = defaultCopy(extra)
-
-  override def transformSchema(schema: StructType): StructType = schema
 
   def doStatistic(alpha: Double): UserDefinedFunction = udf {
     (

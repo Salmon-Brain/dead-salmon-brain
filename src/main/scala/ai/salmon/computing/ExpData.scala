@@ -1,7 +1,5 @@
 package ai.salmon.computing
 
-import ai.salmon.computing.CentralTendency.CentralTendency
-
 case class ExpData(
     timestamp: Long,
     variantId: String,
