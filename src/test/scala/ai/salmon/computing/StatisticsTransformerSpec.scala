@@ -17,6 +17,7 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
   val epsilon = 1e-4f
   val statWelch = new WelchStatisticsTransformer()
   val mannStat = new MannWhitneyStatisticsTransformer()
+  val auto = new AutoStatisticsTransformer()
 
   val cumWithBuckets: CumulativeMetricTransformer = new CumulativeMetricTransformer()
     .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
@@ -92,6 +93,13 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     assert(pValues("views") > 0.05)
     assert(pValues("clicks") > 0.05)
     assert(pValues("ctr") > 0.05)
+  }
+
+  "Auto detection uplift" should "be" in {
+    val pValues = pValuesFromResult(auto.transform(metricsWithUplift))
+    assert(pValues("views") > 0.05)
+    assert(pValues("clicks") < 0.05)
+    assert(pValues("ctr") < 0.05)
   }
 
   def pValuesFromResult(result: DataFrame): Map[String, Double] = {
