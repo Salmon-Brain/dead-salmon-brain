@@ -43,7 +43,7 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
         srm(controlSize.toInt, treatmentSize.toInt, $(srmAlpha)),
         controlSize,
         treatmentSize,
-        "welch"
+        TestType.WELCH.toString
       )
   }
 }

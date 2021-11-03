@@ -3,7 +3,7 @@ package ai.salmon.computing
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{ DataFrame, Dataset, Encoders }
+import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 
 class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticTransformer {
   def this() = this(Identifiable.randomUID("autoStatisticsTransformer"))
@@ -41,26 +41,38 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
     val cltReport = {
       val cltData = data.filter($"isUseClt")
       if (!cltData.isEmpty)
-        fillBaseParameters(new WelchStatisticsTransformer()).transform(cltData)
-      else dataset.sparkSession.emptyDataset(Encoders.product[StatisticsReport])
+        fillBaseParameters(new WelchStatisticsTransformer())
+          .transform(cltData)
+      else
+        dataset.sparkSession.createDataFrame(
+          dataset.sparkSession.sparkContext.emptyRDD[Row],
+          outputSchema
+        )
     }
 
     val nonCltReport = {
       val nonCltData = data.filter(!$"isUseClt")
       if (!nonCltData.isEmpty)
-        fillBaseParameters(new MannWhitneyStatisticsTransformer()).transform(nonCltData)
-      else dataset.sparkSession.emptyDataset(Encoders.product[StatisticsReport])
+        fillBaseParameters(new MannWhitneyStatisticsTransformer())
+          .transform(nonCltData)
+      else
+        dataset.sparkSession.createDataFrame(
+          dataset.sparkSession.sparkContext.emptyRDD[Row],
+          outputSchema
+        )
     }
 
     cltReport.union(nonCltReport).toDF()
   }
 
   /*
+    ACMRef: Ron Kohavi, Alex Deng, Roger Longbotham, and Ya Xu.  2014. Seven Rules of Thumb for Web Site Experimenters.
+    In Proceedings of the 20th ACM SIGKDD international conference on Knowledge discovery and data mining (KDD '14), pp. 1857-1866.
     https://exp-platform.com/Documents/2014%20experimentersRulesOfThumb.pdf
    */
   def checkHeuristicsForCLT: UserDefinedFunction = udf { (sampleSize: Long, skewness: Double) =>
     if (math.abs(skewness) > 1) {
-      sampleSize >= 355 * skewness * skewness
+      sampleSize >= (355 * skewness * skewness).toLong
     } else {
       /*
         Montgomery, Douglas C. Applied Statistics and Probability

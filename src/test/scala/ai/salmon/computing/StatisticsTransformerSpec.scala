@@ -19,6 +19,9 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
   val mannStat = new MannWhitneyStatisticsTransformer()
   val auto = new AutoStatisticsTransformer()
 
+  val cum: CumulativeMetricTransformer = new CumulativeMetricTransformer()
+    .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
+
   val cumWithBuckets: CumulativeMetricTransformer = new CumulativeMetricTransformer()
     .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
     .setNumBuckets(256)
@@ -40,6 +43,18 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
         uplift = 0.0,
         controlSize = 10000,
         treatmentSize = 10000
+      )
+    )
+  )
+
+  private lazy val metricsToNonCltWithSkewness: DataFrame = cum.transform(
+    seqExpDataToDataFrame(
+      experimentDataGenerator(
+        uplift = 0.0,
+        controlSize = 3000,
+        treatmentSize = 3000,
+        treatmentSkew = 10,
+        controlSkew = 10
       )
     )
   )
@@ -95,11 +110,14 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     assert(pValues("ctr") > 0.05)
   }
 
-  "Auto detection uplift" should "be" in {
-    val pValues = pValuesFromResult(auto.transform(metricsWithUplift))
+  "Auto detection equality" should "be" in {
+    val statResult = auto.transform(metricsToNonCltWithSkewness)
+    val pValues = pValuesFromResult(statResult)
     assert(pValues("views") > 0.05)
-    assert(pValues("clicks") < 0.05)
-    assert(pValues("ctr") < 0.05)
+    assert(pValues("clicks") > 0.05)
+    assert(pValues("ctr") > 0.05)
+    val testType = statResult.select($"statisticsData.testType").collect()(0).getString(0)
+    assertResult(TestType.MANN_WHITNEY.toString)(testType)
   }
 
   def pValuesFromResult(result: DataFrame): Map[String, Double] = {

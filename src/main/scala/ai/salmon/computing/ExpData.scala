@@ -47,3 +47,8 @@ object CentralTendency extends Enumeration {
   type CentralTendency = Value
   val MEAN, MEDIAN, MODE = Value
 }
+
+object TestType extends Enumeration {
+  type CentralTendency = Value
+  val WELCH, MANN_WHITNEY = Value
+}

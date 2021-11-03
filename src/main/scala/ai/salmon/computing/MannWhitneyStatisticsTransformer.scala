@@ -47,7 +47,7 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
         srm(controlSize, treatmentSize, $(srmAlpha)),
         controlSize,
         treatmentSize,
-        "mannWhitney"
+        TestType.MANN_WHITNEY.toString
       )
   }
 }
