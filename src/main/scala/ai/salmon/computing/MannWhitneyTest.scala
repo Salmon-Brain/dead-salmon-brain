@@ -19,12 +19,17 @@ object MannWhitneyTest {
     val pValue = mannWhitneyUTest.mannWhitneyUTest(control, treatment)
     val controlMedian = median.evaluate(control)
     val treatmentMedian = median.evaluate(treatment)
-    val effect = treatmentMedian - controlMedian
-    val std = math.sqrt(medianVariance(treatment) + medianVariance(control))
-    val ci = ConfidenceInterval(
-      effect + normal.inverseCumulativeProbability(alpha / 2) * std,
-      effect + normal.inverseCumulativeProbability(1 - alpha / 2) * std,
-      controlMedian
+    val treatmentMedianVariance = medianVariance(treatment)
+    val controlMedianVariance = medianVariance(control)
+    val std = math.sqrt(treatmentMedianVariance + controlMedianVariance)
+    val ci = CI(
+      controlMedian,
+      math.sqrt(controlMedianVariance),
+      treatmentMedian,
+      math.sqrt(treatmentMedianVariance),
+      std,
+      normal.inverseCumulativeProbability(alpha / 2),
+      normal.inverseCumulativeProbability(1 - alpha / 2)
     )
 
     StatResult(
@@ -32,8 +37,8 @@ object MannWhitneyTest {
       pValue,
       controlMedian,
       treatmentMedian,
-      ci.percentageLeft,
-      ci.percentageRight,
+      ci.lowerPercent,
+      ci.upperPercent,
       CentralTendency.MEDIAN.toString
     )
   }

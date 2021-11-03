@@ -51,11 +51,14 @@ object WelchTTest {
           square(qt) / (square(vx) / (square(nx) * (nx - 1)) + square(vy) / (square(ny) * (ny - 1)))
         val tDistribution = new TDistribution(df)
         val p = 2.0 * tDistribution.cumulativeProbability(-math.abs(t))
-        val effect = treatmentMean - controlMean
-        val ci = ConfidenceInterval(
-          effect + tDistribution.inverseCumulativeProbability(alpha / 2) * std,
-          effect + tDistribution.inverseCumulativeProbability(1 - alpha / 2) * std,
-          controlMean
+        val ci = CI(
+          controlMean,
+          math.sqrt(vx),
+          treatmentMean,
+          math.sqrt(vy),
+          std,
+          tDistribution.inverseCumulativeProbability(alpha / 2),
+          tDistribution.inverseCumulativeProbability(1 - alpha / 2)
         )
 
         StatResult(
@@ -63,8 +66,8 @@ object WelchTTest {
           p,
           controlMean,
           treatmentMean,
-          ci.percentageLeft,
-          ci.percentageRight
+          ci.lowerPercent,
+          ci.upperPercent
         )
     }
   }

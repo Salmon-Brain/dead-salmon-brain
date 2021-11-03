@@ -21,13 +21,42 @@ case class StatisticsReport(
     testType: String
 )
 
-case class ConfidenceInterval(
-    left: Double,
-    right: Double,
-    denominator: Double
+case class CI(
+    controlCentrality: Double,
+    controlStd: Double,
+    treatmentCentrality: Double,
+    treatmentStd: Double,
+    commonStd: Double,
+    leftInterval: Double,
+    rightInterval: Double
 ) {
-  def percentageLeft: Double = left / denominator * 100.0
-  def percentageRight: Double = right / denominator * 100.0
+  def effect: Double = treatmentCentrality - controlCentrality
+  def lower: Double = effect + commonStd * leftInterval
+  def upper: Double = effect + commonStd * rightInterval
+  def effectPercent: Double = (effect / controlCentrality) * 100
+  def controlCV: Double = controlStd / controlCentrality
+  def treatmentCV: Double = treatmentStd / treatmentCentrality
+  def lowerPercent: Double = getPercentEffect(effectPercent, controlCV, treatmentCV, leftInterval)
+  def upperPercent: Double = getPercentEffect(effectPercent, controlCV, treatmentCV, rightInterval)
+
+  def getPercentEffect(
+      effectPercent: Double,
+      cvControl: Double,
+      cvTreatment: Double,
+      interval: Double
+  ): Double = {
+    val percent = (effectPercent + 1)
+    val nominator = 1 + interval * math.sqrt(
+      sq(cvControl) + sq(cvTreatment) - sq(interval) * sq(cvControl) * sq(cvTreatment)
+    )
+    val denominator = 1 - interval * sq(cvControl)
+
+    percent * nominator / denominator - 1
+  }
+
+  def sq(x: Double): Double = {
+    x * x
+  }
 }
 
 case class StatResult(
