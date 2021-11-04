@@ -1,4 +1,5 @@
 input: "Clickhouse"
+output: "/tmp/report.json"
 accessLog:
   metricName: "case when regexp_extract(path, '^(/click/)') = '/click/' then 'clicks' else case when regexp_extract(path, '^(/view/)') = '/view/' then 'views' else 'none' end end "
   metricValue: "1.0"

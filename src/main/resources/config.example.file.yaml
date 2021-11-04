@@ -1,4 +1,5 @@
 input: "Files"
+output: "/tmp/report.json"
 files:
   - "src/main/resources/nginx_sample.txt"
 accessLog:

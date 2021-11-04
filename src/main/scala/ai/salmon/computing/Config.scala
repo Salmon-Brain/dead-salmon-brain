@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 case class Config(
     @JsonScalaEnumeration(classOf[InputTypeRef]) input: Input.Input = Input.Files,
     files: Seq[String] = Seq.empty,
+    output: String,
     accessLog: Option[AccessLogConfig],
     clickhouse: Option[ClickhouseConfig]
 ) {}
