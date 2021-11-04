@@ -28,12 +28,12 @@ object WelchTTest {
   ): StatResult = {
     assert(alpha < 1 && alpha > 0)
 
-    val (vx, vy) = (controlData.variance, treatmentData.variance)
-    val (nx, ny) = (controlData.length, treatmentData.length)
+    val (controlVariance, treatmentVariance) = (controlData.variance, treatmentData.variance)
+    val (controlSampleSize, treatmentSampleSize) = (controlData.length, treatmentData.length)
     val (controlMean, treatmentMean) =
       (controlData.mean, treatmentData.mean)
 
-    (vx, vy) match {
+    (controlVariance, treatmentVariance) match {
       case x if x._1 < EPS || x._2 < EPS =>
         StatResult(
           Double.NaN,
@@ -44,18 +44,22 @@ object WelchTTest {
           Double.NaN
         )
       case _ =>
-        val qt = vx / nx + vy / ny
+        val qt = controlVariance / controlSampleSize + treatmentVariance / treatmentSampleSize
         val std = math.sqrt(qt)
         val t = (controlMean - treatmentMean) / std
         val df =
-          square(qt) / (square(vx) / (square(nx) * (nx - 1)) + square(vy) / (square(ny) * (ny - 1)))
+          square(qt) / (square(controlVariance) / (square(
+            controlSampleSize
+          ) * (controlSampleSize - 1)) + square(treatmentVariance) / (square(
+            treatmentSampleSize
+          ) * (treatmentSampleSize - 1)))
         val tDistribution = new TDistribution(df)
         val p = 2.0 * tDistribution.cumulativeProbability(-math.abs(t))
         val ci = CI(
           controlMean,
-          math.sqrt(vx),
+          math.sqrt(controlVariance),
           treatmentMean,
-          math.sqrt(vy),
+          math.sqrt(treatmentVariance),
           std,
           tDistribution.inverseCumulativeProbability(alpha / 2),
           tDistribution.inverseCumulativeProbability(1 - alpha / 2)

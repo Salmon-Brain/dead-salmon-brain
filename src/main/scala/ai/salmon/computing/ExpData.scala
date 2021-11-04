@@ -45,18 +45,15 @@ case class CI(
       cvTreatment: Double,
       interval: Double
   ): Double = {
-    val percent = (effectPercent + 1)
+    val sq = (x: Double) => x * x
+    val percent = effectPercent + 1
     val nominator = 1 + interval * math.sqrt(
       sq(cvControl) + sq(cvTreatment) - sq(interval) * sq(cvControl) * sq(cvTreatment)
     )
-    val denominator = 1 - interval * sq(cvControl)
-
-    percent * nominator / denominator - 1
+    val denominator = 1 - math.abs(interval) * sq(cvControl)
+    percent * (nominator / denominator) - 1
   }
 
-  def sq(x: Double): Double = {
-    x * x
-  }
 }
 
 case class StatResult(
