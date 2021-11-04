@@ -39,6 +39,9 @@ case class CI(
   def lowerPercent: Double = getPercentEffect(effectPercent, controlCV, treatmentCV, leftInterval)
   def upperPercent: Double = getPercentEffect(effectPercent, controlCV, treatmentCV, rightInterval)
 
+  /*
+  https://ai.stanford.edu/~ronnyk/2009controlledExperimentsOnTheWebSurvey.pdf
+   */
   def getPercentEffect(
       effectPercent: Double,
       cvControl: Double,
