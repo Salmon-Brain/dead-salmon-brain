@@ -24,7 +24,7 @@ class OutlierRemoveTransformer(override val uid: String)
     "upperPercentile",
     "upper percentile to clear outliers"
   )
-  setDefault(lowerPercentile, 0.99)
+  setDefault(upperPercentile, 0.99)
 
   /** @group setParam */
   def setLowerPercentile(value: Double): this.type =
@@ -41,21 +41,21 @@ class OutlierRemoveTransformer(override val uid: String)
 
     import dataset.sparkSession.implicits._
 
+    val columns = Seq(
+      $(variantColumn),
+      $(experimentColumn),
+      $(metricSourceColumn),
+      $(metricNameColumn)
+    )
     val percentilesBound = dataset
-      .groupBy(
-        $(variantColumn),
-        $(entityIdColumn),
-        $(experimentColumn),
-        $(metricSourceColumn),
-        $(metricNameColumn)
-      )
+      .groupBy(columns.head, columns: _*)
       .agg(
         callUDF("percentile_approx", col($(valueColumn)), lit($(lowerPercentile))) as "leftBound",
         callUDF("percentile_approx", col($(valueColumn)), lit($(upperPercentile))) as "rightBound"
       )
 
     dataset
-      .join(broadcast(percentilesBound))
+      .join(broadcast(percentilesBound), columns)
       .filter(col($(valueColumn)) > $"leftBound" && col($(valueColumn)) < $"rightBound")
       .drop("leftBound", "rightBound")
   }

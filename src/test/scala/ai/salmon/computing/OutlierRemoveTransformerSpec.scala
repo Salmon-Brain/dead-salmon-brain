@@ -9,7 +9,6 @@ class OutlierRemoveTransformerSpec extends AnyFlatSpec with SparkHelper with Mat
   "OutlierRemoveTransformerSpec" should "be" in {
     val data = generateDataForWelchTest()
     val clearData = new OutlierRemoveTransformer().transform(data)
-    clearData.write.parquet("/tmp/outlier")
-    assert(2 == 2)
+    assert(clearData.count() == 26)
   }
 }
