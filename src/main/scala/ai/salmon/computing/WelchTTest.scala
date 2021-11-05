@@ -48,11 +48,15 @@ object WelchTTest {
         val std = math.sqrt(qt)
         val t = (controlMean - treatmentMean) / std
         val df =
-          square(qt) / (square(controlVariance) / (square(
-            controlSampleSize
-          ) * (controlSampleSize - 1)) + square(treatmentVariance) / (square(
-            treatmentSampleSize
-          ) * (treatmentSampleSize - 1)))
+          square(qt) /
+            (square(controlVariance) /
+              (square(
+                controlSampleSize
+              ) * (controlSampleSize - 1)) + square(
+                treatmentVariance
+              ) / (square(
+                treatmentSampleSize
+              ) * (treatmentSampleSize - 1)))
         val tDistribution = new TDistribution(df)
         val p = 2.0 * tDistribution.cumulativeProbability(-math.abs(t))
         val ci = CI(

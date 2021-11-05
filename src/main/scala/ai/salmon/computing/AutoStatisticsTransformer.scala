@@ -26,10 +26,8 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
       )
       .withColumn(
         "isUseClt",
-        checkHeuristicsForCLT($"control.length", $"control.skewness") && checkHeuristicsForCLT(
-          $"treatment.length",
-          $"treatment.skewness"
-        )
+        checkHeuristicsForCLT($"control.length", $"control.skewness")
+          && checkHeuristicsForCLT($"treatment.length", $"treatment.skewness")
       )
       .drop("treatment", "control", "length")
 
@@ -74,7 +72,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
     if (math.abs(skewness) > 1) {
       sampleSize >= (355 * skewness * skewness).toLong
     } else {
-      /*
+      /*Cut
         Montgomery, Douglas C. Applied Statistics and Probability
         for Engineers. 5th. s.l. : John Wiley & Sons, Inc, 2010. 978-
         0470053041.
