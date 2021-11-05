@@ -35,9 +35,12 @@ class OutlierRemoveTransformer(override val uid: String)
     set(upperPercentile, value)
 
   override def transform(dataset: Dataset[_]): DataFrame = {
-    assert($(lowerPercentile) > 0 && $(lowerPercentile) < 1)
-    assert($(upperPercentile) > 0 && $(upperPercentile) < 1)
-    assert($(upperPercentile) > $(lowerPercentile))
+    assert($(lowerPercentile) > 0 && $(lowerPercentile) < 1, "lowerPercentile must be in (0, 1)")
+    assert($(upperPercentile) > 0 && $(upperPercentile) < 1, "upperPercentile must be in (0, 1)")
+    assert(
+      $(upperPercentile) > $(lowerPercentile),
+      "upperPercentile must be greater than lowerPercentile"
+    )
 
     import dataset.sparkSession.implicits._
 
