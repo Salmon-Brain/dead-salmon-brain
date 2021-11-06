@@ -1,6 +1,5 @@
 package ai.salmon.computing
 
-import org.apache.commons.math3.distribution.NormalDistribution
 import org.apache.commons.math3.stat.inference.TestUtils
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
@@ -28,7 +27,6 @@ trait BaseStatisticTransformer
         )
       )
     )
-  val normalDistribution = new NormalDistribution(0, 1)
 
   override def copy(extra: ParamMap): Transformer = defaultCopy(extra)
 
@@ -41,24 +39,5 @@ trait BaseStatisticTransformer
       Array(controlSize, treatmentSize),
       alpha
     )
-  }
-
-  def minimumSampleSizeEstimation(
-      alpha: Double,
-      beta: Double,
-      mean: Double,
-      variance: Double,
-      detectableEffect: Double
-  ): Double = {
-    assert(detectableEffect > 0 && detectableEffect < 1)
-    val multiplier = 2 * math.ceil(
-      math.pow(
-        normalDistribution.inverseCumulativeProbability(1 - alpha / 2) + normalDistribution
-          .inverseCumulativeProbability(1 - beta),
-        2
-      )
-    )
-
-    (multiplier * variance) / math.pow((mean * detectableEffect), 2)
   }
 }

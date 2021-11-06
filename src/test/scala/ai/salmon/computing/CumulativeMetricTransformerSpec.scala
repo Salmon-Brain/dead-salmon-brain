@@ -12,13 +12,12 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
 
     val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
 
-    val cumulativeDataByDate = new CumulativeMetricTransformer()
+    val cumulativeData = new CumulativeMetricTransformer()
       .setRatioMetricsData(ratioMetrics)
       .setNumBuckets(256)
-      .setIsUseDate(true)
       .transform(metrics)
 
-    val newMetrics = cumulativeDataByDate
+    val newMetrics = cumulativeData
       .groupBy("expUid")
       .pivot("metricName")
       .agg(first("metricValue"))
@@ -30,17 +29,15 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
         sameElements Array("expUid", "clicks", "views", "ctr").sorted
     )
 
-    assert(cumulativeDataByDate.columns.contains("date"))
     assert(
-      cumulativeDataByDate.columns.sorted sameElements Array(
+      cumulativeData.columns.sorted sameElements Array(
         "metricSource",
         "entityUid",
         "expUid",
         "isAdditive",
         "metricName",
         "metricValue",
-        "variantId",
-        "date"
+        "variantId"
       ).sorted
     )
   }

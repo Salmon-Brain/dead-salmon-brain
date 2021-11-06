@@ -32,14 +32,6 @@ class CumulativeMetricTransformer(override val uid: String)
   )
   setDefault(numBuckets, -1)
 
-  val isUseDate: Param[Boolean] = new Param[Boolean](
-    this,
-    "isUseDate",
-    "Is added date column for aggregation"
-  )
-
-  setDefault(isUseDate, false)
-
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sparkSession.implicits._
 
@@ -108,10 +100,6 @@ class CumulativeMetricTransformer(override val uid: String)
   def setRatioMetricsData(value: Seq[RatioMetricData]): this.type =
     set(ratioMetricData, value)
 
-  /** @group setParam */
-  def setIsUseDate(value: Boolean): this.type =
-    set(isUseDate, value)
-
   def ratioUdf(pairs: Seq[RatioMetricData]): UserDefinedFunction = udf {
     metrics: mutable.WrappedArray[Row] =>
       val epsilon = 1e-10d
@@ -142,7 +130,6 @@ class CumulativeMetricTransformer(override val uid: String)
 
   def constructColumnsToAggregate(withName: Boolean, withAdditive: Boolean): Seq[String] = {
     Seq($(variantColumn), $(entityIdColumn), $(experimentColumn), $(metricSourceColumn)) ++
-      (if ($(isUseDate)) Seq("date") else Seq[String]()) ++
       (if (withName) Seq($(metricNameColumn)) else Seq[String]()) ++
       (if (withAdditive) Seq($(additiveColumn)) else Seq[String]())
   }

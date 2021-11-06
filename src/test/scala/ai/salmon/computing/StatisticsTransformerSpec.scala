@@ -68,7 +68,12 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     val result = statWelch.transform(data)
     val pValue =
       result.select("statisticsData.statResult.pValue").collect().map(_.getDouble(0)).toSeq
+
+    val requiredSampleSize =
+      result.select("statisticsData.statResult.requiredSampleSizeByVariant").collect()(0).getLong(0)
     assert(0.036 === pValue.head)
+    assert(9 === requiredSampleSize)
+
   }
 
   "Srm" should "be" in {

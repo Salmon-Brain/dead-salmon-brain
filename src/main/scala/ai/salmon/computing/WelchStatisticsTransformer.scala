@@ -10,6 +10,7 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sqlContext.implicits._
+
     dataset
       .groupBy(
         $(experimentColumn),
@@ -25,16 +26,16 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
           count(col($(valueColumn))) as "length"
         )
       )
-      .withColumn("statisticsData", doStatistic($(alpha))($"control", $"treatment"))
+      .withColumn("statisticsData", doStatistic($(alpha), $(beta))($"control", $"treatment"))
       .drop("control", "treatment")
   }
 
-  def doStatistic(alpha: Double): UserDefinedFunction = udf {
+  def doStatistic(alpha: Double, beta: Double): UserDefinedFunction = udf {
     (
         control: Row,
         treatment: Row
     ) =>
-      val statResult = WelchTTest.welchTTest(control, treatment, alpha)
+      val statResult = WelchTTest.welchTTest(control, treatment, alpha, beta)
       val controlSize = control.getAs[Long]("length")
       val treatmentSize = treatment.getAs[Long]("length")
 

@@ -4,14 +4,15 @@ import org.apache.commons.math3.distribution.{ BinomialDistribution, NormalDistr
 import org.apache.commons.math3.stat.descriptive.rank.Median
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest
 
-object MannWhitneyTest {
+object MannWhitneyTest extends SampleSizeEstimation {
   val median = new Median()
   val normal = new NormalDistribution()
 
   def mannWhitneyTest(
       control: Array[Double],
       treatment: Array[Double],
-      alpha: Double
+      alpha: Double,
+      beta: Double
   ): StatResult = {
     assert(alpha < 1)
     val mannWhitneyUTest = new MannWhitneyUTest()
@@ -22,6 +23,8 @@ object MannWhitneyTest {
     val treatmentMedianVariance = medianVariance(treatment)
     val controlMedianVariance = medianVariance(control)
     val std = math.sqrt(treatmentMedianVariance + controlMedianVariance)
+    val size = math.max(control.length, treatment.length)
+
     val ci = CI(
       controlMedian,
       math.sqrt(controlMedianVariance),
@@ -29,12 +32,22 @@ object MannWhitneyTest {
       math.sqrt(treatmentMedianVariance),
       std,
       normal.inverseCumulativeProbability(alpha / 2),
-      normal.inverseCumulativeProbability(1 - alpha / 2)
+      normal.inverseCumulativeProbability(1 - alpha / 2),
+      size
+    )
+
+    val sampleSize = sampleSizeEstimation(
+      alpha,
+      beta,
+      controlMedian,
+      treatmentMedian,
+      (treatmentMedianVariance + controlMedianVariance) / 2
     )
 
     StatResult(
       uStatistic,
       pValue,
+      sampleSize,
       controlMedian,
       treatmentMedian,
       ci.lowerPercent,

@@ -26,7 +26,7 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
       .agg(
         collect_list($(valueColumn))
       )
-      .withColumn("statisticsData", doStatistic($(alpha))($"control", $"treatment"))
+      .withColumn("statisticsData", doStatistic($(alpha), $(beta))($"control", $"treatment"))
       .drop("control", "treatment")
   }
 
@@ -34,12 +34,13 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
 
   override def transformSchema(schema: StructType): StructType = schema
 
-  def doStatistic(alpha: Double): UserDefinedFunction = udf {
+  def doStatistic(alpha: Double, beta: Double): UserDefinedFunction = udf {
     (
         control: mutable.WrappedArray[Double],
         treatment: mutable.WrappedArray[Double]
     ) =>
-      val statResult = MannWhitneyTest.mannWhitneyTest(control.toArray, treatment.toArray, alpha)
+      val statResult =
+        MannWhitneyTest.mannWhitneyTest(control.toArray, treatment.toArray, alpha, beta)
       val controlSize = control.length
       val treatmentSize = treatment.length
       StatisticsReport(

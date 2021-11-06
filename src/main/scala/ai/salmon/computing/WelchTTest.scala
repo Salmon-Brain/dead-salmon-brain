@@ -4,12 +4,17 @@ import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.descriptive.moment.{ Mean, Variance }
 import org.apache.spark.sql.Row
 
-object WelchTTest {
+object WelchTTest extends SampleSizeEstimation {
   val EPS = 1e-10
   lazy val mean = new Mean()
   lazy val variance = new Variance()
 
-  def welchTTest(control: Array[Double], treatment: Array[Double], alpha: Double): StatResult = {
+  def welchTTest(
+      control: Array[Double],
+      treatment: Array[Double],
+      alpha: Double,
+      beta: Double
+  ): StatResult = {
     val controlData =
       DescriptiveStat(mean.evaluate(control), variance.evaluate(control), control.length.toLong)
     val treatmentData =
@@ -18,13 +23,14 @@ object WelchTTest {
         variance.evaluate(treatment),
         treatment.length.toLong
       )
-    welchTTest(controlData, treatmentData, alpha)
+    welchTTest(controlData, treatmentData, alpha, beta)
   }
 
   def welchTTest(
       controlData: DescriptiveStat,
       treatmentData: DescriptiveStat,
-      alpha: Double
+      alpha: Double,
+      beta: Double
   ): StatResult = {
     assert(alpha < 1 && alpha > 0)
 
@@ -37,9 +43,10 @@ object WelchTTest {
       case x if x._1 < EPS || x._2 < EPS =>
         StatResult(
           Double.NaN,
+          Double.NaN,
+          0L,
           controlMean,
           treatmentMean,
-          Double.NaN,
           Double.NaN,
           Double.NaN
         )
@@ -59,6 +66,7 @@ object WelchTTest {
               ) * (treatmentSampleSize - 1)))
         val tDistribution = new TDistribution(df)
         val p = 2.0 * tDistribution.cumulativeProbability(-math.abs(t))
+        val size = math.max(controlSampleSize, treatmentSampleSize)
         val ci = CI(
           controlMean,
           math.sqrt(controlVariance),
@@ -66,12 +74,22 @@ object WelchTTest {
           math.sqrt(treatmentVariance),
           std,
           tDistribution.inverseCumulativeProbability(alpha / 2),
-          tDistribution.inverseCumulativeProbability(1 - alpha / 2)
+          tDistribution.inverseCumulativeProbability(1 - alpha / 2),
+          size
+        )
+
+        val sampleSize = sampleSizeEstimation(
+          alpha,
+          beta,
+          controlMean,
+          treatmentMean,
+          math.sqrt((controlVariance + treatmentVariance) / 2)
         )
 
         StatResult(
           t,
           p,
+          sampleSize,
           controlMean,
           treatmentMean,
           ci.lowerPercent,
@@ -80,7 +98,12 @@ object WelchTTest {
     }
   }
 
-  def welchTTest(control: Row, treatment: Row, alpha: Double): StatResult = {
+  def welchTTest(
+      control: Row,
+      treatment: Row,
+      alpha: Double,
+      beta: Double
+  ): StatResult = {
     val controlData = DescriptiveStat(
       control.getAs[Double]("mean"),
       control.getAs[Double]("variance"),
@@ -91,7 +114,7 @@ object WelchTTest {
       treatment.getAs[Double]("variance"),
       treatment.getAs[Long]("length")
     )
-    welchTTest(controlData, treatmentData, alpha)
+    welchTTest(controlData, treatmentData, alpha, beta)
   }
 
   def square(x: Double): Double = {

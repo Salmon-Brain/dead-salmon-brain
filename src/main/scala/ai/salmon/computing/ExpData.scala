@@ -28,40 +28,39 @@ case class CI(
     treatmentStd: Double,
     commonStd: Double,
     leftInterval: Double,
-    rightInterval: Double
+    rightInterval: Double,
+    sampleSize: Double
 ) {
+
   def effect: Double = treatmentCentrality - controlCentrality
   def lower: Double = effect + commonStd * leftInterval
   def upper: Double = effect + commonStd * rightInterval
   def effectPercent: Double = (effect / controlCentrality) * 100
   def controlCV: Double = controlStd / controlCentrality
   def treatmentCV: Double = treatmentStd / treatmentCentrality
-  def lowerPercent: Double = getPercentEffect(effectPercent, controlCV, treatmentCV, leftInterval)
-  def upperPercent: Double = getPercentEffect(effectPercent, controlCV, treatmentCV, rightInterval)
+  def lowerPercent: Double = getPercent(leftInterval)
+  def upperPercent: Double = getPercent(rightInterval)
 
   /*
-  https://ai.stanford.edu/~ronnyk/2009controlledExperimentsOnTheWebSurvey.pdf
+  https://arxiv.org/pdf/1803.06336.pdf - delta method
+  These formulas assume the covariance between the Treatment and Control mean is
+  zero which will be true in a controlled experiment when the randomization is carried out properly
    */
-  def getPercentEffect(
-      effectPercent: Double,
-      cvControl: Double,
-      cvTreatment: Double,
-      interval: Double
-  ): Double = {
+  def getPercent(interval: Double): Double = {
     val sq = (x: Double) => x * x
-    val percent = effectPercent + 1
-    val nominator = 1 + interval * math.sqrt(
-      sq(cvControl) + sq(cvTreatment) - sq(interval) * sq(cvControl) * sq(cvTreatment)
-    )
-    val denominator = 1 - math.abs(interval) * sq(cvControl)
-    percent * (nominator / denominator) - 1
+    val pointEstimate = treatmentCentrality / controlCentrality - 1
+    val uncertainty =
+      (interval / (math.sqrt(sampleSize) * controlCentrality)) * math.sqrt(
+        treatmentStd + (sq(treatmentCentrality) * controlStd) / sq(controlCentrality)
+      )
+    (pointEstimate + uncertainty) * 100
   }
-
 }
 
 case class StatResult(
     statistic: Double,
     pValue: Double,
+    requiredSampleSizeByVariant: Long,
     controlCentralTendency: Double,
     treatmentCentralTendency: Double,
     percentageLeft: Double,
