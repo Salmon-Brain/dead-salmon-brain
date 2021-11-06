@@ -1,16 +1,14 @@
 package helpers
 
 import ai.salmon.computing.ExpData
-import org.apache.commons.math3.distribution.{
-  BetaDistribution,
-  BinomialDistribution,
-  NormalDistribution
-}
+import org.apache.commons.math3.distribution.{BetaDistribution, BinomialDistribution, NormalDistribution}
 import org.apache.commons.math3.random.Well19937a
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.from_unixtime
 
-import java.sql.Timestamp
+import java.io.{BufferedWriter, FileWriter}
+import java.sql.{Date, Timestamp}
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit.DAYS
 import scala.util.Random
@@ -162,5 +160,32 @@ object ExperimentDataGenerator extends SparkHelper {
       from,
       to
     )
+  }
+
+  def main(args: Array[String]): Unit = {
+    val expDatas = ExperimentDataGenerator.experimentDataGenerator(
+      controlSize = 20000,
+      treatmentSize = 10000,
+      uplift = 0.2,
+      withAggregation = false,
+      beta = 1000,
+      treatmentSkew = 1.5
+    )
+
+    val writer = new BufferedWriter(new FileWriter("/tmp/data.csv"), 64 * 1024)
+
+    val format = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss")
+    for (elem <- expDatas) {
+      writer.write(
+        "172.17.0.2 - \"%s\" [%s +0000] \"GET /%s/2 HTTP/1.0\" 200 100 \"-\" \"user agent 2\" \"-\"\n".format(
+          elem.entityUid + (if(elem.variantId == "control") "1" else "0"),
+          format.format(new Date(elem.timestamp)),
+          elem.metricName
+        )
+      )
+    }
+
+    writer.close()
+
   }
 }
