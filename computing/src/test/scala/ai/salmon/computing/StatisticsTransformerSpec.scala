@@ -103,7 +103,9 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
   }
 
   "MannWhitney detection uplift" should "be" in {
-    val pValues = pValuesFromResult(mannStat.transform(metricsWithUplift))
+    val res = mannStat.transform(metricsWithUplift)
+    res.write.mode("overwrite").parquet("/tmp/ci")
+    val pValues = pValuesFromResult(res)
     assert(pValues("views") > 0.05)
     assert(pValues("clicks") < 0.05)
     assert(pValues("ctr") < 0.05)

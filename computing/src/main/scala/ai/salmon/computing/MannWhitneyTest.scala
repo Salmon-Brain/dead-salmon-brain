@@ -1,12 +1,11 @@
 package ai.salmon.computing
 
-import org.apache.commons.math3.distribution.{ BinomialDistribution, NormalDistribution }
+import org.apache.commons.math3.distribution.BinomialDistribution
 import org.apache.commons.math3.stat.descriptive.rank.Median
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest
 
-object MannWhitneyTest extends SampleSizeEstimation {
+object MannWhitneyTest extends BaseStatTest {
   val median = new Median()
-  val normal = new NormalDistribution()
 
   def mannWhitneyTest(
       control: Array[Double],
@@ -27,15 +26,14 @@ object MannWhitneyTest extends SampleSizeEstimation {
 
     val ci = CI(
       controlMedian,
-      math.sqrt(controlMedianVariance),
+      controlMedianVariance,
       treatmentMedian,
-      math.sqrt(treatmentMedianVariance),
+      treatmentMedianVariance,
       std,
-      normal.inverseCumulativeProbability(alpha / 2),
-      normal.inverseCumulativeProbability(1 - alpha / 2),
+      normalDistribution.inverseCumulativeProbability(alpha / 2),
+      normalDistribution.inverseCumulativeProbability(1 - alpha / 2),
       size
     )
-
     val sampleSize = sampleSizeEstimation(
       alpha,
       beta,
@@ -67,7 +65,7 @@ object MannWhitneyTest extends SampleSizeEstimation {
 
     val y2 = sorted(alpha(sorted.length) - 1)
     val zed = zeta(sorted.length)
-    (y1 - y2) * (y1 - y2) / 4 / zed / zed
+    square(y1 - y2) / 4 / zed / zed
   }
 
   private def alpha(length: Int): Int = {
@@ -83,6 +81,6 @@ object MannWhitneyTest extends SampleSizeEstimation {
   }
 
   private def zeta(length: Int): Double = {
-    normal.inverseCumulativeProbability(1 - aBinomial(length) / 2)
+    normalDistribution.inverseCumulativeProbability(1 - aBinomial(length) / 2)
   }
 }

@@ -5,6 +5,11 @@ import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 
+/**
+ * Transformer to apply Welch test
+ * @see https://en.wikipedia.org/wiki/Welch%27s_t-test
+ * @param uid -  uid for transformer
+ */
 class WelchStatisticsTransformer(override val uid: String) extends BaseStatisticTransformer {
   def this() = this(Identifiable.randomUID("welchStatisticsTransformer"))
 

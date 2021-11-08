@@ -33,7 +33,8 @@ object ReportBuilder {
         accessLogTransformer,
         new CumulativeMetricTransformer()
           .setRatioMetricsData(ratioMetrics),
-        new WelchStatisticsTransformer()
+        new OutlierRemoveTransformer(),
+        new AutoStatisticsTransformer()
       )
     )
 

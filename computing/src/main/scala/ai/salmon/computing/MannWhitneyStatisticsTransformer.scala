@@ -10,6 +10,11 @@ import org.apache.spark.sql.{ DataFrame, Dataset }
 
 import scala.collection.mutable
 
+/**
+ * Transformer to apply Mann–Whitney U test
+ * @see https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test
+ * @param uid -  uid for transformer
+ */
 class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseStatisticTransformer {
   def this() = this(Identifiable.randomUID("mannWhitneyStatisticsTransformer"))
 

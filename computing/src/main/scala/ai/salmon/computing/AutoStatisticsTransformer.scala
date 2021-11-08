@@ -5,6 +5,10 @@ import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 
+/**
+ * Transformer to auto choose between Welch and Mann Whitney test based on data
+ * @param uid - uid for transformer
+ */
 class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticTransformer {
   def this() = this(Identifiable.randomUID("autoStatisticsTransformer"))
 

@@ -4,8 +4,7 @@ import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.descriptive.moment.{ Mean, Variance }
 import org.apache.spark.sql.Row
 
-object WelchTTest extends SampleSizeEstimation {
-  val EPS = 1e-10
+object WelchTTest extends BaseStatTest {
   lazy val mean = new Mean()
   lazy val variance = new Variance()
 
@@ -69,9 +68,9 @@ object WelchTTest extends SampleSizeEstimation {
         val size = math.max(controlSampleSize, treatmentSampleSize)
         val ci = CI(
           controlMean,
-          math.sqrt(controlVariance),
+          controlVariance,
           treatmentMean,
-          math.sqrt(treatmentVariance),
+          treatmentVariance,
           std,
           tDistribution.inverseCumulativeProbability(alpha / 2),
           tDistribution.inverseCumulativeProbability(1 - alpha / 2),
@@ -83,7 +82,7 @@ object WelchTTest extends SampleSizeEstimation {
           beta,
           controlMean,
           treatmentMean,
-          math.sqrt((controlVariance + treatmentVariance) / 2)
+          (controlVariance + treatmentVariance) / 2
         )
 
         StatResult(
@@ -115,10 +114,6 @@ object WelchTTest extends SampleSizeEstimation {
       treatment.getAs[Long]("length")
     )
     welchTTest(controlData, treatmentData, alpha, beta)
-  }
-
-  def square(x: Double): Double = {
-    x * x
   }
 }
 

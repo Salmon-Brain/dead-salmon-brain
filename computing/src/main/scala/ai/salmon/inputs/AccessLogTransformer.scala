@@ -3,7 +3,7 @@ package ai.salmon.inputs
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.{ Param, ParamMap }
 import org.apache.spark.ml.util.Identifiable
-import org.apache.spark.sql.functions.{ col, expr, lit, typedLit }
+import org.apache.spark.sql.functions.{ col, expr, lit }
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{ DataFrame, Dataset }
 
@@ -72,8 +72,6 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
       .withColumn("variantId", expr($(variantIdExpression)))
       .withColumn("metricValue", expr($(metricValueExpression)).cast(DoubleType))
       .withColumn("metricName", expr($(metricNameExpression)))
-      .withColumn("isHistory", lit(false))
-      .withColumn("entityCategories", typedLit(Seq.empty[String]))
       .withColumn("metricSource", lit("feedback"))
       .withColumn("isAdditive", lit(true))
       .filter(col("metricName") =!= "none")
@@ -84,8 +82,6 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
         "expUid",
         "metricValue",
         "metricName",
-        "isHistory",
-        "entityCategories",
         "metricSource",
         "isAdditive"
       )

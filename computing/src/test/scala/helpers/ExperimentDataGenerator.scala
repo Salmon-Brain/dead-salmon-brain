@@ -14,7 +14,10 @@ import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit.DAYS
 import scala.util.Random
-
+/*
+ Inspired by
+ https://vkteam.medium.com/practitioners-guide-to-statistical-tests-ed2d580ef04f#609f
+ */
 object ExperimentDataGenerator extends SparkHelper {
   import spark.implicits._
   val randomGenerator = new Well19937a(777)

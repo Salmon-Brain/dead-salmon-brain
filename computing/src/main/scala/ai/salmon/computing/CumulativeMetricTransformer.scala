@@ -11,6 +11,11 @@ import org.apache.spark.sql.{ DataFrame, Dataset, Row }
 import scala.collection.mutable
 import scala.util.hashing.MurmurHash3
 
+/**
+ * Transformer to aggregate data by experimental unit with additional
+ * functionality like bucketing and ratio metric computing
+ * @param uid -  uid for transformer
+ */
 class CumulativeMetricTransformer(override val uid: String)
     extends Transformer
     with DefaultParamsWritable
@@ -37,7 +42,7 @@ class CumulativeMetricTransformer(override val uid: String)
 
     val columns = constructColumnsToAggregate(withName = true, withAdditive = true)
 
-    val cumulativeMetrics = dataset
+    val additiveCumulativeMetrics = dataset
       .filter($(additiveColumn))
       .withColumn(
         $(entityIdColumn),
@@ -51,13 +56,16 @@ class CumulativeMetricTransformer(override val uid: String)
       )
       .agg(sum($(valueColumn)) as $(valueColumn))
 
+    val nonAdditiveMetrics = dataset
+      .filter(!col($(additiveColumn)))
+
     val ratioValues =
       $(ratioMetricData).flatMap(r => Seq(r.metricNominator, r.metricDenominator)).distinct
 
-    ratioValues match {
+    val metrics = ratioValues match {
       case values if values.nonEmpty => {
         val ratioColumns = constructColumnsToAggregate(withName = false, withAdditive = false)
-        val cumulativeRatioMetrics = cumulativeMetrics
+        val cumulativeRatioMetrics = additiveCumulativeMetrics
           .filter(col($(metricNameColumn)).isin(values: _*))
           .groupBy(ratioColumns.head, ratioColumns.tail: _*)
           .agg(
@@ -71,14 +79,18 @@ class CumulativeMetricTransformer(override val uid: String)
           .withColumn($(additiveColumn), lit(false))
           .drop("ratioMetric")
 
-        cumulativeMetrics.union(
-          cumulativeRatioMetrics.select(cumulativeMetrics.columns.map(col): _*)
+        additiveCumulativeMetrics.union(
+          cumulativeRatioMetrics.select(additiveCumulativeMetrics.columns.map(col): _*)
         )
-
       }
-      case _ => cumulativeMetrics
+      case _ => additiveCumulativeMetrics
     }
 
+    metrics
+      .union(
+        nonAdditiveMetrics
+          .select(additiveCumulativeMetrics.columns.map(col): _*)
+      )
   }
 
   override def copy(extra: ParamMap): Transformer = defaultCopy(extra)
@@ -100,7 +112,7 @@ class CumulativeMetricTransformer(override val uid: String)
   def setRatioMetricsData(value: Seq[RatioMetricData]): this.type =
     set(ratioMetricData, value)
 
-  def ratioUdf(pairs: Seq[RatioMetricData]): UserDefinedFunction = udf {
+  private def ratioUdf(pairs: Seq[RatioMetricData]): UserDefinedFunction = udf {
     metrics: mutable.WrappedArray[Row] =>
       val epsilon = 1e-10d
 
@@ -122,13 +134,13 @@ class CumulativeMetricTransformer(override val uid: String)
       })
   }
 
-  def uidToBucket(numBuckets: Int): UserDefinedFunction = udf {
+  private def uidToBucket(numBuckets: Int): UserDefinedFunction = udf {
     (entityUid: String, experimentUid: String) =>
       val hash = MurmurHash3.stringHash(entityUid ++ experimentUid)
       math.abs(math.max(Int.MinValue + 1, hash) % numBuckets).toString
   }
 
-  def constructColumnsToAggregate(withName: Boolean, withAdditive: Boolean): Seq[String] = {
+  private def constructColumnsToAggregate(withName: Boolean, withAdditive: Boolean): Seq[String] = {
     Seq($(variantColumn), $(entityIdColumn), $(experimentColumn), $(metricSourceColumn)) ++
       (if (withName) Seq($(metricNameColumn)) else Seq[String]()) ++
       (if (withAdditive) Seq($(additiveColumn)) else Seq[String]())
