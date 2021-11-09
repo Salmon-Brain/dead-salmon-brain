@@ -33,7 +33,8 @@ case class ExpData(
 
 
 ```scala
-import  org.apache.commons.math3.distribution.NormalDistribution
+import org.apache.commons.math3.distribution.NormalDistribution
+import org.apache.spark.ml.Pipeline
 import ai.salmon.computing.{ExpData, CumulativeMetricTransformer, OutlierRemoveTransformer, AutoStatisticsTransformer}
 
 
