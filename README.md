@@ -77,7 +77,7 @@ report.select(
 +----------+------+-----+--------+-------+---------------------------+-----------------+-----------------+
 ```
 
-### How is it understanding?
+### What they are and how to interpret them?
 [srm](https://towardsdatascience.com/the-essential-guide-to-sample-ratio-mismatch-for-your-a-b-tests-96a4db81d7a4)
  if true than your test is invalid 
 
