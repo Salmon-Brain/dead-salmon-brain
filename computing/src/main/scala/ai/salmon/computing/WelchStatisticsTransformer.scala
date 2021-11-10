@@ -46,6 +46,8 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
 
       StatisticsReport(
         statResult,
+        alpha,
+        beta,
         srm(controlSize.toInt, treatmentSize.toInt, $(srmAlpha)),
         controlSize,
         treatmentSize,

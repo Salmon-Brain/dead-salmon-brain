@@ -13,6 +13,8 @@ case class ExpData(
 
 case class StatisticsReport(
     statResult: StatResult,
+    alpha: Double,
+    beta: Double,
     srm: Boolean,
     controlSize: Long,
     treatmentSize: Long,

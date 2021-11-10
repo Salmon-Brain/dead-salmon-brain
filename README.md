@@ -54,8 +54,12 @@ val treatment = new NormalDistribution(2, 4)
 val model = new Pipeline().setStages(
   Array(
     new CumulativeMetricTransformer(), // aggregate all metrics
-    new OutlierRemoveTransformer(), // remove outliers by percentile
-    new AutoStatisticsTransformer() // auto choose and compute Welch or MannWhitney test 
+    new OutlierRemoveTransformer() // remove outliers by percentile
+           .setLowerPercentile(0.01)
+           .setUpperPercentile(0.99),
+    new AutoStatisticsTransformer() // auto choose and compute Welch or MannWhitney test
+            .setAlpha(0.05)
+            .setBeta(0.2)
   )
 )
 
@@ -94,6 +98,16 @@ report.select(
 [percentageRight](https://en.wikipedia.org/wiki/Confidence_interval) 
  upper percent confidence interval
 
+### Extra features
+```scala
+import ai.salmon.computing.RatioMetricData
+
+val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
+
+val cum = new CumulativeMetricTransformer()
+          .setNumBuckets(256) // you can split your data by buckets and use buckets like new entity
+          .setRatioMetricsData(ratioMetrics) // you can create new ratio metric by existing metrics
+```
 
 ## Contributing
 Pull requests are welcome.

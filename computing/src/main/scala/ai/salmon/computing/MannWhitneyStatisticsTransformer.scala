@@ -50,6 +50,8 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
       val treatmentSize = treatment.length
       StatisticsReport(
         statResult,
+        alpha,
+        beta,
         srm(controlSize, treatmentSize, $(srmAlpha)),
         controlSize,
         treatmentSize,

@@ -89,6 +89,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
     transformer
       .setAdditiveColumn($(additiveColumn))
       .setAlpha($(alpha))
+      .setBeta($(beta))
       .setDataProviderColumn($(metricSourceColumn))
       .setEntityIdColumn($(entityIdColumn))
       .setExperimentColumn($(experimentColumn))

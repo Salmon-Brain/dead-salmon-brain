@@ -18,7 +18,6 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
   val statWelch = new WelchStatisticsTransformer()
   val mannStat = new MannWhitneyStatisticsTransformer()
   val auto = new AutoStatisticsTransformer()
-
   val cum: CumulativeMetricTransformer = new CumulativeMetricTransformer()
     .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
 
@@ -72,7 +71,7 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     val requiredSampleSize =
       result.select("statisticsData.statResult.requiredSampleSizeByVariant").collect()(0).getLong(0)
     assert(0.036 === pValue.head)
-    assert(9 === requiredSampleSize)
+    assert(30 === requiredSampleSize)
 
   }
 
@@ -104,7 +103,6 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
 
   "MannWhitney detection uplift" should "be" in {
     val res = mannStat.transform(metricsWithUplift)
-    res.write.mode("overwrite").parquet("/tmp/ci")
     val pValues = pValuesFromResult(res)
     assert(pValues("views") > 0.05)
     assert(pValues("clicks") < 0.05)
