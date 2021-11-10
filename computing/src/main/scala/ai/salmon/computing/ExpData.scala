@@ -7,14 +7,14 @@ case class ExpData(
     expUid: String,
     metricValue: Double,
     metricName: String,
-    isHistory: Boolean = false,
-    entityCategories: Seq[String] = Seq[String](),
     metricSource: String = "feedback",
     isAdditive: Boolean = true
 )
 
 case class StatisticsReport(
     statResult: StatResult,
+    alpha: Double,
+    beta: Double,
     srm: Boolean,
     controlSize: Long,
     treatmentSize: Long,
@@ -23,9 +23,9 @@ case class StatisticsReport(
 
 case class CI(
     controlCentrality: Double,
-    controlStd: Double,
+    controlVariance: Double,
     treatmentCentrality: Double,
-    treatmentStd: Double,
+    treatmentVariance: Double,
     commonStd: Double,
     leftInterval: Double,
     rightInterval: Double,
@@ -35,9 +35,6 @@ case class CI(
   def effect: Double = treatmentCentrality - controlCentrality
   def lower: Double = effect + commonStd * leftInterval
   def upper: Double = effect + commonStd * rightInterval
-  def effectPercent: Double = (effect / controlCentrality) * 100
-  def controlCV: Double = controlStd / controlCentrality
-  def treatmentCV: Double = treatmentStd / treatmentCentrality
   def lowerPercent: Double = getPercent(leftInterval)
   def upperPercent: Double = getPercent(rightInterval)
 
@@ -51,7 +48,7 @@ case class CI(
     val pointEstimate = treatmentCentrality / controlCentrality - 1
     val uncertainty =
       (interval / (math.sqrt(sampleSize) * controlCentrality)) * math.sqrt(
-        treatmentStd + (sq(treatmentCentrality) * controlStd) / sq(controlCentrality)
+        treatmentVariance + (sq(treatmentCentrality) * controlVariance) / sq(controlCentrality)
       )
     (pointEstimate + uncertainty) * 100
   }

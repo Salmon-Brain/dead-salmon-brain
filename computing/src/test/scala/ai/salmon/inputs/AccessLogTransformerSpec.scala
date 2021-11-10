@@ -10,7 +10,6 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 class AccessLogTransformerSpec extends AnyFlatSpec with SparkHelper with Matchers {
 
   "AccessLogTransformer" should "be" in {
-
     import sqlc.implicits._
     val logsDF: DataFrame = sc
       .parallelize(

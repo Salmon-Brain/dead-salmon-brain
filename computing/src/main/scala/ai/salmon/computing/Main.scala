@@ -17,9 +17,8 @@ object Main {
     }
     val spark = builder.getOrCreate()
     val report = ReportBuilder.buildReport(config, spark)
-    report
-      .coalesce(1)
-      .write
+    report.write
+      .partitionBy("expUid")
       .mode(SaveMode.Overwrite)
       .json(config.output)
   }

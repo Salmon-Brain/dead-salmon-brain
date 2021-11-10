@@ -2,8 +2,9 @@ package ai.salmon.computing
 
 import org.apache.commons.math3.distribution.NormalDistribution
 
-trait SampleSizeEstimation {
+trait BaseStatTest {
   val normalDistribution = new NormalDistribution(0, 1)
+  val EPS = 1e-10
 
   /*
     van Belle G (2002) Statistical rules of thumb. Wiley, ISBN: 0471402273
@@ -15,16 +16,18 @@ trait SampleSizeEstimation {
       treatmentCentralTendency: Double,
       commonVariance: Double
   ): Long = {
-    val sq = (x: Double) => x * x
     val nominator = 2 * math.ceil(
-      math.pow(
+      square(
         normalDistribution.inverseCumulativeProbability(1 - alpha / 2) + normalDistribution
-          .inverseCumulativeProbability(1 - beta),
-        2
+          .inverseCumulativeProbability(1 - beta)
       )
     )
 
-    val denominator = sq(treatmentCentralTendency - controlCentralTendency) / commonVariance
-    (nominator / denominator).toLong
+    val denominator = square(treatmentCentralTendency - controlCentralTendency) / commonVariance
+    if (denominator < EPS) 0 else (nominator / denominator).toLong
+  }
+
+  def square(x: Double): Double = {
+    x * x
   }
 }

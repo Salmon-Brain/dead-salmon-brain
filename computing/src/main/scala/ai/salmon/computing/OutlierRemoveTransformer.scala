@@ -7,6 +7,10 @@ import org.apache.spark.sql.functions.{ broadcast, callUDF, col, lit }
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ DataFrame, Dataset }
 
+/**
+ * Transformer to remove outliers from data based on percentiles
+ * @param uid -  uid for transformer
+ */
 class OutlierRemoveTransformer(override val uid: String)
     extends Transformer
     with BaseStatisticTransformerParameters {

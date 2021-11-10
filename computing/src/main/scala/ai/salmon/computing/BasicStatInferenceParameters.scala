@@ -24,13 +24,6 @@ trait BasicStatInferenceParameters extends Params {
   )
   setDefault(srmAlpha, 0.05)
 
-  val minimumDetectableEffect: Param[Double] = new Param[Double](
-    this,
-    "alpha",
-    "desire detectable effect size"
-  )
-  setDefault(minimumDetectableEffect, 0.05)
-
   /** @group setParam */
   def setAlpha(value: Double): this.type =
     set(alpha, value)
@@ -38,10 +31,6 @@ trait BasicStatInferenceParameters extends Params {
   /** @group setParam */
   def setBeta(value: Double): this.type =
     set(beta, value)
-
-  /** @group setParam */
-  def setMinimumDetectableEffect(value: Double): this.type =
-    set(minimumDetectableEffect, value)
 
   /** @group setParam */
   def setSrmAlpha(value: Double): this.type =
