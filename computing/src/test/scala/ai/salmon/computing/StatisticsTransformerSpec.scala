@@ -1,14 +1,11 @@
 package ai.salmon.computing
 
-import helpers.ExperimentDataGenerator.{
-  experimentDataGenerator,
-  generateDataForWelchTest,
-  seqExpDataToDataFrame
-}
+import ai.salmon.computing.Variants.Variant
+import helpers.ExperimentDataGenerator.{experimentDataGenerator, generateDataForWelchTest, seqExpDataToDataFrame}
 import helpers.SparkHelper
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.first
-import org.scalactic.{ Equality, TolerantNumerics }
+import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 

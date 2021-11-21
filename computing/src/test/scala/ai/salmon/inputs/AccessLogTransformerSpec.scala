@@ -1,6 +1,6 @@
 package ai.salmon.inputs;
 
-import ai.salmon.computing.ExpData
+import ai.salmon.computing.{ExpData, Variants}
 import helpers.SparkHelper
 import org.apache.spark.sql.DataFrame
 import org.scalatest.flatspec.AnyFlatSpec
@@ -44,13 +44,13 @@ class AccessLogTransformerSpec extends AnyFlatSpec with SparkHelper with Matcher
     val expected = sc
       .parallelize(
         Seq(
-          ExpData(1L, "treatment", "user1", "exp1", 1.0, "view"),
-          ExpData(2L, "treatment", "user1", "exp1", 1.0, "view"),
-          ExpData(3L, "treatment", "user1", "exp1", 1.0, "view"),
-          ExpData(5L, "treatment", "user1", "exp1", 1.0, "click"),
-          ExpData(7L, "control", "user2", "exp1", 1.0, "view"),
-          ExpData(8L, "control", "user2", "exp1", 1.0, "click"),
-          ExpData(9L, "control", "user4", "exp1", 1.0, "view")
+          ExpData(1L, Variants.Treatment, "user1", "exp1", 1.0, "view"),
+          ExpData(2L, Variants.Treatment, "user1", "exp1", 1.0, "view"),
+          ExpData(3L, Variants.Treatment, "user1", "exp1", 1.0, "view"),
+          ExpData(5L, Variants.Treatment, "user1", "exp1", 1.0, "click"),
+          ExpData(7L, Variants.Control, "user2", "exp1", 1.0, "view"),
+          ExpData(8L, Variants.Control, "user2", "exp1", 1.0, "click"),
+          ExpData(9L, Variants.Control, "user4", "exp1", 1.0, "view")
         )
       )
       .toDF()

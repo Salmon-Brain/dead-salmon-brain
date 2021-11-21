@@ -1,8 +1,26 @@
 package ai.salmon.computing
 
+import ai.salmon.computing
+
+class Variant extends Enumeration {
+  val CONTROL = ChessPieceVal("CONTROL")
+  val TREATMENT = ChessPieceVal("CONTROL")
+  protected case class ChessPieceVal(name: String) extends super.Val()
+  implicit def convert(value: Value) = value.asInstanceOf[Variant]
+}
+
+class Variants {
+
+}
+
+object MyDataEncoders {
+  implicit def variantEncoder: org.apache.spark.sql.Encoder[Variant] =
+    org.apache.spark.sql.Encoders.kryo[Variant]
+}
+
 case class ExpData(
     timestamp: Long,
-    variantId: String,
+    variantId: Variant,
     entityUid: String,
     expUid: String,
     metricValue: Double,
