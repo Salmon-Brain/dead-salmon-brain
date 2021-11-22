@@ -1,4 +1,4 @@
-from pyspark import since, keyword_only
+from pyspark import keyword_only
 from pyspark.ml.common import inherit_doc
 from pyspark.ml.util import JavaMLReadable, JavaMLWritable
 from pyspark.ml.wrapper import (
@@ -7,7 +7,7 @@ from pyspark.ml.wrapper import (
 
 __all__ = ["CumulativeMetricTransformer"]
 
-from params import BaseStatisticTransformerParameters
+from ai.salmon import BaseStatisticTransformerParameters
 
 
 @inherit_doc
@@ -28,13 +28,12 @@ class CumulativeMetricTransformer(
     ):
         super(CumulativeMetricTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
-            "import ai.salmon.computing.CumulativeMetricTransformer", self.uid
+            "ai.salmon.computing.CumulativeMetricTransformer", self.uid
         )
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
 
     @keyword_only
-    @since("2.3.0")
     def setParams(
         self,
         *,

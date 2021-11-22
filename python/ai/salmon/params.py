@@ -17,7 +17,7 @@ class BaseStatisticTransformerParameters(Params):
     )
     experimentColumn = Param(
         Params._dummy(),
-        "metricSource",
+        "experimentColumn",
         "",
         typeConverter=TypeConverters.toString,
     )
