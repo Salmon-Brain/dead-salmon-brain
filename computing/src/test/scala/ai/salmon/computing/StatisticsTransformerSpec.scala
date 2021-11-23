@@ -19,10 +19,14 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
   val mannStat = new MannWhitneyStatisticsTransformer()
   val auto = new AutoStatisticsTransformer()
   val cum: CumulativeMetricTransformer = new CumulativeMetricTransformer()
-    .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
+    .setNumeratorNames(Array("clicks"))
+    .setDenominatorNames(Array("views"))
+    .setRatioMetrics(Array("ctr"))
 
   val cumWithBuckets: CumulativeMetricTransformer = new CumulativeMetricTransformer()
-    .setRatioMetricsData(Seq(RatioMetricData("clicks", "views", "ctr")))
+    .setNumeratorNames(Array("clicks"))
+    .setDenominatorNames(Array("views"))
+    .setRatioMetrics(Array("ctr"))
     .setNumBuckets(256)
 
   private val metricsWithUplift: DataFrame = cumWithBuckets.transform(

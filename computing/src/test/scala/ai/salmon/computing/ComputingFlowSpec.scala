@@ -18,12 +18,13 @@ class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
           withAggregation = false
         )
       )
-    val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
 
     val statPipe = new Pipeline().setStages(
       Array(
         new CumulativeMetricTransformer()
-          .setRatioMetricsData(ratioMetrics),
+          .setNumeratorNames(Array("clicks"))
+          .setDenominatorNames(Array("views"))
+          .setRatioMetrics(Array("ctr")),
         new OutlierRemoveTransformer(),
         new AutoStatisticsTransformer()
       )

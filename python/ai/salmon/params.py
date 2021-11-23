@@ -92,3 +92,50 @@ class BaseStatisticTransformerParameters(Params):
 
     def setAdditiveColumn(self, value):
         return self._set(additiveColumn=value)
+
+
+class BasicStatInferenceParameters(Params):
+    alpha = Param(
+        Params._dummy(),
+        "alpha",
+        "",
+        typeConverter=TypeConverters.toFloat,
+    )
+
+    beta = Param(
+        Params._dummy(),
+        "beta",
+        "",
+        typeConverter=TypeConverters.toFloat,
+    )
+
+    srmAlpha = Param(
+        Params._dummy(),
+        "srmAlpha",
+        "",
+        typeConverter=TypeConverters.toFloat,
+    )
+
+    def __init__(self):
+        super(BasicStatInferenceParameters, self).__init__()
+        self._setDefault(alpha=0.05)
+        self._setDefault(beta=0.02)
+        self._setDefault(srmAlpha=0.05)
+
+    def getAlpha(self):
+        return self.getOrDefault(self.alpha)
+
+    def setAlpha(self, value):
+        return self._set(alpha=value)
+
+    def getBeta(self):
+        return self.getOrDefault(self.beta)
+
+    def setBeta(self, value):
+        return self._set(beta=value)
+
+    def getSrmAlpha(self):
+        return self.getOrDefault(self.srmAlpha)
+
+    def setSrmAlpha(self, value):
+        return self._set(srmAlpha=value)
