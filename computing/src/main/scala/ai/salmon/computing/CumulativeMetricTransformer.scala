@@ -138,7 +138,7 @@ class CumulativeMetricTransformer(override val uid: String)
     set(denominatorMetrics, value)
 
   /** @group setParam */
-  def setRatioMetrics(value: Array[String]): this.type =
+  def setRatioNames(value: Array[String]): this.type =
     set(ratioMetrics, value)
 
   private def ratioUdf(pairs: Seq[RatioMetricData]): UserDefinedFunction = udf {

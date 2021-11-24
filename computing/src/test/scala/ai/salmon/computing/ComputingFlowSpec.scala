@@ -24,7 +24,7 @@ class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
         new CumulativeMetricTransformer()
           .setNumeratorNames(Array("clicks"))
           .setDenominatorNames(Array("views"))
-          .setRatioMetrics(Array("ctr")),
+          .setRatioNames(Array("ctr")),
         new OutlierRemoveTransformer(),
         new AutoStatisticsTransformer()
       )

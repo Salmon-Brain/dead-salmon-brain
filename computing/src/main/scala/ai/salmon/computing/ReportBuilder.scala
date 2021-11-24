@@ -32,7 +32,7 @@ object ReportBuilder {
         new CumulativeMetricTransformer()
           .setNumeratorNames(Array("clicks"))
           .setDenominatorNames(Array("views"))
-          .setRatioMetrics(Array("ctr")),
+          .setRatioNames(Array("ctr")),
         new OutlierRemoveTransformer(),
         new AutoStatisticsTransformer()
       )

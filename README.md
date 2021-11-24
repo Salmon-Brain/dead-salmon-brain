@@ -102,11 +102,11 @@ report.select(
 ```scala
 import ai.salmon.computing.RatioMetricData
 
-val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
-
 val cum = new CumulativeMetricTransformer()
           .setNumBuckets(256) // you can split your data by buckets and use buckets like new entity
-          .setRatioMetricsData(ratioMetrics) // you can create new ratio metric by existing metrics
+          .setNumeratorNames(Array("clicks"))  // you can set numerator
+          .setDenominatorNames(Array("views")) // and denominator
+          .setRatioNames(Array("ctr"))  // and create new ratio metric
 ```
 
 ## Contributing

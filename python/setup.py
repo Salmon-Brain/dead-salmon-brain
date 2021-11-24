@@ -1,0 +1,28 @@
+from os import path
+
+from setuptools import setup, find_packages
+
+here = path.abspath(path.dirname(__file__))
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setup(
+    name='dead-salmon-brain',
+    version='0.0.1',
+    description='Dead Salmon Brain is a cluster computing system for analysing A/B experiments',
+    license="Apache License v2.0",
+    author='Dead Salmon Brain',
+    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    python_requires='>=3.6',
+    install_requires=['pyspark>=2.3.0'],
+    project_urls={
+        'Source code': 'https://github.com/Salmon-Brain/salmon-brain',
+    },
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: Apache Software License"
+    ]
+)

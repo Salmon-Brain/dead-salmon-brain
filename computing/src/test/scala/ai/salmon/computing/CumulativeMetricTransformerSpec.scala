@@ -13,7 +13,7 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
     val cumulativeData = new CumulativeMetricTransformer()
       .setNumeratorNames(Array("clicks"))
       .setDenominatorNames(Array("views"))
-      .setRatioMetrics(Array("ctr"))
+      .setRatioNames(Array("ctr"))
       .setNumBuckets(256)
       .transform(metrics)
 
