@@ -96,15 +96,6 @@ class CumulativeMetricTransformer(
     def setRatioMetrics(self, value):
         return self._set(ratioMetrics=value)
 
-    def getNumeratorMetrics(self):
-        return self.numeratorMetrics
-
-    def getDenominatorMetrics(self):
-        return self.denominatorMetrics
-
-    def getRatioMetrics(self):
-        return self.ratioMetrics
-
 
 class StatisticTransformer:
     @keyword_only
@@ -283,11 +274,5 @@ class OutlierRemoveTransformer(
     def setLowerPercentile(self, value):
         return self._set(lowerPercentile=value)
 
-    def getLowerPercentile(self):
-        return self.lowerPercentile
-
     def setUpperPercentile(self, value):
         return self._set(upperPercentile=value)
-
-    def getUpperPercentile(self):
-        return self.upperPercentile

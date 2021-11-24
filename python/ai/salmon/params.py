@@ -57,24 +57,6 @@ class BaseStatisticTransformerParameters(Params):
         self._setDefault(valueColumn="metricValue")
         self._setDefault(additiveColumn="isAdditive")
 
-    def getMetricSourceColumn(self):
-        return self.getOrDefault(self.metricSourceColumn)
-
-    def getEntityIdColumn(self):
-        return self.getOrDefault(self.entityIdColumn)
-
-    def getExperimentColumn(self):
-        return self.getOrDefault(self.experimentColumn)
-
-    def getVariantColumn(self):
-        return self.getOrDefault(self.variantColumn)
-
-    def getValueColumn(self):
-        return self.getOrDefault(self.valueColumn)
-
-    def getAdditiveColumn(self):
-        return self.getOrDefault(self.additiveColumn)
-
     def setMetricSourceColumn(self, value):
         return self._set(metricSourceColumn=value)
 
@@ -122,20 +104,11 @@ class BasicStatInferenceParameters(Params):
         self._setDefault(beta=0.02)
         self._setDefault(srmAlpha=0.05)
 
-    def getAlpha(self):
-        return self.getOrDefault(self.alpha)
-
     def setAlpha(self, value):
         return self._set(alpha=value)
 
-    def getBeta(self):
-        return self.getOrDefault(self.beta)
-
     def setBeta(self, value):
         return self._set(beta=value)
-
-    def getSrmAlpha(self):
-        return self.getOrDefault(self.srmAlpha)
 
     def setSrmAlpha(self, value):
         return self._set(srmAlpha=value)
