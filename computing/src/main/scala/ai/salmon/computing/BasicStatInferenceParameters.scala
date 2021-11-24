@@ -19,7 +19,7 @@ trait BasicStatInferenceParameters extends Params {
 
   val srmAlpha: Param[Double] = new Param[Double](
     this,
-    "alpha",
+    "srmAlpha",
     "parameter for check FPR for SRM"
   )
   setDefault(srmAlpha, 0.05)

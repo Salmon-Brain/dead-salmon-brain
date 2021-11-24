@@ -11,18 +11,18 @@ spark = (
     .getOrCreate()
 )
 
-cum = CumulativeMetricTransformer().setMetricSourceColumn("source")
+cum = CumulativeMetricTransformer()
 welch = WelchStatisticsTransformer()
 
 data = spark.createDataFrame(
     [
-        ("feedback", "1", "exp", "treatment", 1.0, "ts", True),
-        ("feedback", "2", "exp", "treatment", 1.0, "ts", True),
-        ("feedback", "3", "exp", "control", 1.0, "ts", True),
-        ("feedback", "4", "exp", "control", 1.0, "ts", True),
+        ("feedback", "1", "exp", "treatment", 1.0, "ts", False),
+        ("feedback", "2", "exp", "treatment", 10.0, "ts", False),
+        ("feedback", "3", "exp", "control", 1.0, "ts", False),
+        ("feedback", "4", "exp", "control", 15.0, "ts", False),
     ],
     [
-        "source",
+        "metricSource",
         "entityUid",
         "expUid",
         "variantId",
@@ -31,4 +31,4 @@ data = spark.createDataFrame(
         "isAdditive",
     ],
 )
-welch.transform(cum.transform(data)).show()
+welch.transform(cum.transform(data)).select("statisticsData.*").show()
