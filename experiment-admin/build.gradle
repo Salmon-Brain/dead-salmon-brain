@@ -1,0 +1,33 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version '2.5.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    testImplementation 'org.testng:testng:7.4.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+application {
+    mainClass = 'ai.student.admin.App'
+}
+
+tasks.named('test') {
+    useTestNG()
+}
