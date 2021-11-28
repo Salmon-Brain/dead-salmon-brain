@@ -77,3 +77,8 @@ object TestType extends Enumeration {
   type CentralTendency = Value
   val WELCH, MANN_WHITNEY = Value
 }
+
+object Variants extends Enumeration {
+  type CentralTendency = Value
+  val CONTROL, TREATMENT = Value
+}

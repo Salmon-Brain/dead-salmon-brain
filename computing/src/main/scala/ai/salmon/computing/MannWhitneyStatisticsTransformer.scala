@@ -4,7 +4,7 @@ import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.functions.{ collect_list, udf }
+import org.apache.spark.sql.functions.{ col, collect_list, lower, udf }
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ DataFrame, Dataset }
 
@@ -20,7 +20,9 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sqlContext.implicits._
+    checkVariants(dataset)
     dataset
+      .withColumn($(variantColumn), lower(col($(variantColumn))))
       .groupBy(
         $(experimentColumn),
         $(metricNameColumn),
