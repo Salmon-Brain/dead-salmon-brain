@@ -5,46 +5,46 @@ class BaseStatisticTransformerParameters(Params):
     metricSourceColumn = Param(
         Params._dummy(),
         "metricSourceColumn",
-        "",
+        "column with experiment metric data source",
         typeConverter=TypeConverters.toString,
     )
 
     entityIdColumn = Param(
         Params._dummy(),
         "entityIdColumn",
-        "",
+        "column with entity id",
         typeConverter=TypeConverters.toString,
     )
     experimentColumn = Param(
         Params._dummy(),
         "experimentColumn",
-        "",
+        "column with experiment id",
         typeConverter=TypeConverters.toString,
     )
     variantColumn = Param(
         Params._dummy(),
         "variantColumn",
-        "",
+        "column to split control and treatment",
         typeConverter=TypeConverters.toString,
     )
     valueColumn = Param(
         Params._dummy(),
         "valueColumn",
-        "",
+        "column with metric value",
         typeConverter=TypeConverters.toString,
     )
 
     metricNameColumn = Param(
         Params._dummy(),
         "metricNameColumn",
-        "",
+        "column with metric name",
         typeConverter=TypeConverters.toString,
     )
 
     additiveColumn = Param(
         Params._dummy(),
         "additiveColumn",
-        "",
+        "column with metric type additive or non_additive",
         typeConverter=TypeConverters.toString,
     )
 
@@ -80,21 +80,21 @@ class BasicStatInferenceParameters(Params):
     alpha = Param(
         Params._dummy(),
         "alpha",
-        "",
+        "parameter for check Type 1 error",
         typeConverter=TypeConverters.toFloat,
     )
 
     beta = Param(
         Params._dummy(),
         "beta",
-        "",
+        "parameter for check Type 2 error",
         typeConverter=TypeConverters.toFloat,
     )
 
     srmAlpha = Param(
         Params._dummy(),
         "srmAlpha",
-        "",
+        "parameter for check FPR for SRM",
         typeConverter=TypeConverters.toFloat,
     )
 

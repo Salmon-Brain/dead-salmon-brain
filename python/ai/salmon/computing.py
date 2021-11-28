@@ -16,28 +16,28 @@ class CumulativeMetricTransformer(
     numBuckets = Param(
         Params._dummy(),
         "numBuckets",
-        "",
+        "change entity uid to synth buckets",
         typeConverter=TypeConverters.toInt,
     )
 
-    numeratorMetrics = Param(
+    numeratorNames = Param(
         Params._dummy(),
-        "numeratorMetrics",
-        "",
+        "numeratorNames",
+        "numerator metrics names",
         typeConverter=TypeConverters.toListString,
     )
 
-    denominatorMetrics = Param(
+    denominatorNames = Param(
         Params._dummy(),
-        "denominatorMetrics",
-        "",
+        "denominatorNames",
+        "denominator metric names",
         typeConverter=TypeConverters.toListString,
     )
 
-    ratioMetrics = Param(
+    ratioNames = Param(
         Params._dummy(),
-        "ratioMetrics",
-        "",
+        "ratioNames",
+        "new ratio metric names",
         typeConverter=TypeConverters.toListString,
     )
 
@@ -53,18 +53,18 @@ class CumulativeMetricTransformer(
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
         numBuckets=-1,
-        numeratorMetrics=[],
-        denominatorMetrics=[],
-        ratioMetric=[]
+        numeratorNames=[],
+        denominatorNames=[],
+        ratioNames=[]
     ):
         super(CumulativeMetricTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
             "ai.salmon.computing.CumulativeMetricTransformer", self.uid
         )
         self._setDefault(numBuckets=-1)
-        self._setDefault(numeratorMetrics=[])
-        self._setDefault(denominatorMetrics=[])
-        self._setDefault(ratioMetrics=[])
+        self._setDefault(numeratorNames=[])
+        self._setDefault(denominatorNames=[])
+        self._setDefault(ratioNames=[])
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
 
@@ -80,21 +80,21 @@ class CumulativeMetricTransformer(
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
         numBuckets=-1,
-        numeratorMetrics=[],
-        denominatorMetrics=[],
-        ratioMetric=[]
+        numeratorNames=[],
+        denominatorNames=[],
+        ratioNames=[]
     ):
         kwargs = self._input_kwargs
         return self._set(**kwargs)
 
-    def setNumeratorMetrics(self, value):
-        return self._set(numeratorMetrics=value)
+    def setNumeratorNames(self, value):
+        return self._set(numeratorNames=value)
 
-    def setDenominatorMetrics(self, value):
-        return self._set(denominatorMetrics=value)
+    def setDenominatorNames(self, value):
+        return self._set(denominatorNames=value)
 
-    def setRatioMetrics(self, value):
-        return self._set(ratioMetrics=value)
+    def setRatioNames(self, value):
+        return self._set(ratioNames=value)
 
 
 class StatisticTransformer:
@@ -220,14 +220,14 @@ class OutlierRemoveTransformer(
     lowerPercentile = Param(
         Params._dummy(),
         "lowerPercentile",
-        "",
+        "lower percentile to clear outliers",
         typeConverter=TypeConverters.toFloat,
     )
 
     upperPercentile = Param(
         Params._dummy(),
         "upperPercentile",
-        "",
+        "upper percentile to clear outliers",
         typeConverter=TypeConverters.toFloat,
     )
 
