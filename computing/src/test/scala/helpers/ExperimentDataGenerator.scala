@@ -1,7 +1,11 @@
 package helpers
 
-import ai.salmon.computing.{ExpData, Variants}
-import org.apache.commons.math3.distribution.{BetaDistribution, BinomialDistribution, NormalDistribution}
+import ai.salmon.computing.ExpData
+import org.apache.commons.math3.distribution.{
+  BetaDistribution,
+  BinomialDistribution,
+  NormalDistribution
+}
 import org.apache.commons.math3.random.Well19937a
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.from_unixtime
@@ -23,13 +27,13 @@ object ExperimentDataGenerator extends SparkHelper {
       23.2, 17.5, 20.6, 18, 23.9, 21.6, 24.3, 20.4, 24, 13.2)
 
     val controlData = controlMetricValues.zipWithIndex.map { case (value, idx) =>
-      ExpData(System.currentTimeMillis(), Variants.Control, idx.toString, "exp", value, "timeSpent")
+      ExpData(System.currentTimeMillis(), "control", idx.toString, "exp", value, "timeSpent")
     }
 
     val treatmentData = treatmentMetricValues.zipWithIndex.map { case (value, idx) =>
       ExpData(
         System.currentTimeMillis(),
-        Variants.Treatment,
+        "treatment",
         (idx + controlMetricValues.length).toString,
         "exp",
         value,
@@ -70,14 +74,14 @@ object ExperimentDataGenerator extends SparkHelper {
 
     val controlViewsMetricValues = viewsControl.zipWithIndex.flatMap { case (value, idx) =>
       expandByValue(
-        ExpData(dates.next(), Variants.Control, idx.toString, "exp", value, "views"),
+        ExpData(dates.next(), "control", idx.toString, "exp", value, "views"),
         withAggregation
       )
     }
 
     val controlClicksMetricValues = clicksControl.zipWithIndex.flatMap { case (value, idx) =>
       expandByValue(
-        ExpData(dates.next(), Variants.Control, idx.toString, "exp", value, "clicks"),
+        ExpData(dates.next(), "control", idx.toString, "exp", value, "clicks"),
         withAggregation
       )
     }
@@ -86,7 +90,7 @@ object ExperimentDataGenerator extends SparkHelper {
       expandByValue(
         ExpData(
           dates.next(),
-          Variants.Treatment,
+          "treatment",
           (idx + controlClicksMetricValues.length).toString,
           "exp",
           value,
@@ -100,7 +104,7 @@ object ExperimentDataGenerator extends SparkHelper {
       expandByValue(
         ExpData(
           dates.next(),
-          Variants.Treatment,
+          "treatment",
           (idx + controlClicksMetricValues.length).toString,
           "exp",
           value,
