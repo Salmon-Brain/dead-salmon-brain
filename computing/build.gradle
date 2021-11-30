@@ -44,3 +44,17 @@ shadowJar {
     zip64 true
     mergeServiceFiles("META-INF/services/org.apache.spark.sql.sources.DataSourceRegister")
 }
+
+test{
+    maxHeapSize = '1G'
+}
+
+task pythonTest(type: Exec) {
+    workingDir '../python/tests'
+    commandLine "pytest"
+    def stdout = new ByteArrayOutputStream()
+    errorOutput = stdout
+    println stdout;
+}
+
+pythonTest.dependsOn test

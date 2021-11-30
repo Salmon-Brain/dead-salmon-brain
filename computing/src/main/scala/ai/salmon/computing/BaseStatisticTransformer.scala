@@ -13,7 +13,6 @@ trait BaseStatisticTransformer
     with BaseStatisticTransformerParameters
     with BasicStatInferenceParameters {
 
-  protected val variants = Variants.values.map(_.toString.toLowerCase)
   protected val outputSchema: StructType =
     StructType(
       Array(
@@ -43,12 +42,16 @@ trait BaseStatisticTransformer
   }
 
   protected def checkVariants(dataset: Dataset[_]): Unit = {
+    val expectedVariants = Set($(treatmentName), $(controlName))
     val observedVariants = dataset
       .select($(variantColumn))
       .distinct()
       .collect()
       .map(row => row.getAs[String]($(variantColumn)))
       .toSet
-    assert(variants == observedVariants, "Variants must be named control and treatment")
+    assert(
+      expectedVariants == observedVariants,
+      s"Variants must be named ${$(treatmentName)} and ${$(controlName)}"
+    )
   }
 }

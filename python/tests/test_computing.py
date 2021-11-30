@@ -6,7 +6,11 @@ from ai.salmon import (
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
 )
-from tests import src
+
+
+@pytest.fixture(scope="session")
+def path(pytestconfig):
+    return pytestconfig.getoption("path")
 
 
 @pytest.fixture(scope="session")
@@ -59,15 +63,15 @@ def data_sample(spark: SparkSession):
 
 
 @pytest.fixture(scope="session")
-def spark():
+def spark(path: str):
     return (
         SparkSession.builder.appName("Python Spark for tests")
-        .config("spark.jars", src)
+        .config("spark.jars", path)
         .getOrCreate()
     )
 
 
-def test_cumulativeMetricTransformer(spark: SparkSession, data_sample: DataFrame):
+def test_cumulativeMetricTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer(
         metricSourceColumn="metricSource",
         entityIdColumn="entityUid",
@@ -100,7 +104,7 @@ def test_cumulativeMetricTransformer(spark: SparkSession, data_sample: DataFrame
         assert value in values
 
 
-def test_welchStatisticsTransformer(spark: SparkSession, data_sample: DataFrame):
+def test_welchStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
     welch = WelchStatisticsTransformer()
     result = welch.transform(cum.transform(data_sample))
@@ -122,7 +126,7 @@ def test_mannWhitneyStatisticsTransformer(spark: SparkSession, data_sample: Data
     assert all([p > 0.05 for p in p_values])
 
 
-def test_autoStatisticsTransformer(spark: SparkSession, data_sample: DataFrame):
+def test_autoStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
     welch = WelchStatisticsTransformer()
     result = welch.transform(cum.transform(data_sample))
@@ -134,7 +138,7 @@ def test_autoStatisticsTransformer(spark: SparkSession, data_sample: DataFrame):
 
 
 def test_outlierRemoveTransformer(
-    spark: SparkSession, data_sample_for_outlier: DataFrame
+    data_sample_for_outlier: DataFrame
 ):
     outlier = OutlierRemoveTransformer(lowerPercentile=0.05, upperPercentile=0.95)
     result = outlier.transform(data_sample_for_outlier)

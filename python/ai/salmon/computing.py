@@ -111,7 +111,9 @@ class StatisticTransformer:
         variantColumn="variantId",
         valueColumn="metricValue",
         metricNameColumn="metricName",
-        additiveColumn="isAdditive"
+        additiveColumn="isAdditive",
+        controlName="control",
+        treatmentName="treatment"
     ):
         kwargs = self._input_kwargs
         return self._set(**kwargs)
@@ -139,7 +141,9 @@ class WelchStatisticsTransformer(
         variantColumn="variantId",
         valueColumn="metricValue",
         metricNameColumn="metricName",
-        additiveColumn="isAdditive"
+        additiveColumn="isAdditive",
+        controlName="control",
+        treatmentName="treatment"
     ):
         super(WelchStatisticsTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
@@ -171,7 +175,9 @@ class MannWhitneyStatisticsTransformer(
         variantColumn="variantId",
         valueColumn="metricValue",
         metricNameColumn="metricName",
-        additiveColumn="isAdditive"
+        additiveColumn="isAdditive",
+        controlName="control",
+        treatmentName="treatment"
     ):
         super(MannWhitneyStatisticsTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
@@ -203,7 +209,9 @@ class AutoStatisticsTransformer(
         variantColumn="variantId",
         valueColumn="metricValue",
         metricNameColumn="metricName",
-        additiveColumn="isAdditive"
+        additiveColumn="isAdditive",
+        controlName="control",
+        treatmentName="treatment"
     ):
         super(AutoStatisticsTransformer, self).__init__()
         self._java_obj = self._new_java_obj(

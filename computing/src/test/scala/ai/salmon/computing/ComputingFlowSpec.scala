@@ -22,10 +22,7 @@ class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
     val statPipe = new Pipeline().setStages(
       Array(
         new CumulativeMetricTransformer()
-          .setNumBuckets(256)
-          .setNumeratorNames(Array("clicks"))
-          .setDenominatorNames(Array("views"))
-          .setRatioNames(Array("ctr")),
+          .setNumBuckets(256),
         new OutlierRemoveTransformer(),
         new AutoStatisticsTransformer()
       )

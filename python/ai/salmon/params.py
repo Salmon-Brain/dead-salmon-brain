@@ -48,6 +48,20 @@ class BaseStatisticTransformerParameters(Params):
         typeConverter=TypeConverters.toString,
     )
 
+    controlName = Param(
+        Params._dummy(),
+        "controlName",
+        "label for control groups",
+        typeConverter=TypeConverters.toString,
+    )
+
+    treatmentName = Param(
+        Params._dummy(),
+        "treatmentName",
+        "label for treatment groups",
+        typeConverter=TypeConverters.toString,
+    )
+
     def __init__(self):
         super(BaseStatisticTransformerParameters, self).__init__()
         self._setDefault(metricSourceColumn="metricSource")
@@ -56,6 +70,8 @@ class BaseStatisticTransformerParameters(Params):
         self._setDefault(variantColumn="variantId")
         self._setDefault(valueColumn="metricValue")
         self._setDefault(additiveColumn="isAdditive")
+        self._setDefault(controlName="control")
+        self._setDefault(treatmentName="treatment")
 
     def setMetricSourceColumn(self, value):
         return self._set(metricSourceColumn=value)
@@ -74,6 +90,12 @@ class BaseStatisticTransformerParameters(Params):
 
     def setAdditiveColumn(self, value):
         return self._set(additiveColumn=value)
+
+    def setControlName(self, value):
+        return self._set(controlName=value)
+
+    def setTreatmentName(self, value):
+        return self._set(treatmentName=value)
 
 
 class BasicStatInferenceParameters(Params):
