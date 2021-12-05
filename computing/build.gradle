@@ -3,6 +3,7 @@ plugins {
     id 'scala'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
     id "com.github.maiflai.scalatest" version "0.31"
+    id 'maven-publish'
 }
 
 
@@ -58,3 +59,17 @@ task pythonTest(type: Exec) {
 }
 
 pythonTest.dependsOn test
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/Salmon-Brain/salmon-brain"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
