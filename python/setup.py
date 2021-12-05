@@ -1,8 +1,5 @@
-from os import path
-
 from setuptools import setup, find_packages
 
-here = path.abspath(path.dirname(__file__))
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -17,7 +14,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     python_requires=">=3.6",
-    install_requires=["pyspark>=2.3.0"],
+    install_requires=["pyspark>=2.3.0", "numpy"],
     tests_require=["pytest"],
     project_urls={
         "Source code": "https://github.com/Salmon-Brain/salmon-brain",

@@ -115,7 +115,7 @@ def test_welchStatisticsTransformer(data_sample: DataFrame):
     assert all([p > 0.05 for p in p_values])
 
 
-def test_mannWhitneyStatisticsTransformer(spark: SparkSession, data_sample: DataFrame):
+def test_mannWhitneyStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
     welch = WelchStatisticsTransformer()
     result = welch.transform(cum.transform(data_sample))

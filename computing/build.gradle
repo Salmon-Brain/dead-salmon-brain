@@ -10,15 +10,15 @@ def scalaVersion = findProperty("scalaVersion") ?: "2.12.15"
 println "Scala version: $scalaVersion"
 def scalaVersionShort = "${VersionNumber.parse(scalaVersion).getMajor()}.${VersionNumber.parse(scalaVersion).getMinor()}"
 
-def sparkVersion = findProperty("sparkVersion") ?: "3.0.3"
+def sparkVersion = findProperty("sparkVersion") ?: "3.1.2"
 println "Spark version: $sparkVersion"
 
 
 application {
-    mainClass = 'ai.student.computing.Main'
+    mainClass = 'ai.salmon.computing.Main'
 }
 
-group 'ai.student'
+group 'ai.salmon'
 version '0.0.1'
 
 repositories {

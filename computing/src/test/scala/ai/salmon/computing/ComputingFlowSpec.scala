@@ -13,6 +13,8 @@ class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
       seqExpDataToDataFrame(
         experimentDataGenerator(
           uplift = 0,
+          controlSkew = 0.1,
+          treatmentSkew = 0.1,
           controlSize = 3000,
           treatmentSize = 3000,
           withAggregation = false
