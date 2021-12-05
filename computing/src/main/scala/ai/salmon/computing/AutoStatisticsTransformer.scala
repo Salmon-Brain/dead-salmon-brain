@@ -73,7 +73,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
     https://exp-platform.com/Documents/2014%20experimentersRulesOfThumb.pdf
    */
   def checkHeuristicsForCLT: UserDefinedFunction = udf { (sampleSize: Long, skewness: Double) =>
-    if (math.abs(skewness) > 1) {
+    if (math.abs(skewness) > 1 && sampleSize >= 30) {
       sampleSize >= (355 * skewness * skewness).toLong
     } else {
       /*

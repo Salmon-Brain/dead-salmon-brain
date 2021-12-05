@@ -1,7 +1,7 @@
 package ai.salmon.computing
 
 import org.apache.spark.ml.Transformer
-import org.apache.spark.ml.param.{ Param, ParamMap }
+import org.apache.spark.ml.param.{ Param, ParamMap, StringArrayParam }
 import org.apache.spark.ml.util.{ DefaultParamsWritable, Identifiable }
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
@@ -23,22 +23,45 @@ class CumulativeMetricTransformer(override val uid: String)
 
   def this() = this(Identifiable.randomUID("cumulativeMetricTransformer"))
 
-  val ratioMetricData: Param[Seq[RatioMetricData]] = new Param[Seq[RatioMetricData]](
+  val numeratorNames: StringArrayParam = new StringArrayParam(
     this,
-    "ratioMetricData",
-    "Data structure to compute ratio metrics"
+    "numeratorNames",
+    "numerator metrics names"
   )
-  setDefault(ratioMetricData, Seq[RatioMetricData]())
+  setDefault(numeratorNames, Array[String]())
+
+  val denominatorNames: StringArrayParam = new StringArrayParam(
+    this,
+    "denominatorNames",
+    "denominator metric names"
+  )
+  setDefault(denominatorNames, Array[String]())
+
+  val ratioNames: StringArrayParam = new StringArrayParam(
+    this,
+    "ratioNames",
+    "new ratio metric names"
+  )
+  setDefault(ratioNames, Array[String]())
 
   val numBuckets: Param[Int] = new Param[Int](
     this,
     "numBuckets",
-    "Change entity uid to synth buckets"
+    "change entity uid to synth buckets"
   )
   setDefault(numBuckets, -1)
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sparkSession.implicits._
+
+    assert(
+      $(numeratorNames).length == $(denominatorNames).toSeq.length,
+      "Numerator metrics must have same size with denominator metrics"
+    )
+    assert(
+      $(numeratorNames).length == $(ratioNames).length,
+      "ratioMetricNames metrics must have same size with denominator and numerator metrics"
+    )
 
     val columns = constructColumnsToAggregate(withName = true, withAdditive = true)
 
@@ -59,17 +82,18 @@ class CumulativeMetricTransformer(override val uid: String)
     val nonAdditiveMetrics = dataset
       .filter(!col($(additiveColumn)))
 
-    val ratioValues =
-      $(ratioMetricData).flatMap(r => Seq(r.metricNominator, r.metricDenominator)).distinct
+    val ratioValues = ($(numeratorNames) ++ $(denominatorNames)).distinct
 
     val metrics = ratioValues match {
       case values if values.nonEmpty => {
+        val ratioData = ($(numeratorNames), $(denominatorNames), $(ratioNames)).zipped
+          .map(RatioMetricData)
         val ratioColumns = constructColumnsToAggregate(withName = false, withAdditive = false)
         val cumulativeRatioMetrics = additiveCumulativeMetrics
           .filter(col($(metricNameColumn)).isin(values: _*))
           .groupBy(ratioColumns.head, ratioColumns.tail: _*)
           .agg(
-            ratioUdf($(ratioMetricData))(
+            ratioUdf(ratioData)(
               collect_list(struct($(metricNameColumn), $(valueColumn)))
             ) as "ratioMetrics"
           )
@@ -109,8 +133,16 @@ class CumulativeMetricTransformer(override val uid: String)
     set(numBuckets, value)
 
   /** @group setParam */
-  def setRatioMetricsData(value: Seq[RatioMetricData]): this.type =
-    set(ratioMetricData, value)
+  def setNumeratorNames(value: Array[String]): this.type =
+    set(numeratorNames, value)
+
+  /** @group setParam */
+  def setDenominatorNames(value: Array[String]): this.type =
+    set(denominatorNames, value)
+
+  /** @group setParam */
+  def setRatioNames(value: Array[String]): this.type =
+    set(ratioNames, value)
 
   private def ratioUdf(pairs: Seq[RatioMetricData]): UserDefinedFunction = udf {
     metrics: mutable.WrappedArray[Row] =>

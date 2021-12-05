@@ -10,10 +10,10 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
   "CumulativeMetricTransformer" should "be" in {
     val metrics = seqExpDataToDataFrame(experimentDataGenerator(withAggregation = false))
 
-    val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
-
     val cumulativeData = new CumulativeMetricTransformer()
-      .setRatioMetricsData(ratioMetrics)
+      .setNumeratorNames(Array("clicks"))
+      .setDenominatorNames(Array("views"))
+      .setRatioNames(Array("ctr"))
       .setNumBuckets(256)
       .transform(metrics)
 

@@ -26,13 +26,13 @@ object ReportBuilder {
     accessLogTransformer.setMetricValueExpression(accessLogConfig.metricValue)
     accessLogTransformer.setVariantIdExpression(accessLogConfig.variantId)
 
-    val ratioMetrics = Seq(RatioMetricData("clicks", "views", "ctr"))
-
     val statPipeline = new Pipeline().setStages(
       Array(
         accessLogTransformer,
         new CumulativeMetricTransformer()
-          .setRatioMetricsData(ratioMetrics),
+          .setNumeratorNames(Array("clicks"))
+          .setDenominatorNames(Array("views"))
+          .setRatioNames(Array("ctr")),
         new OutlierRemoveTransformer(),
         new AutoStatisticsTransformer()
       )

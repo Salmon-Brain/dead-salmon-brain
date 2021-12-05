@@ -65,6 +65,22 @@ trait BaseStatisticTransformerParameters extends Params {
 
   setDefault(additiveColumn, "isAdditive")
 
+  val controlName: Param[String] = new Param[String](
+    this,
+    "controlName",
+    "label for control groups"
+  )
+
+  setDefault(controlName, "control")
+
+  val treatmentName: Param[String] = new Param[String](
+    this,
+    "treatmentName",
+    "label for treatment groups"
+  )
+
+  setDefault(treatmentName, "treatment")
+
   /** @group setParam */
   def setDataProviderColumn(value: String): this.type =
     set(metricSourceColumn, value)
@@ -95,4 +111,11 @@ trait BaseStatisticTransformerParameters extends Params {
   def setAdditiveColumn(value: String): this.type =
     set(additiveColumn, value)
 
+  /** @group setParam */
+  def setControlName(value: String): this.type =
+    set(controlName, value)
+
+  /** @group setParam */
+  def setTreatmentName(value: String): this.type =
+    set(treatmentName, value)
 }
