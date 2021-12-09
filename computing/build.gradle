@@ -35,7 +35,6 @@ dependencies {
     implementation "org.apache.commons:commons-math3:3.6.1"
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.3'
     implementation 'com.github.housepower:clickhouse-native-jdbc:2.5.6'
-
     testImplementation "org.scalatest:scalatest_$scalaVersionShort:3.1.0"
     testImplementation "com.vladsch.flexmark:flexmark-all:0.35.10"
     testImplementation "org.mockito:mockito-scala_$scalaVersionShort:1.16.42"
@@ -70,6 +69,15 @@ publishing {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
+        }
+    }
+
+    publications {
+        gpr(MavenPublication) {
+            artifactId "computing"
+            version version
+            groupId group
+            artifact file("build/libs/computing-${version}.jar")
         }
     }
 }
