@@ -15,6 +15,6 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
       - name: Publish package
-        run: gradle publish
+        run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
