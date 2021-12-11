@@ -4,9 +4,6 @@ on: push
 jobs:
   publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: python
     permissions:
       contents: read
       packages: write
@@ -26,6 +23,7 @@ jobs:
         run: >-
           python -m
           build
+          python/
           --sdist
           --wheel
           --outdir dist/
