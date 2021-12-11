@@ -9,7 +9,7 @@ HERE = pathlib.Path(__file__).parent
 
 setup(
     name="dead-salmon-brain",
-    version="0.0.1-alpha",
+    version="0.0.1-beta",
     description="Dead Salmon Brain is a cluster computing system for analysing A/B experiments",
     license="Apache License v2.0",
     author="Dead Salmon Brain",
