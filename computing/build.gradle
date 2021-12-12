@@ -64,7 +64,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/Salmon-Brain/salmon-brain"
+            url = "https://maven.pkg.github.com/Salmon-Brain/dead-salmon-brain"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
