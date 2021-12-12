@@ -74,7 +74,7 @@ publishing {
 
     publications {
         gpr(MavenPublication) {
-            artifactId "computing"
+            artifactId "computing-library"
             version version
             groupId group
             artifact file("build/libs/computing-${version}.jar")
