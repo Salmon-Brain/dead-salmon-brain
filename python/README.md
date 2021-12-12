@@ -15,9 +15,8 @@ Python API for analysis A/B experiments
 
 ### Installation for python
 ```
-1) pip install dead-salmon-brain
-2) go to spark jars folder
-3) wget https://maven.pkg.github.com/Salmon-Brain/dead-salmon-brain/ai.salmon.computiing/{VERSION}/computing-{VERSION}.jar
+Colab example
+https://colab.research.google.com/drive/1uzxBpkpxVDLNhIcS2clfeOJK57AbH-pf?usp=sharing
 ```
 
 ### Installation for jvm
