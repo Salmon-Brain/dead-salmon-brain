@@ -8,9 +8,8 @@ Python API for analysis A/B experiments
 
 ```
 1) Clone git repository
-2) ./gradlew build
-3) pip install python/
-4) Add computing/build/libs/computing-*.*.*.jar to Spark jars/ folder
+2) Create virtual environment
+3) bash setup.sh spark=3.1.2 scala=2.12.15 hadoop=3.2 is_install_python=true
 ```
 
 ### Installation for python

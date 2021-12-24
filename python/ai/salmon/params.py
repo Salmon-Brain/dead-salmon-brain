@@ -66,7 +66,7 @@ class BaseStatisticTransformerParameters(Params):
         super(BaseStatisticTransformerParameters, self).__init__()
         self._setDefault(metricSourceColumn="metricSource")
         self._setDefault(entityIdColumn="entityUid")
-        self._setDefault(experimentColumn="expUid")
+        self._setDefault(experimentColumn="experimentUid")
         self._setDefault(variantColumn="variantId")
         self._setDefault(valueColumn="metricValue")
         self._setDefault(additiveColumn="isAdditive")

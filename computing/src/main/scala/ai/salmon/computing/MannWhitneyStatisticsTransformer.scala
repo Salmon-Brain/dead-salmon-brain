@@ -20,7 +20,7 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     checkVariants(dataset)
-    dataset
+    dropInvalidValues(dataset)
       .groupBy(
         $(experimentColumn),
         $(metricNameColumn),

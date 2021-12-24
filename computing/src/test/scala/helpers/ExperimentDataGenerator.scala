@@ -129,7 +129,7 @@ object ExperimentDataGenerator extends SparkHelper {
       case x if x == 0 || x == 1 || isNotExpand => Seq(exp)
       case _ =>
         (0 until num).map(_ =>
-          ExpData(exp.timestamp, exp.variantId, exp.entityUid, exp.expUid, 1, exp.metricName)
+          ExpData(exp.timestamp, exp.variantId, exp.entityUid, exp.experimentUid, 1, exp.metricName)
         )
     }
   }

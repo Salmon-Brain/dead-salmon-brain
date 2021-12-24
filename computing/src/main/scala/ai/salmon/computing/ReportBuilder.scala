@@ -21,7 +21,7 @@ object ReportBuilder {
       case None        => throw new IllegalArgumentException("Access log config required")
     }
     val accessLogTransformer = new AccessLogTransformer()
-    accessLogTransformer.setExpUidExpression(accessLogConfig.expUid)
+    accessLogTransformer.setexperimentUidExpression(accessLogConfig.experimentUid)
     accessLogTransformer.setMetricNameExpression(accessLogConfig.metricName)
     accessLogTransformer.setMetricValueExpression(accessLogConfig.metricValue)
     accessLogTransformer.setVariantIdExpression(accessLogConfig.variantId)

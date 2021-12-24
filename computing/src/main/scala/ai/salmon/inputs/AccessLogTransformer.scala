@@ -14,7 +14,7 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
       StructField("timestamp", LongType, true),
       StructField("variantId", StringType, true),
       StructField("entityUid", StringType, true),
-      StructField("expUid", StringType, true),
+      StructField("experimentUid", StringType, true),
       StructField("metricValue", DoubleType, true),
       StructField("metricName", StringType, true),
       StructField("isHistory", BooleanType, true),
@@ -26,9 +26,9 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
 
   def this() = this(Identifiable.randomUID("NginxLogTransformer"))
 
-  val expUidExpression: Param[String] = new Param[String](
+  val experimentUidExpression: Param[String] = new Param[String](
     this,
-    "expUidExpression",
+    "experimentUidExpression",
     "experiment id expression"
   )
 
@@ -51,8 +51,8 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
   )
 
   /** @group setParam */
-  def setExpUidExpression(value: String): this.type =
-    set(expUidExpression, value)
+  def setexperimentUidExpression(value: String): this.type =
+    set(experimentUidExpression, value)
 
   /** @group setParam */
   def setVariantIdExpression(value: String): this.type =
@@ -68,7 +68,7 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     dataset
-      .withColumn("expUid", expr($(expUidExpression)))
+      .withColumn("experimentUid", expr($(experimentUidExpression)))
       .withColumn("variantId", expr($(variantIdExpression)))
       .withColumn("metricValue", expr($(metricValueExpression)).cast(DoubleType))
       .withColumn("metricName", expr($(metricNameExpression)))
@@ -79,7 +79,7 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
         "timestamp",
         "variantId",
         "entityUid",
-        "expUid",
+        "experimentUid",
         "metricValue",
         "metricName",
         "metricSource",

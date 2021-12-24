@@ -16,7 +16,7 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sqlContext.implicits._
     checkVariants(dataset)
-    dataset
+    dropInvalidValues(dataset)
       .groupBy(
         $(experimentColumn),
         $(metricNameColumn),

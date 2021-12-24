@@ -3,7 +3,7 @@ output: "/tmp/report.json"
 accessLog:
   metricName: "case when regexp_extract(path, '^(/click/)') = '/click/' then 'clicks' else case when regexp_extract(path, '^(/view/)') = '/view/' then 'views' else 'none' end end "
   metricValue: "1.0"
-  expUid: "'exp1'"
+  experimentUid: "'exp1'"
   variantId: "case when regexp_extract(entityUid, '([0-4])$') != '' then 'treatment' else 'control' end"
 clickhouse:
   driver: "com.github.housepower.jdbc.ClickHouseDriver"

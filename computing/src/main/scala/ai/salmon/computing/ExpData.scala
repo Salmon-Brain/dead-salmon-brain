@@ -4,7 +4,7 @@ case class ExpData(
     timestamp: Long,
     variantId: String,
     entityUid: String,
-    expUid: String,
+    experimentUid: String,
     metricValue: Double,
     metricName: String,
     metricSource: String = "feedback",

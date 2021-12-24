@@ -4,8 +4,9 @@ import org.apache.commons.math3.stat.inference.TestUtils
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.DefaultParamsWritable
+import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types.{ BooleanType, StringType, StructField, StructType }
-import org.apache.spark.sql.{ Dataset, Encoders }
+import org.apache.spark.sql.{ Dataset, Encoders, Row }
 
 trait BaseStatisticTransformer
     extends Transformer
@@ -16,7 +17,7 @@ trait BaseStatisticTransformer
   protected val outputSchema: StructType =
     StructType(
       Array(
-        StructField("expUid", StringType, nullable = false),
+        StructField("experimentUid", StringType, nullable = false),
         StructField("metricName", StringType, nullable = false),
         StructField("isAdditive", BooleanType, nullable = false),
         StructField("metricSource", StringType, nullable = false),
@@ -31,6 +32,12 @@ trait BaseStatisticTransformer
   override def copy(extra: ParamMap): Transformer = defaultCopy(extra)
 
   override def transformSchema(schema: StructType): StructType = outputSchema
+
+  def dropInvalidValues(data: Dataset[_]): Dataset[Row] = {
+    data.na
+      .drop(Seq($(valueColumn)))
+      .filter(col($(valueColumn)).isNotNull)
+  }
 
   def srm(controlSize: Int, treatmentSize: Int, alpha: Double): Boolean = {
     val uniform = (treatmentSize + controlSize).toDouble / 2
