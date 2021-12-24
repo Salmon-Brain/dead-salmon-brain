@@ -123,7 +123,7 @@ class BasicStatInferenceParameters(Params):
     def __init__(self):
         super(BasicStatInferenceParameters, self).__init__()
         self._setDefault(alpha=0.05)
-        self._setDefault(beta=0.02)
+        self._setDefault(beta=0.2)
         self._setDefault(srmAlpha=0.05)
 
     def setAlpha(self, value):
