@@ -60,6 +60,8 @@ case class StatResult(
     requiredSampleSizeByVariant: Long,
     controlCentralTendency: Double,
     treatmentCentralTendency: Double,
+    controlVariance: Double,
+    treatmentVariance: Double,
     percentageLeft: Double,
     percentageRight: Double,
     centralTendencyType: String = CentralTendency.MEAN.toString
