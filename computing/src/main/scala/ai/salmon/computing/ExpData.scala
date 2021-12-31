@@ -4,7 +4,7 @@ case class ExpData(
     timestamp: Long,
     variantId: String,
     entityUid: String,
-    expUid: String,
+    experimentUid: String,
     metricValue: Double,
     metricName: String,
     metricSource: String = "feedback",
@@ -60,6 +60,8 @@ case class StatResult(
     requiredSampleSizeByVariant: Long,
     controlCentralTendency: Double,
     treatmentCentralTendency: Double,
+    controlVariance: Double,
+    treatmentVariance: Double,
     percentageLeft: Double,
     percentageRight: Double,
     centralTendencyType: String = CentralTendency.MEAN.toString

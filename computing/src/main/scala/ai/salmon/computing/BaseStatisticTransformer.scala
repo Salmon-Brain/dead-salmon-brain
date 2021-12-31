@@ -16,7 +16,7 @@ trait BaseStatisticTransformer
   protected val outputSchema: StructType =
     StructType(
       Array(
-        StructField("expUid", StringType, nullable = false),
+        StructField("experimentUid", StringType, nullable = false),
         StructField("metricName", StringType, nullable = false),
         StructField("isAdditive", BooleanType, nullable = false),
         StructField("metricSource", StringType, nullable = false),

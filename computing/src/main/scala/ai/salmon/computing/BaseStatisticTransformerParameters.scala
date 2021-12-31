@@ -31,7 +31,7 @@ trait BaseStatisticTransformerParameters extends Params {
     "column with experiment id"
   )
 
-  setDefault(experimentColumn, "expUid")
+  setDefault(experimentColumn, "experimentUid")
 
   val variantColumn: Param[String] = new Param[String](
     this,

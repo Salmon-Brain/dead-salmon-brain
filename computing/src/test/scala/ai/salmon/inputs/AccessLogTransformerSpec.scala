@@ -33,7 +33,7 @@ class AccessLogTransformerSpec extends AnyFlatSpec with SparkHelper with Matcher
           "case when regexp_extract(path, '^(/view/)') = '/view/' then 'view' else 'none' end end"
       )
       .setMetricValueExpression("1.0")
-      .setExpUidExpression("'exp1'")
+      .setexperimentUidExpression("'exp1'")
       .setVariantIdExpression(
         "case when regexp_extract(entityUid, '([0-9])$') = 1 then 'treatment' else 'control' end"
       )

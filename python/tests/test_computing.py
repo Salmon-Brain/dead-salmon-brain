@@ -1,11 +1,10 @@
 import pytest
-from pyspark.sql import SparkSession, DataFrame
-
 from ai.salmon import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
 )
+from pyspark.sql import SparkSession, DataFrame
 
 
 @pytest.fixture(scope="session")
@@ -20,7 +19,7 @@ def data_sample_for_outlier(spark: SparkSession):
         [
             "metricSource",
             "entityUid",
-            "expUid",
+            "experimentUid",
             "variantId",
             "metricValue",
             "metricName",
@@ -53,7 +52,7 @@ def data_sample(spark: SparkSession):
         [
             "metricSource",
             "entityUid",
-            "expUid",
+            "experimentUid",
             "variantId",
             "metricValue",
             "metricName",
@@ -75,7 +74,7 @@ def test_cumulativeMetricTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer(
         metricSourceColumn="metricSource",
         entityIdColumn="entityUid",
-        experimentColumn="expUid",
+        experimentColumn="experimentUid",
         variantColumn="variantId",
         valueColumn="metricValue",
         metricNameColumn="metricName",

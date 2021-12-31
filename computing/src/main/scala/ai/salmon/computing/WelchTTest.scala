@@ -46,6 +46,8 @@ object WelchTTest extends BaseStatTest {
           0L,
           controlMean,
           treatmentMean,
+          controlVariance,
+          treatmentVariance,
           Double.NaN,
           Double.NaN
         )
@@ -91,6 +93,8 @@ object WelchTTest extends BaseStatTest {
           sampleSize,
           controlMean,
           treatmentMean,
+          controlVariance,
+          treatmentVariance,
           ci.lowerPercent,
           ci.upperPercent
         )
@@ -114,6 +118,27 @@ object WelchTTest extends BaseStatTest {
       treatment.getAs[Long]("length")
     )
     welchTTest(controlData, treatmentData, alpha, beta)
+  }
+
+  /*
+  van Belle G (2002) Statistical rules of thumb. Wiley, ISBN: 0471402273
+   */
+  def sampleSizeEstimation(
+      alpha: Double,
+      beta: Double,
+      controlCentralTendency: Double,
+      treatmentCentralTendency: Double,
+      commonVariance: Double
+  ): Long = {
+    val nominator = 2 * math.ceil(
+      square(
+        normalDistribution.inverseCumulativeProbability(1 - alpha / 2) + normalDistribution
+          .inverseCumulativeProbability(1 - beta)
+      )
+    )
+
+    val denominator = square(treatmentCentralTendency - controlCentralTendency) / commonVariance
+    if (denominator < EPS) 0 else (nominator / denominator).toLong
   }
 }
 

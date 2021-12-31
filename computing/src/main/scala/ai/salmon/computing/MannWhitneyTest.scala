@@ -37,9 +37,10 @@ object MannWhitneyTest extends BaseStatTest {
     val sampleSize = sampleSizeEstimation(
       alpha,
       beta,
-      controlMedian,
       treatmentMedian,
-      (treatmentMedianVariance + controlMedianVariance) / 2
+      controlMedian,
+      treatment.length,
+      control.length
     )
 
     StatResult(
@@ -48,6 +49,8 @@ object MannWhitneyTest extends BaseStatTest {
       sampleSize,
       controlMedian,
       treatmentMedian,
+      controlMedianVariance,
+      treatmentMedianVariance,
       ci.lowerPercent,
       ci.upperPercent,
       CentralTendency.MEDIAN.toString
@@ -65,7 +68,7 @@ object MannWhitneyTest extends BaseStatTest {
 
     val y2 = sorted(alpha(sorted.length) - 1)
     val zed = zeta(sorted.length)
-    square(y1 - y2) / 4 / zed / zed
+    square(y1 - y2) / (4 * square(zed))
   }
 
   private def alpha(length: Int): Int = {
@@ -82,5 +85,28 @@ object MannWhitneyTest extends BaseStatTest {
 
   private def zeta(length: Int): Double = {
     normalDistribution.inverseCumulativeProbability(1 - aBinomial(length) / 2)
+  }
+
+  /*
+   * https://www.researchgate.net/publication/11148358_Statistical_inference_for_a_linear_function_of_medians_Confidence_intervals_hypothesis_testing_and_sample_size_requirements
+   */
+  def sampleSizeEstimation(
+      alpha: Double,
+      beta: Double,
+      medianTreatment: Double,
+      medianControl: Double,
+      treatmentSize: Int,
+      controlSize: Int
+  ): Long = {
+    val nominator = math.ceil(
+      square(
+        normalDistribution.inverseCumulativeProbability(1 - alpha / 2) + normalDistribution
+          .inverseCumulativeProbability(1 - beta)
+      )
+    )
+
+    val denominator = square(medianTreatment - medianControl) / (treatmentSize + controlSize)
+
+    (nominator / denominator).toLong
   }
 }

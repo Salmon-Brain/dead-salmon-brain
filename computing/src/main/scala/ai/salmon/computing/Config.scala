@@ -20,7 +20,7 @@ class InputTypeRef extends TypeReference[Input.type]
 case class AccessLogConfig(
     metricName: String = "",
     metricValue: String = "",
-    expUid: String = "",
+    experimentUid: String = "",
     variantId: String = ""
 )
 

@@ -18,7 +18,7 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
       .transform(metrics)
 
     val newMetrics = cumulativeData
-      .groupBy("expUid")
+      .groupBy("experimentUid")
       .pivot("metricName")
       .agg(first("metricValue"))
       .columns
@@ -26,14 +26,14 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
 
     assert(
       newMetrics
-        sameElements Array("expUid", "clicks", "views", "ctr").sorted
+        sameElements Array("experimentUid", "clicks", "views", "ctr").sorted
     )
 
     assert(
       cumulativeData.columns.sorted sameElements Array(
         "metricSource",
         "entityUid",
-        "expUid",
+        "experimentUid",
         "isAdditive",
         "metricName",
         "metricValue",

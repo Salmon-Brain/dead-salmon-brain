@@ -66,7 +66,7 @@ class BaseStatisticTransformerParameters(Params):
         super(BaseStatisticTransformerParameters, self).__init__()
         self._setDefault(metricSourceColumn="metricSource")
         self._setDefault(entityIdColumn="entityUid")
-        self._setDefault(experimentColumn="expUid")
+        self._setDefault(experimentColumn="experimentUid")
         self._setDefault(variantColumn="variantId")
         self._setDefault(valueColumn="metricValue")
         self._setDefault(additiveColumn="isAdditive")
@@ -123,7 +123,7 @@ class BasicStatInferenceParameters(Params):
     def __init__(self):
         super(BasicStatInferenceParameters, self).__init__()
         self._setDefault(alpha=0.05)
-        self._setDefault(beta=0.02)
+        self._setDefault(beta=0.2)
         self._setDefault(srmAlpha=0.05)
 
     def setAlpha(self, value):
