@@ -26,10 +26,10 @@ println "Spark version: $sparkVersion"
 
 
 application {
-    mainClass = 'ai.salmon.computing.Main'
+    mainClass = 'ai.salmonbrain.computing.Main'
 }
 
-group 'ai.salmon'
+group 'ai.salmonbrain'
 version '0.0.2'
 
 repositories {

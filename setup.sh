@@ -65,6 +65,7 @@ cd "$current_dir"
 if [ "$is_install_python" = true ]; then
   apt install python3-pip
   pip install python/
+  pip install findspark
 fi
 
 # shellcheck disable=SC2034

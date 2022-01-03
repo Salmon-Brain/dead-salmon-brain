@@ -1,4 +1,4 @@
-package ai.salmon.computing
+package ai.salmonbrain.computing
 
 case class ExpData(
     timestamp: Long,

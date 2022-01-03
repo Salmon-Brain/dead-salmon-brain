@@ -1,4 +1,4 @@
-package ai.salmon.inputs
+package ai.salmonbrain.inputs
 
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.{ Param, ParamMap }

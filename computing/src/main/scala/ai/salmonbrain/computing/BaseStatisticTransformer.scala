@@ -1,4 +1,4 @@
-package ai.salmon.computing
+package ai.salmonbrain.computing
 
 import org.apache.commons.math3.stat.inference.TestUtils
 import org.apache.spark.ml.Transformer

@@ -1,10 +1,11 @@
 import pytest
-from ai.salmon import (
+from pyspark.sql import SparkSession, DataFrame
+
+from ai.salmonbrain import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
 )
-from pyspark.sql import SparkSession, DataFrame
 
 
 @pytest.fixture(scope="session")

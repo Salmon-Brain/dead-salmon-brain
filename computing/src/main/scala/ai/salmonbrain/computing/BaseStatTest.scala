@@ -1,4 +1,4 @@
-package ai.salmon.computing
+package ai.salmonbrain.computing
 
 import org.apache.commons.math3.distribution.NormalDistribution
 
