@@ -1,4 +1,4 @@
-package ai.salmon.computing
+package ai.salmonbrain.computing
 
 import helpers.ExperimentDataGenerator.{
   experimentDataGenerator,

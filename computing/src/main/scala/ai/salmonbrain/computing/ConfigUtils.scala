@@ -1,4 +1,4 @@
-package ai.salmon.computing
+package ai.salmonbrain.computing
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
@@ -11,7 +11,7 @@ object ConfigUtils {
   private val mapper = new ObjectMapper(factory)
   mapper.registerModule(DefaultScalaModule)
 
-  def readConfig(path:String):Config = {
+  def readConfig(path: String): Config = {
     mapper.readValue(new File(path), classOf[Config])
   }
 

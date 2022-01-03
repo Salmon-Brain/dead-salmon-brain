@@ -1,6 +1,6 @@
-package ai.salmon.inputs
+package ai.salmonbrain.inputs
 
-import ai.salmon.computing.ClickhouseConfig
+import ai.salmonbrain.computing.ClickhouseConfig
 import org.apache.spark.sql.{ DataFrame, SparkSession }
 
 object ClickhouseDataSource {

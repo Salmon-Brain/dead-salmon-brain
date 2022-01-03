@@ -1,6 +1,6 @@
-package ai.salmon.inputs;
+package ai.salmonbrain.inputs;
 
-import ai.salmon.computing.ExpData
+import ai.salmonbrain.computing.ExpData
 import helpers.SparkHelper
 import org.apache.spark.sql.DataFrame
 import org.scalatest.flatspec.AnyFlatSpec

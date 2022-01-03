@@ -1,4 +1,4 @@
-package ai.salmon.computing
+package ai.salmonbrain.computing
 
 import org.apache.commons.math3.distribution.BinomialDistribution
 import org.apache.commons.math3.stat.descriptive.rank.Median
