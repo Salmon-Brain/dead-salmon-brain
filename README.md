@@ -7,11 +7,11 @@ Because good and scalable
 realization for industrial A/B analysis doesn't exist in open source
 
 ## Getting Started
-### Installation
+### Build from source
 
 ```bash
 1) Clone git repository
-2) Chech spark,scala,hadoop and set correct in 3 step
+2) Check spark,scala,hadoop and set correct in 3 step
 3) bash setup.sh spark=3.1.2 scala=2.12.15 hadoop=3.2 is_install_python=false
 ```
 
@@ -77,11 +77,11 @@ report.select(
   "statisticsData.statResult.percentageLeft",
   "statisticsData.statResult.percentageRight"
 ).show
-+----------+------+-----+--------+-------+---------------------------+-----------------+-----------------+
++----------+-------------+-----+--------+-------+---------------------------+-----------------+-----------------+
 |metricName|experimentUid|  srm|testType|pValue |requiredSampleSizeByVariant|   percentageLeft|  percentageRight|
-+----------+------+-----+--------+-------+---------------------------+-----------------+-----------------+
-| timeSpent|   exp|false|   WELCH|1.3e-21|                         82|          94.6294|         148.8822|
-+----------+------+-----+--------+-------+---------------------------+-----------------+-----------------+
++----------+-------------+-----+--------+-------+---------------------------+-----------------+-----------------+
+| timeSpent|          exp|false|   WELCH|1.3e-21|                         82|          94.6294|         148.8822|
++----------+-------------+-----+--------+-------+---------------------------+-----------------+-----------------+
 ```
 
 ### What they are and how to interpret them?
