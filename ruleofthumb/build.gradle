@@ -1,0 +1,94 @@
+plugins {
+    id 'application'
+    id 'scala'
+    id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
+    id "com.github.maiflai.scalatest" version "0.31"
+    id 'maven-publish'
+}
+
+boolean isShadow =(findProperty("shadow") ?: "false").toBoolean()
+println "Is apply shadow plugin: $isShadow"
+
+if (isShadow) {
+    apply plugin: 'com.github.johnrengelman.shadow'
+    shadowJar {
+        zip64 true
+        mergeServiceFiles("META-INF/services/org.apache.spark.sql.sources.DataSourceRegister")
+    }
+}
+
+def scalaVersion = findProperty("scalaVersion") ?: "2.12.15"
+println "Scala version: $scalaVersion"
+def scalaVersionShort = "${VersionNumber.parse(scalaVersion).getMajor()}.${VersionNumber.parse(scalaVersion).getMinor()}"
+
+def sparkVersion = findProperty("sparkVersion") ?: "3.1.2"
+println "Spark version: $sparkVersion"
+
+
+application {
+    mainClass = 'ai.salmonbrain.ruleofthumb.Main'
+}
+
+group 'ai.salmonbrain'
+version '0.0.2'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation "org.scala-lang:scala-library:$scalaVersion"
+    implementation "org.apache.spark:spark-core_$scalaVersionShort:$sparkVersion"
+    implementation "org.apache.spark:spark-sql_$scalaVersionShort:$sparkVersion"
+    implementation "org.apache.spark:spark-mllib_$scalaVersionShort:$sparkVersion"
+    implementation "org.apache.commons:commons-math3:3.6.1"
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.3'
+    implementation 'com.github.housepower:clickhouse-native-jdbc:2.5.6'
+    testImplementation "org.scalatest:scalatest_$scalaVersionShort:3.1.0"
+    testImplementation "com.vladsch.flexmark:flexmark-all:0.35.10"
+    testImplementation "org.mockito:mockito-scala_$scalaVersionShort:1.16.42"
+}
+
+
+
+test{
+    maxHeapSize = '1G'
+}
+
+task pythonTest(type: Exec) {
+    workingDir '../python/tests'
+    commandLine "pytest"
+    def stdout = new ByteArrayOutputStream()
+    errorOutput = stdout
+    println stdout;
+}
+
+pythonTest.dependsOn test
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/Salmon-Brain/dead-salmon-brain"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        gpr(MavenPublication) {
+            artifactId "ruleofthumb"
+            version version
+            groupId group
+            artifact file("build/libs/computing-${version}.jar")
+        }
+    }
+}
+
+archivesBaseName = "${project.name}_${sparkVersion}_${scalaVersionShort}"
+
+apply from: "$rootDir/gradle/jvm-publication.gradle"
