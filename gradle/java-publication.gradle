@@ -35,7 +35,7 @@ publishing {
             artifact javadocJar
 
             artifactId = project.archivesBaseName
-
+            version = project.version
             pom {
                 name = artifactId
                 description = "Apache Spark based framework for analysis A/B experiments"
@@ -47,6 +47,20 @@ publishing {
                         url = 'https://github.com/Salmon-Brain/dead-salmon-brain/blob/main/LICENSE'
                         distribution = 'repo'
                     }
+                }
+                developers {
+                    [
+                            developer {
+                                id = "deadsalmonbrain"
+                                email = 'deadsalmonbrain@gmail.com'
+                                roles = ["Core developer"]
+                            },
+                            developer {
+                                id = "livesalmonbrain"
+                                email = 'livesalmonbrain@gmail.com'
+                                roles = ["Core developer"]
+                            },
+                    ]
                 }
 
                 scm {

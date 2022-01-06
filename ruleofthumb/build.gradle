@@ -3,7 +3,6 @@ plugins {
     id 'scala'
     id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
     id "com.github.maiflai.scalatest" version "0.31"
-    id 'maven-publish'
 }
 
 boolean isShadow =(findProperty("shadow") ?: "false").toBoolean()
@@ -29,8 +28,7 @@ application {
     mainClass = 'ai.salmonbrain.ruleofthumb.Main'
 }
 
-group 'ai.salmonbrain'
-version '0.0.2'
+version '0.0.3'
 
 repositories {
     mavenCentral()
@@ -66,29 +64,6 @@ task pythonTest(type: Exec) {
 
 pythonTest.dependsOn test
 
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/Salmon-Brain/dead-salmon-brain"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-
-    publications {
-        gpr(MavenPublication) {
-            artifactId "ruleofthumb"
-            version version
-            groupId group
-            artifact file("build/libs/computing-${version}.jar")
-        }
-    }
-}
-
 archivesBaseName = "${project.name}_${sparkVersion}_${scalaVersionShort}"
 
-apply from: "$rootDir/gradle/jvm-publication.gradle"
+apply from: "$rootDir/gradle/java-publication.gradle"
