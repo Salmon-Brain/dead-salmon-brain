@@ -42,7 +42,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
 
     val cltReport = {
       val cltData = data.filter($"isUseClt")
-      if (!cltData.isEmpty)
+      if (cltData.count > 0)
         fillBaseParameters(new WelchStatisticsTransformer())
           .transform(cltData)
       else
@@ -54,7 +54,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
 
     val nonCltReport = {
       val nonCltData = data.filter(!$"isUseClt")
-      if (!nonCltData.isEmpty)
+      if (nonCltData.count > 0)
         fillBaseParameters(new MannWhitneyStatisticsTransformer())
           .transform(nonCltData)
       else
