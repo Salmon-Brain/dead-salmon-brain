@@ -12,7 +12,7 @@ realization for industrial A/B analysis doesn't exist in open source
 ```bash
 1) Clone git repository
 2) Check spark,scala,hadoop and set correct in 3 step
-3) bash setup.sh spark=3.1.2 scala=2.12.15 hadoop=3.2 is_install_python=false
+3) bash setup.sh spark=3.1.2 scala=2.12.15 hadoop=3.2 is_install_python_lib=false
 ```
 
 
