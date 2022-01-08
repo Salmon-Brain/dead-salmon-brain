@@ -1,9 +1,13 @@
 #!/bin/bash
 
 spark=${spark:-3.1.2}
-scala=${scala:-2.12.15}
+scala=${scala:-2.12.11}
+scala_short=$(echo "$scala" | cut -f1,2 -d'.')
 hadoop=${hadoop:-3.2}
-is_install_python=${is_install_python:-false}
+version=${version:-0.0.3}
+is_install_python_lib=${is_install_python_lib:-false}
+is_build=${is_build:-false}
+
 
 set -x
 # shellcheck disable=SC2034
@@ -17,7 +21,8 @@ for ARGUMENT in "$@"; do
   spark) spark=${VALUE} ;;
   scala) scala=${VALUE} ;;
   hadoop) hadoop=${VALUE} ;;
-  is_install_python) is_install_python=${VALUE} ;;
+  is_install_python_lib) is_install_python_lib=${VALUE} ;;
+  is_build) is_build=${VALUE} ;;
 
   *) ;;
   esac
@@ -54,26 +59,36 @@ fi
 # shellcheck disable=SC1090
 . ~/.bashrc
 
-# shellcheck disable=SC2164
-cd "$current_dir"
+jars="$spark_path"/jars
+rm -f "$jars/ruleofthumb-*.jar"
 
-"${current_dir}"/gradlew clean build -PscalaVersion="$scala" -PsparkVersion="$spark" -x test
+if [ "$is_build" = true ]; then
+  # shellcheck disable=SC2164
+  cd "$current_dir"
+  "${current_dir}"/gradlew clean build -PscalaVersion="$scala" -PsparkVersion="$spark" -x test
+  # shellcheck disable=SC2034
+  path='ruleofthumb/build/libs/'
+  # shellcheck disable=SC2012
+  # shellcheck disable=SC2034
+  # shellcheck disable=SC2196
+  # shellcheck disable=SC2154
+  file=$(ls path | egrep -v "ruleofthumb_$spark_$scala_short-([0-9]{1,}\.)+[0-9]{1,}.jar")
+  cp "$path"/"$file" "$jars"
+  else
+    # shellcheck disable=SC2164
+    cd $jars
+    wget https://repo1.maven.org/maven2/ai/salmonbrain/ruleofthumb_"$spark"_"$scala_short"/"$version"/ruleofthumb_"$spark"_"$scala_short"-"$version".jar
+fi
 
 
 # shellcheck disable=SC1072
 # shellcheck disable=SC1073
-if [ "$is_install_python" = true ]; then
+if [ "$is_install_python_lib" = true ]; then
   apt install python3-pip
-  pip install python/
-  pip install findspark
+  pip install pyspark=="$spark" findspark
+  if [ "$is_build" = true ]; then
+    pip install python/
+  else
+    pip install dead-salmon-brain=="$version"
+  fi
 fi
-
-# shellcheck disable=SC2034
-path='computing/build/libs/'
-# shellcheck disable=SC2012
-# shellcheck disable=SC2034
-# shellcheck disable=SC2196
-file=$(ls computing/build/libs/ | egrep -v '*-all.jar')
-jars="$spark_path"/jars/
-rm -f "$jars"/computing-*.jar
-cp "$path"/"$file" "$jars"

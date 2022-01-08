@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.github.gradle-nexus:publish-plugin:1.+"
+    }
+}
+
+plugins {
+}
+
+apply from: "gradle/release.gradle"
+
+allprojects {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+
+    group = "ai.salmonbrain"
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete "build"
+}

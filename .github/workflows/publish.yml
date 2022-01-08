@@ -1,13 +1,26 @@
-name: Publish package to GitHub Packages
+name: Publish package to Maven Central and PIP
 on:
   release:
     types: [created]
 jobs:
-  publishJvm:
+  publishJvmOnMavenCentral:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        include:
+          - scala-version: 2.11.8
+            spark-version: 2.3.0
+          - scala-version: 2.11.8
+            spark-version: 2.4.3
+          - scala-version: 2.12.11
+            spark-version: 2.4.3
+          - scala-version: 2.12.11
+            spark-version: 3.0.0
+          - scala-version: 2.12.11
+            spark-version: 3.1.2
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
@@ -17,14 +30,22 @@ jobs:
           cache: gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Publish package
-        run: ./gradlew publish
+      - name: Perform build
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SCALA_VERSION: ${{ matrix.scala-version }}
+          SPARK_VERSION: ${{ matrix.spark-version }}
+        run: ./gradlew build publishToMavenLocal -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
+      - name: Release to Maven Central
+        run: ./gradlew publishToSonatype closeAndReleaseStagingRepository -i -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
+        env:
+          SCALA_VERSION: ${{ matrix.scala-version }}
+          SPARK_VERSION: ${{ matrix.spark-version }}
+          SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
+          SONATYPE_PWD: ${{ secrets.SONATYPE_PWD }}
+          PGP_KEY: ${{ secrets.PGP_KEY }}
+          PGP_PWD: ${{ secrets.PGP_PWD }}
   publishPython:
-    needs: publishJvm
+    needs: publishJvmOnMavenCentral
     runs-on: ubuntu-latest
     permissions:
       contents: read

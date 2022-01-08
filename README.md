@@ -6,14 +6,29 @@ Apache Spark based framework for analysis A/B experiments
 Because good and scalable
 realization for industrial A/B analysis doesn't exist in open source
 
+## API
+Java/Scala/Python
+
 ## Getting Started
 ### Build from source
 
 ```bash
 1) Clone git repository
 2) Check spark,scala,hadoop and set correct in 3 step
-3) bash setup.sh spark=3.1.2 scala=2.12.15 hadoop=3.2 is_install_python=false
+3) bash setup.sh spark=3.1.2 scala=2.12.11 hadoop=3.2 is_build=true is_install_python_lib=false
 ```
+
+### Setup from released packages
+```bash
+1) Clone git repository
+2) Check version,spark,scala,hadoop and set correct in 3 step
+3) bash setup.sh version=0.0.3 spark=3.1.2 scala=2.12.11 hadoop=3.2 is_build=false is_install_python_lib=false
+```
+
+### Add as library
+[Maven Central](https://mvnrepository.com/artifact/ai.salmonbrain/)
+
+[PIP](https://pypi.org/project/dead-salmon-brain/)
 
 
 ### Data model

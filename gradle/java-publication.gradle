@@ -1,0 +1,94 @@
+apply plugin: "java"
+
+def licenseSpec = copySpec {
+    from project.rootDir
+    include "LICENSE"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+    with licenseSpec
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from tasks.javadoc
+    with licenseSpec
+}
+
+jar {
+    with licenseSpec
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+apply plugin: "maven-publish"  // https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+    publications {
+        ruleOfThumbJar(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            artifactId = project.archivesBaseName
+            version = project.version
+            pom {
+                name = artifactId
+                description = "Apache Spark based framework for analysis A/B experiments"
+
+                url = "https://github.com/Salmon-Brain/dead-salmon-brain"
+                licenses {
+                    license {
+                        name = 'Apache License 2.0'
+                        url = 'https://github.com/Salmon-Brain/dead-salmon-brain/blob/main/LICENSE'
+                        distribution = 'repo'
+                    }
+                }
+                developers {
+                    [
+                            developer {
+                                id = "deadsalmonbrain"
+                                email = 'deadsalmonbrain@gmail.com'
+                                roles = ["Core developer"]
+                            },
+                            developer {
+                                id = "livesalmonbrain"
+                                email = 'livesalmonbrain@gmail.com'
+                                roles = ["Core developer"]
+                            },
+                    ]
+                }
+
+                scm {
+                    url = 'https://github.com/Salmon-Brain/dead-salmon-brain.git'
+                }
+                issueManagement {
+                    url = 'https://github.com/Salmon-Brain/dead-salmon-brain/issues'
+                    system = 'GitHub Issues'
+                }
+                ciManagement {
+                    url = 'https://github.com/Salmon-Brain/dead-salmon-brain/actions/workflows/publish.yml'
+                    system = 'GitHub Actions'
+                }
+            }
+        }
+    }
+
+    // Useful for testing - running "publish" will create artifacts/pom in a local dir.
+    repositories { maven { url = "$rootProject.buildDir/repo" } }
+}
+
+// Fleshes out problems with Maven pom generation when building.
+tasks.build.dependsOn("publishRuleOfThumbJarPublicationToMavenLocal")
+
+apply plugin: 'signing'  // https://docs.gradle.org/current/userguide/signing_plugin.html
+signing {
+    if (System.getenv("PGP_KEY")) {
+        useInMemoryPgpKeys(System.getenv("PGP_KEY"), System.getenv("PGP_PWD"))
+        sign publishing.publications.ruleOfThumbJar
+    }
+}
