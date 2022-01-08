@@ -14,14 +14,14 @@ jobs:
         include:
           - scala-version: 2.11.8
             spark-version: 2.3.0
-#          - scala-version: 2.11.8
-#            spark-version: 2.4.3
-#          - scala-version: 2.12.11
-#            spark-version: 2.4.3
-#          - scala-version: 2.12.11
-#            spark-version: 3.0.0
-#          - scala-version: 2.12.11
-#            spark-version: 3.1.2
+          - scala-version: 2.11.8
+            spark-version: 2.4.3
+          - scala-version: 2.12.11
+            spark-version: 2.4.3
+          - scala-version: 2.12.11
+            spark-version: 3.0.0
+          - scala-version: 2.12.11
+            spark-version: 3.1.2
           - scala-version: 2.12.11
             spark-version: 3.2.0
     steps:
@@ -36,7 +36,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Install pypa/build
+    - name: Prepare python env
       env:
         SPARK_VERSION: ${{ matrix.spark-version }}
       run: >-
@@ -47,13 +47,8 @@ jobs:
         python/
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Test scala
-      env:
-        SCALA_VERSION: ${{ matrix.scala-version }}
-        SPARK_VERSION: ${{ matrix.spark-version }}
-      run: ./gradlew test
     - name: Tests
       env:
         SCALA_VERSION: ${{ matrix.scala-version }}
         SPARK_VERSION: ${{ matrix.spark-version }}
-      run: ./gradlew clean build test pythonTest -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
+      run: ./gradlew clean build pythonTest -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
