@@ -16,7 +16,7 @@ if (isShadow) {
     }
 }
 
-def scalaVersion = findProperty("scalaVersion") ?: "2.12.15"
+def scalaVersion = findProperty("scalaVersion") ?: "2.12.11"
 println "Scala version: $scalaVersion"
 def scalaVersionShort = "${VersionNumber.parse(scalaVersion).getMajor()}.${VersionNumber.parse(scalaVersion).getMinor()}"
 
@@ -28,7 +28,7 @@ application {
     mainClass = 'ai.salmonbrain.ruleofthumb.Main'
 }
 
-version '0.0.3'
+version '0.0.4'
 
 repositories {
     mavenCentral()
