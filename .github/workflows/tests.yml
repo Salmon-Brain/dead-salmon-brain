@@ -9,6 +9,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - scala-version: 2.11.8
+            spark-version: 2.3.0
+          - scala-version: 2.11.8
+            spark-version: 2.4.3
+          - scala-version: 2.12.11
+            spark-version: 2.4.3
+          - scala-version: 2.12.11
+            spark-version: 3.0.0
+          - scala-version: 2.12.11
+            spark-version: 3.1.2
+          - scala-version: 2.12.11
+            spark-version: 3.2.0
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
@@ -22,12 +37,18 @@ jobs:
       with:
         python-version: 3.7
     - name: Install pypa/build
+      env:
+        SPARK_VERSION: ${{ matrix.spark-version }}
       run: >-
         python -m
         pip install
         pytest
+        pyspark==$SPARK_VERSION 
         python/
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew test pythonTest
+      env:
+        SCALA_VERSION: ${{ matrix.scala-version }}
+        SPARK_VERSION: ${{ matrix.spark-version }}
+      run: ./gradlew build test pythonTest -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
