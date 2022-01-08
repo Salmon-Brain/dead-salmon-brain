@@ -59,7 +59,7 @@ class CumulativeMetricTransformer(
     ):
         super(CumulativeMetricTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
-            "ai.salmon.computing.CumulativeMetricTransformer", self.uid
+            "ai.salmonbrain.ruleofthumb.CumulativeMetricTransformer", self.uid
         )
         self._setDefault(numBuckets=-1)
         self._setDefault(numeratorNames=[])
@@ -147,7 +147,7 @@ class WelchStatisticsTransformer(
     ):
         super(WelchStatisticsTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
-            "ai.salmon.computing.WelchStatisticsTransformer", self.uid
+            "ai.salmonbrain.ruleofthumb.WelchStatisticsTransformer", self.uid
         )
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
@@ -181,7 +181,7 @@ class MannWhitneyStatisticsTransformer(
     ):
         super(MannWhitneyStatisticsTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
-            "ai.salmon.computing.MannWhitneyStatisticsTransformer", self.uid
+            "ai.salmonbrain.ruleofthumb.MannWhitneyStatisticsTransformer", self.uid
         )
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
@@ -215,7 +215,7 @@ class AutoStatisticsTransformer(
     ):
         super(AutoStatisticsTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
-            "ai.salmon.computing.AutoStatisticsTransformer", self.uid
+            "ai.salmonbrain.ruleofthumb.AutoStatisticsTransformer", self.uid
         )
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
@@ -255,7 +255,7 @@ class OutlierRemoveTransformer(
     ):
         super(OutlierRemoveTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
-            "ai.salmon.computing.OutlierRemoveTransformer", self.uid
+            "ai.salmonbrain.ruleofthumb.OutlierRemoveTransformer", self.uid
         )
         self._setDefault(lowerPercentile=0.01)
         self._setDefault(upperPercentile=0.99)
