@@ -4,7 +4,7 @@ import re
 
 
 def get_default(path: str):
-    pattern = re.compile("ruleofthumb-\d+(\.\d+)+.jar")
+    pattern = re.compile("ruleofthumb_.*-\d+(\.\d+)+.jar")
     files = [file for file in os.listdir(path) if pattern.match(file)]
     return str(pathlib.Path(path, files[0]))
 
