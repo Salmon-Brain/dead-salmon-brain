@@ -89,6 +89,6 @@ if [ "$is_install_python_lib" = true ]; then
   if [ "$is_build" = true ]; then
     pip install python/
   else
-    pip install dead-salmon-brain
+    pip install dead-salmon-brain=="$version"
   fi
 fi
