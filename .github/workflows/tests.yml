@@ -14,14 +14,14 @@ jobs:
         include:
           - scala-version: 2.11.8
             spark-version: 2.3.0
-          - scala-version: 2.11.8
-            spark-version: 2.4.3
-          - scala-version: 2.12.11
-            spark-version: 2.4.3
-          - scala-version: 2.12.11
-            spark-version: 3.0.0
-          - scala-version: 2.12.11
-            spark-version: 3.1.2
+#          - scala-version: 2.11.8
+#            spark-version: 2.4.3
+#          - scala-version: 2.12.11
+#            spark-version: 2.4.3
+#          - scala-version: 2.12.11
+#            spark-version: 3.0.0
+#          - scala-version: 2.12.11
+#            spark-version: 3.1.2
           - scala-version: 2.12.11
             spark-version: 3.2.0
     steps:
@@ -47,8 +47,13 @@ jobs:
         python/
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
+    - name: Test scala
       env:
         SCALA_VERSION: ${{ matrix.scala-version }}
         SPARK_VERSION: ${{ matrix.spark-version }}
-      run: ./gradlew build test pythonTest -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
+      run: ./gradlew test
+    - name: Tests
+      env:
+        SCALA_VERSION: ${{ matrix.scala-version }}
+        SPARK_VERSION: ${{ matrix.spark-version }}
+      run: ./gradlew clean build test pythonTest -PscalaVersion=$SCALA_VERSION -PsparkVersion=$SPARK_VERSION
