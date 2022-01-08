@@ -6,6 +6,9 @@ Apache Spark based framework for analysis A/B experiments
 Because good and scalable
 realization for industrial A/B analysis doesn't exist in open source
 
+## API
+Java/Scala/Python
+
 ## Getting Started
 ### Build from source
 
