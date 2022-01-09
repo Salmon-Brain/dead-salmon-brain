@@ -3,7 +3,7 @@
 spark=${spark:-3.1.2}
 scala=${scala:-2.12.11}
 hadoop=${hadoop:-3.2}
-version=${version:-0.0.3}
+version=${version:-0.0.4}
 is_install_python_lib=${is_install_python_lib:-false}
 is_build=${is_build:-false}
 
