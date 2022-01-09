@@ -22,7 +22,7 @@ Java/Scala/Python
 ```bash
 1) Clone git repository
 2) Check version,spark,scala,hadoop and set correct in 3 step
-3) bash setup.sh version=0.0.3 spark=3.1.2 scala=2.12.11 hadoop=3.2 is_build=false is_install_python_lib=false
+3) bash setup.sh version=0.0.4 spark=3.1.2 scala=2.12.11 hadoop=3.2 is_build=false is_install_python_lib=false
 ```
 
 ### Add as library
