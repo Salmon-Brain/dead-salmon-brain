@@ -2,9 +2,8 @@
 
 spark=${spark:-3.1.2}
 scala=${scala:-2.12.11}
-scala_short=$(echo "$scala" | cut -f1,2 -d'.')
 hadoop=${hadoop:-3.2}
-version=${version:-0.0.3}
+version=${version:-0.0.4}
 is_install_python_lib=${is_install_python_lib:-false}
 is_build=${is_build:-false}
 
@@ -23,10 +22,13 @@ for ARGUMENT in "$@"; do
   hadoop) hadoop=${VALUE} ;;
   is_install_python_lib) is_install_python_lib=${VALUE} ;;
   is_build) is_build=${VALUE} ;;
+  version) version=${VALUE} ;;
 
   *) ;;
   esac
 done
+
+scala_short=$(echo "$scala" | cut -f1,2 -d'.')
 
 if [[ -z "${JAVA_HOME}" ]]; then
   apt update
