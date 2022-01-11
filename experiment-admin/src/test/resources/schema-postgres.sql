@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS experiment CASCADE;
+DROP TABLE IF EXISTS experiment_metric_data;
+
 CREATE TABLE IF NOT EXISTS experiment
 (
     id SERIAL PRIMARY KEY,

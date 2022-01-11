@@ -1,54 +1,50 @@
 package ai.student.admin;
 
+import ai.student.admin.model.Experiment;
 import ai.student.admin.model.ExperimentMetricData;
 import ai.student.admin.model.StatResult;
 import ai.student.admin.model.StatisticsData;
-import ai.student.admin.repository.ExperimentMetricDataRepository;
+import ai.student.admin.repository.CustomExperimentRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class Example {
-    private final ExperimentMetricDataRepository repository;
+    private final CustomExperimentRepositoryImpl repository;
 
     @Autowired
-    public Example(ExperimentMetricDataRepository repository) {
+    public Example(CustomExperimentRepositoryImpl repository) {
         this.repository = repository;
     }
 
     @PostConstruct
     public void init() {
-        repository.save(new ExperimentMetricData(
-                "exp1", "metric1", Timestamp.from(ZonedDateTime.now().toInstant()),
-                new StatisticsData(
-                new StatResult(1, 0, 10000, 10, 20,
-                        10, 20, "TYPE"),
-                false, 10000, 1000, "TEST","source1", true
-        )
-        ));
-        repository.save(new ExperimentMetricData(
-                "exp2", "metric3", Timestamp.from(ZonedDateTime.now().toInstant()),
-                new StatisticsData(
-                new StatResult(1, 0, 10000, 10, 20,
-                        10, 20, "TYPE"),
-                false, 10000, 1000, "TEST","source1", true
-        )
-        ));
-        repository.save(new ExperimentMetricData(
-                "exp3", "metric3", Timestamp.from(ZonedDateTime.now().toInstant()),
-                new StatisticsData(
-                new StatResult(1, 0, 10000, 10, 20,
-                        10, 20, "TYPE"),
-                false, 10000, 1000, "TEST","source1", true
-        )
-        ));
+        if (!"true".equals(System.getProperty("ai.salmonbrain.init.fakes", "false"))) {
+            return;
+        }
+        for (int i = 0; i < 100; i++) {
+            Experiment experiment = repository.findOrCreate("fakeExp" + i);
+            for (int j = 0; j < 20; j++) {
+                repository.addStatToExperiment(experiment.getExpUid(), getMetricData(j));
+            }
+        }
+    }
 
-
-        System.out.println("By exp1 " + repository.findByExpUid("exp1"));
-        System.out.println("All " + repository.findAll());
+    private ExperimentMetricData getMetricData(int j) {
+        return new ExperimentMetricData(
+                "m1",
+                new Timestamp(System.currentTimeMillis() + j * 1000),
+                new StatisticsData(
+                        new StatResult(
+                                ThreadLocalRandom.current().nextDouble(0, 10),
+                                ThreadLocalRandom.current().nextDouble(0, 0.1),
+                                3, 4, 5, 6, 7, "c"),
+                        false, 100, 100, "tt", "ms", false
+                )
+        );
     }
 }

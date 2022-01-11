@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS experiment;
+DROP TABLE IF EXISTS experiment_metric_data;
+
 CREATE TABLE IF NOT EXISTS experiment (
     id bigint NOT NULL AUTO_INCREMENT,
     exp_uid VARCHAR(128) NOT NULL,
