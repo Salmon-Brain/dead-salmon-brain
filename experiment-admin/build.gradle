@@ -15,7 +15,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations'
-    implementation 'org.modelmapper:modelmapper:2.3.0'
+    implementation 'org.modelmapper:modelmapper:2.4.5'
 
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
