@@ -26,7 +26,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'ai.student.admin.App'
+    mainClass = 'ai.salmonbrain.admin.App'
 }
 
 bootRun {

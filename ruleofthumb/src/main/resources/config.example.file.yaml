@@ -1,0 +1,9 @@
+input: "Files"
+output: "/tmp/report.json"
+files:
+  - "src/main/resources/nginx_sample.txt"
+accessLog:
+  metricName: "case when regexp_extract(path, '^(/click/)') = '/click/' then 'clicks' else case when regexp_extract(path, '^(/view/)') = '/view/' then 'view' else 'none' end end "
+  metricValue: "1.0"
+  experimentUid: "'exp1'"
+  variantId: "case when regexp_extract(entityUid, '([0-9])$') = 1 then 'treatment' else 'control' end"

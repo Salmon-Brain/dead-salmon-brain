@@ -1,0 +1,29 @@
+import java.time.Duration
+
+
+//
+// Maven Central configuration
+//
+apply plugin: "io.github.gradle-nexus.publish-plugin"  // https://github.com/gradle-nexus/publish-plugin/
+nexusPublishing {
+    repositories {
+        if (System.getenv("SONATYPE_PWD")) {
+            sonatype {
+                username = System.getenv("SONATYPE_USER")
+                password = System.getenv("SONATYPE_PWD")
+                nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            }
+        }
+    }
+
+    connectTimeout = Duration.ofMinutes(15)
+    clientTimeout = Duration.ofMinutes(15)
+
+    transitionCheckOptions {
+        // We have many artifacts so Maven Central takes a long time on its compliance checks. This sets the timeout for
+        // waiting for the repository to close to a comfortable 60 minutes.
+        maxRetries.set(360)
+        delayBetween.set(Duration.ofSeconds(10))
+    }
+}
