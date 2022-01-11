@@ -36,5 +36,5 @@ bootRun {
 }
 
 tasks.named('test') {
-    useTestNG()
+    useJUnitPlatform()
 }
