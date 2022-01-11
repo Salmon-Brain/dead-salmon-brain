@@ -1,6 +1,6 @@
 # Dead salmon brain
 
-The Dead salmon brain is an open source project for industrial A/B statistical analysis and reporting. The core library extends Apache Spark functionality, making it easy to integrate into your data processing pipelines and provide scalable implementations
+The dead salmon brain is an open source project for industrial A/B statistical analysis and reporting. The core library extends Apache Spark functionality, making it easy to integrate into your data processing pipelines and providing scalable implementations
 of common online experimentation techniques and mathematical methods.
 
 ## API
