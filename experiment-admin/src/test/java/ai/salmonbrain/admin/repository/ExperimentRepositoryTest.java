@@ -97,6 +97,8 @@ public class ExperimentRepositoryTest {
                                 500,
                                 1,
                                 1,
+                                0.01,
+                                0.01,
                                 0.95,
                                 1.05,
                                 "type"
@@ -104,6 +106,8 @@ public class ExperimentRepositoryTest {
                         false,
                         1000,
                         1000,
+                        0.1,
+                        0.2,
                         "test",
                         "source",
                         true

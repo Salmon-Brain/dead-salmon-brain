@@ -1,10 +1,13 @@
 package ai.salmonbrain.admin.service;
 
 import ai.salmonbrain.admin.dto.ExperimentDto;
+import ai.salmonbrain.admin.model.Experiment;
+import ai.salmonbrain.admin.model.ExperimentMetricData;
 import ai.salmonbrain.admin.repository.ExperimentRepository;
 import ai.salmonbrain.admin.repository.PageUtils;
-import ai.salmonbrain.admin.model.Experiment;
+import ai.salmonbrain.experiment.api.dto.ReportDto;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,7 @@ public class ExperimentService {
     public ExperimentService(ExperimentRepository repository) {
         this.repository = repository;
         this.modelMapper = new ModelMapper();
+        this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
     public ResponseEntity<List<ExperimentDto>> getExperiments(String sort,
@@ -46,5 +50,10 @@ public class ExperimentService {
     public ResponseEntity<ExperimentDto> getExperiment(Long id) {
         Experiment experiment = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         return new ResponseEntity<>(modelMapper.map(experiment, ExperimentDto.class), HttpStatus.OK);
+    }
+
+    public void updateReport(ReportDto report) {
+        ExperimentMetricData metricData = modelMapper.map(report, ExperimentMetricData.class);
+        repository.addStatToExperiment(report.getExperimentUid(), metricData);
     }
 }

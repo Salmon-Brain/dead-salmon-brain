@@ -1,8 +1,8 @@
-package ai.salmonbrain.admin.model;
+package ai.salmonbrain.experiment.api.dto;
 
 import java.util.Objects;
 
-public class StatResult {
+public class StatResultDto {
     private double statistic;
     private double pValue;
     private double requiredSampleSizeByVariant;
@@ -13,31 +13,6 @@ public class StatResult {
     private double percentageLeft;
     private double percentageRight;
     private String centralTendencyType;
-
-    public StatResult() {
-    }
-
-    public StatResult(double statistic,
-                      double pValue,
-                      double requiredSampleSizeByVariant,
-                      double controlCentralTendency,
-                      double treatmentCentralTendency,
-                      double controlVariance,
-                      double treatmentVariance,
-                      double percentageLeft,
-                      double percentageRight,
-                      String centralTendencyType) {
-        this.statistic = statistic;
-        this.pValue = pValue;
-        this.requiredSampleSizeByVariant = requiredSampleSizeByVariant;
-        this.controlCentralTendency = controlCentralTendency;
-        this.treatmentCentralTendency = treatmentCentralTendency;
-        this.controlVariance = controlVariance;
-        this.treatmentVariance = treatmentVariance;
-        this.percentageLeft = percentageLeft;
-        this.percentageRight = percentageRight;
-        this.centralTendencyType = centralTendencyType;
-    }
 
     public double getStatistic() {
         return statistic;
@@ -123,7 +98,7 @@ public class StatResult {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StatResult that = (StatResult) o;
+        StatResultDto that = (StatResultDto) o;
         return Double.compare(that.statistic, statistic) == 0 && Double.compare(that.pValue, pValue) == 0 && Double.compare(that.requiredSampleSizeByVariant, requiredSampleSizeByVariant) == 0 && Double.compare(that.controlCentralTendency, controlCentralTendency) == 0 && Double.compare(that.treatmentCentralTendency, treatmentCentralTendency) == 0 && Double.compare(that.controlVariance, controlVariance) == 0 && Double.compare(that.treatmentVariance, treatmentVariance) == 0 && Double.compare(that.percentageLeft, percentageLeft) == 0 && Double.compare(that.percentageRight, percentageRight) == 0 && Objects.equals(centralTendencyType, that.centralTendencyType);
     }
 
@@ -134,7 +109,7 @@ public class StatResult {
 
     @Override
     public String toString() {
-        return "StatResult{" +
+        return "StatResultDto{" +
                 "statistic=" + statistic +
                 ", pValue=" + pValue +
                 ", requiredSampleSizeByVariant=" + requiredSampleSizeByVariant +

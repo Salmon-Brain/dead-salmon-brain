@@ -16,11 +16,16 @@ object Main {
       builder.master(args(1))
     }
     val spark = builder.getOrCreate()
-    val report = ReportBuilder.buildReport(config, spark)
-    report.write
-      .partitionBy("experimentUid")
-      .mode(SaveMode.Overwrite)
-      .json(config.output)
+//    val report = ReportBuilder.buildReport(config, spark)
+//
+//    report.write
+//      .partitionBy("experimentUid")
+//      .mode(SaveMode.Overwrite)
+//      .json(config.output)
+
+    val report = spark.read.json("/tmp/report.json")
+
+    ReportPublisher.publishReport(config, report)
   }
 
 }

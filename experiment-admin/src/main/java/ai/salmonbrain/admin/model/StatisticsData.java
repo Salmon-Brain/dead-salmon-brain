@@ -10,6 +10,9 @@ public class StatisticsData {
     private long treatmentSize;
     private String testType;
 
+    private double alpha;
+    private double beta;
+
     private boolean isAdditive;
     private String metricSource;
 
@@ -20,6 +23,8 @@ public class StatisticsData {
                           boolean srm,
                           long controlSize,
                           long treatmentSize,
+                          double alpha,
+                          double beta,
                           String testType,
                           String metricSource,
                           boolean isAdditive) {
@@ -27,6 +32,8 @@ public class StatisticsData {
         this.srm = srm;
         this.controlSize = controlSize;
         this.treatmentSize = treatmentSize;
+        this.alpha = alpha;
+        this.beta = beta;
         this.testType = testType;
         this.metricSource = metricSource;
         this.isAdditive = isAdditive;
@@ -88,17 +95,33 @@ public class StatisticsData {
         this.metricSource = metricSource;
     }
 
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
+    public double getBeta() {
+        return beta;
+    }
+
+    public void setBeta(double beta) {
+        this.beta = beta;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StatisticsData that = (StatisticsData) o;
-        return srm == that.srm && controlSize == that.controlSize && treatmentSize == that.treatmentSize && isAdditive == that.isAdditive && Objects.equals(statResult, that.statResult) && Objects.equals(testType, that.testType) && Objects.equals(metricSource, that.metricSource);
+        return srm == that.srm && controlSize == that.controlSize && treatmentSize == that.treatmentSize && Double.compare(that.alpha, alpha) == 0 && Double.compare(that.beta, beta) == 0 && isAdditive == that.isAdditive && Objects.equals(statResult, that.statResult) && Objects.equals(testType, that.testType) && Objects.equals(metricSource, that.metricSource);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(statResult, srm, controlSize, treatmentSize, testType, isAdditive, metricSource);
+        return Objects.hash(statResult, srm, controlSize, treatmentSize, testType, alpha, beta, isAdditive, metricSource);
     }
 
     @Override
@@ -109,6 +132,8 @@ public class StatisticsData {
                 ", controlSize=" + controlSize +
                 ", treatmentSize=" + treatmentSize +
                 ", testType='" + testType + '\'' +
+                ", alpha=" + alpha +
+                ", beta=" + beta +
                 ", isAdditive=" + isAdditive +
                 ", metricSource='" + metricSource + '\'' +
                 '}';

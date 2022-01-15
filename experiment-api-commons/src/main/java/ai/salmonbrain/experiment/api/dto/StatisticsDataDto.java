@@ -1,4 +1,4 @@
-package ai.salmonbrain.admin.dto;
+package ai.salmonbrain.experiment.api.dto;
 
 import java.util.Objects;
 
@@ -11,9 +11,6 @@ public class StatisticsDataDto {
 
     private double alpha;
     private double beta;
-
-    private boolean isAdditive;
-    private String metricSource;
 
     public StatResultDto getStatResult() {
         return statResult;
@@ -55,22 +52,6 @@ public class StatisticsDataDto {
         this.testType = testType;
     }
 
-    public boolean isAdditive() {
-        return isAdditive;
-    }
-
-    public void setAdditive(boolean additive) {
-        isAdditive = additive;
-    }
-
-    public String getMetricSource() {
-        return metricSource;
-    }
-
-    public void setMetricSource(String metricSource) {
-        this.metricSource = metricSource;
-    }
-
     public double getAlpha() {
         return alpha;
     }
@@ -92,12 +73,12 @@ public class StatisticsDataDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StatisticsDataDto that = (StatisticsDataDto) o;
-        return srm == that.srm && controlSize == that.controlSize && treatmentSize == that.treatmentSize && Double.compare(that.alpha, alpha) == 0 && Double.compare(that.beta, beta) == 0 && isAdditive == that.isAdditive && Objects.equals(statResult, that.statResult) && Objects.equals(testType, that.testType) && Objects.equals(metricSource, that.metricSource);
+        return srm == that.srm && controlSize == that.controlSize && treatmentSize == that.treatmentSize && Double.compare(that.alpha, alpha) == 0 && Double.compare(that.beta, beta) == 0  && Objects.equals(statResult, that.statResult) && Objects.equals(testType, that.testType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(statResult, srm, controlSize, treatmentSize, testType, alpha, beta, isAdditive, metricSource);
+        return Objects.hash(statResult, srm, controlSize, treatmentSize, testType, alpha, beta);
     }
 
     @Override
@@ -110,8 +91,6 @@ public class StatisticsDataDto {
                 ", testType='" + testType + '\'' +
                 ", alpha=" + alpha +
                 ", beta=" + beta +
-                ", isAdditive=" + isAdditive +
-                ", metricSource='" + metricSource + '\'' +
                 '}';
     }
 }

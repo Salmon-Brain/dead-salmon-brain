@@ -26,24 +26,32 @@ public class Example {
         if (!"true".equals(System.getProperty("ai.salmonbrain.init.fakes", "false"))) {
             return;
         }
-        for (int i = 0; i < 100; i++) {
-            Experiment experiment = repository.findOrCreate("fakeExp" + i);
-            for (int j = 0; j < 20; j++) {
-                repository.addStatToExperiment(experiment.getExpUid(), getMetricData(j));
+        for (int m = 0; m < 3; m++) {
+            for (int i = 0; i < 100; i++) {
+                Experiment experiment = repository.findOrCreate("fakeExp" + i);
+                for (int j = 0; j < 20; j++) {
+                    repository.addStatToExperiment(experiment.getExpUid(), getMetricData(j, "metric_" + m));
+                }
             }
         }
     }
 
-    private ExperimentMetricData getMetricData(int j) {
+    private ExperimentMetricData getMetricData(int j, String metricName) {
         return new ExperimentMetricData(
-                "m1",
+                metricName,
                 new Timestamp(System.currentTimeMillis() + j * 1000),
                 new StatisticsData(
                         new StatResult(
                                 ThreadLocalRandom.current().nextDouble(0, 10),
                                 ThreadLocalRandom.current().nextDouble(0, 0.1),
-                                3, 4, 5, 6, 7, "c"),
-                        false, 100, 100, "tt", "ms", false
+                                3, 4, 5,
+                                ThreadLocalRandom.current().nextDouble(0, 0.1),
+                                ThreadLocalRandom.current().nextDouble(0, 0.1),
+                                ThreadLocalRandom.current().nextDouble(0, 0.1),
+                                ThreadLocalRandom.current().nextDouble(0, 0.1),
+                                "central_tendency_type"),
+                        false, 100, 100, 0.1, 0.2, "test_type",
+                        "metric_source", false
                 )
         );
     }

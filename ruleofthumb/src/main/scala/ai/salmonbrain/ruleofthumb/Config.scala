@@ -7,6 +7,7 @@ case class Config(
     @JsonScalaEnumeration(classOf[InputTypeRef]) input: Input.Input = Input.Files,
     files: Seq[String] = Seq.empty,
     output: String,
+    postReportUrl: Option[String],
     accessLog: Option[AccessLogConfig],
     clickhouse: Option[ClickhouseConfig]
 ) {}

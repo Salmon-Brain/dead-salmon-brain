@@ -36,6 +36,7 @@ repositories {
 
 
 dependencies {
+    implementation project(':experiment-api-commons')
     implementation "org.scala-lang:scala-library:$scalaVersion"
     implementation "org.apache.spark:spark-core_$scalaVersionShort:$sparkVersion"
     implementation "org.apache.spark:spark-sql_$scalaVersionShort:$sparkVersion"
