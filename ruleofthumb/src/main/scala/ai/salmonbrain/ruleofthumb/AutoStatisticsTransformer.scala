@@ -19,7 +19,8 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
         $(experimentColumn),
         $(metricNameColumn),
         $(additiveColumn),
-        $(metricSourceColumn)
+        $(metricSourceColumn),
+        $(entityCategoryColumn)
       )
       .pivot($(variantColumn))
       .agg(
@@ -37,7 +38,13 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
 
     val data = dataset.join(
       broadcast(cltMarker),
-      Seq($(experimentColumn), $(metricNameColumn), $(additiveColumn), $(metricSourceColumn))
+      Seq(
+        $(experimentColumn),
+        $(metricNameColumn),
+        $(additiveColumn),
+        $(metricSourceColumn),
+        $(entityCategoryColumn)
+      )
     )
 
     val cltReport = {
@@ -94,6 +101,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
       .setEntityIdColumn($(entityIdColumn))
       .setExperimentColumn($(experimentColumn))
       .setMetricNameColumn($(metricNameColumn))
+      .setEntityCategoryColumn($(entityCategoryColumn))
       .setSrmAlpha($(srmAlpha))
       .setValueColumn($(valueColumn))
       .setVariantColumn($(variantColumn))

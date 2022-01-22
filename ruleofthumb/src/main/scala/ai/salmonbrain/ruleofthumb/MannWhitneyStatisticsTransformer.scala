@@ -25,7 +25,8 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
         $(experimentColumn),
         $(metricNameColumn),
         $(additiveColumn),
-        $(metricSourceColumn)
+        $(metricSourceColumn),
+        $(entityCategoryColumn)
       )
       .pivot($(variantColumn))
       .agg(

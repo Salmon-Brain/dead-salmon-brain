@@ -37,6 +37,7 @@ class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with 
         "isAdditive",
         "metricName",
         "metricValue",
+        "category",
         "variantId"
       ).sorted
     )

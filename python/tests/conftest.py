@@ -10,4 +10,6 @@ def get_default(path: str):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--path", action="store", default=get_default("../../ruleofthumb/build/libs/"))
+    parser.addoption(
+        "--path", action="store", default=get_default("../../ruleofthumb/build/libs/")
+    )

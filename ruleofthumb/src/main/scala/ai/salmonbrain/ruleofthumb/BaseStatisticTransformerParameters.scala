@@ -11,12 +11,12 @@ trait BaseStatisticTransformerParameters extends Params {
   )
   setDefault(metricSourceColumn, "metricSource")
 
-  val entityCategoriesColumn: Param[String] = new Param[String](
+  val entityCategoryColumn: Param[String] = new Param[String](
     this,
-    "entityCategoriesColumn",
-    "column with experiment entity_id categories"
+    "entityCategoryColumn",
+    "column with experiment entity_id category"
   )
-  setDefault(entityCategoriesColumn, "entityCategories")
+  setDefault(entityCategoryColumn, "category")
 
   val entityIdColumn: Param[String] = new Param[String](
     this,
@@ -87,7 +87,7 @@ trait BaseStatisticTransformerParameters extends Params {
 
   /** @group setParam */
   def setEntityCategoryColumn(value: String): this.type =
-    set(entityCategoriesColumn, value)
+    set(entityCategoryColumn, value)
 
   /** @group setParam */
   def setEntityIdColumn(value: String): this.type =

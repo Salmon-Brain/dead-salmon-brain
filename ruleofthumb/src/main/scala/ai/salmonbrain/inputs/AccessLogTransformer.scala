@@ -18,7 +18,7 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
       StructField("metricValue", DoubleType, true),
       StructField("metricName", StringType, true),
       StructField("isHistory", BooleanType, true),
-      StructField("entityCategories", ArrayType(StringType, true), true),
+      StructField("category", StringType, true),
       StructField("metricSource", StringType, true),
       StructField("isAdditive", BooleanType, true)
     )
@@ -72,6 +72,7 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
       .withColumn("variantId", expr($(variantIdExpression)))
       .withColumn("metricValue", expr($(metricValueExpression)).cast(DoubleType))
       .withColumn("metricName", expr($(metricNameExpression)))
+      .withColumn("category", lit("common"))
       .withColumn("metricSource", lit("feedback"))
       .withColumn("isAdditive", lit(true))
       .filter(col("metricName") =!= "none")
@@ -82,6 +83,7 @@ class AccessLogTransformer(override val uid: String) extends Transformer {
         "experimentUid",
         "metricValue",
         "metricName",
+        "category",
         "metricSource",
         "isAdditive"
       )
