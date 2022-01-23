@@ -37,7 +37,8 @@ case class ExpData(
     entityUid: String, //unique entity id
     experimentUid: String, //unique experiment id
     metricValue: Double, //numeric metric value
-    metricName: String, //unique metric name in metricSource space  
+    metricName: String, //unique metric name in metricSource space
+    category: String, //entity category
     metricSource: String, //metric source 
     isAdditive: Boolean   // is additive metric or not
 )
