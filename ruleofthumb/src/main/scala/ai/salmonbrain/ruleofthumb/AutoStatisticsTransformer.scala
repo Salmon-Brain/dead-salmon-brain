@@ -20,7 +20,8 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
         $(metricNameColumn),
         $(additiveColumn),
         $(metricSourceColumn),
-        $(entityCategoryColumn)
+        $(entityCategoryNameColumn),
+        $(entityCategoryValueColumn)
       )
       .pivot($(variantColumn))
       .agg(
@@ -43,7 +44,8 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
         $(metricNameColumn),
         $(additiveColumn),
         $(metricSourceColumn),
-        $(entityCategoryColumn)
+        $(entityCategoryNameColumn),
+        $(entityCategoryValueColumn)
       )
     )
 
@@ -101,7 +103,7 @@ class AutoStatisticsTransformer(override val uid: String) extends BaseStatisticT
       .setEntityIdColumn($(entityIdColumn))
       .setExperimentColumn($(experimentColumn))
       .setMetricNameColumn($(metricNameColumn))
-      .setEntityCategoryColumn($(entityCategoryColumn))
+      .setEntityCategoryNameColumn($(entityCategoryNameColumn))
       .setSrmAlpha($(srmAlpha))
       .setValueColumn($(valueColumn))
       .setVariantColumn($(variantColumn))

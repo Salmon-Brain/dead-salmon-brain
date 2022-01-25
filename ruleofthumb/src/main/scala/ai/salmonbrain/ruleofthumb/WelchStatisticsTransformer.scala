@@ -22,7 +22,8 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
         $(metricNameColumn),
         $(additiveColumn),
         $(metricSourceColumn),
-        $(entityCategoryColumn)
+        $(entityCategoryNameColumn),
+        $(entityCategoryValueColumn)
       )
       .pivot($(variantColumn))
       .agg(

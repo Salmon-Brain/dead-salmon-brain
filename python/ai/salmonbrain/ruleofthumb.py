@@ -52,7 +52,8 @@ class CumulativeMetricTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         numBuckets=-1,
         numeratorNames=[],
         denominatorNames=[],
@@ -80,7 +81,8 @@ class CumulativeMetricTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         numBuckets=-1,
         numeratorNames=[],
         denominatorNames=[],
@@ -114,7 +116,8 @@ class StatisticTransformer:
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         controlName="control",
         treatmentName="treatment"
     ):
@@ -145,7 +148,8 @@ class WelchStatisticsTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         controlName="control",
         treatmentName="treatment"
     ):
@@ -180,7 +184,8 @@ class MannWhitneyStatisticsTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         controlName="control",
         treatmentName="treatment"
     ):
@@ -215,7 +220,8 @@ class AutoStatisticsTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         controlName="control",
         treatmentName="treatment"
     ):
@@ -256,7 +262,8 @@ class OutlierRemoveTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         lowerPercentile=0.01,
         upperPercentile=0.99
     ):
@@ -280,7 +287,8 @@ class OutlierRemoveTransformer(
         valueColumn="metricValue",
         metricNameColumn="metricName",
         additiveColumn="isAdditive",
-        entityCategoryColumn="category",
+        entityCategoryNameColumn="categoryName",
+        entityCategoryValueColumn="categoryValue",
         lowerPercentile=0.01,
         upperPercentile=0.99
     ):

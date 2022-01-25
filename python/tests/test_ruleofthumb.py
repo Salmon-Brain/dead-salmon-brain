@@ -17,11 +17,12 @@ def path(pytestconfig):
 def data_sample_for_outlier(spark: SparkSession):
     return spark.createDataFrame(
         [
-            ("common", "feedback", "1", "exp", "treatment", i, "shows", True)
+            ("common", "all", "feedback", "1", "exp", "treatment", i, "shows", True)
             for i in range(100)
         ],
         [
-            "category",
+            "categoryName",
+            "categoryValue",
             "metricSource",
             "entityUid",
             "experimentUid",
@@ -37,25 +38,26 @@ def data_sample_for_outlier(spark: SparkSession):
 def data_sample(spark: SparkSession):
     return spark.createDataFrame(
         [
-            ("common", "feedback", "1", "exp", "treatment", 11.0, "shows", True),
-            ("common", "feedback", "1", "exp", "treatment", 3.0, "likes", True),
-            ("common", "feedback", "1", "exp", "treatment", 11.0, "shows", True),
-            ("common", "feedback", "1", "exp", "treatment", 3.0, "likes", True),
-            ("common", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
-            ("common", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
-            ("common", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
-            ("common", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
-            ("common", "feedback", "3", "exp", "control", 11.0, "shows", True),
-            ("common", "feedback", "3", "exp", "control", 7.0, "likes", True),
-            ("common", "feedback", "3", "exp", "control", 11.0, "shows", True),
-            ("common", "feedback", "3", "exp", "control", 7.0, "likes", True),
-            ("common", "feedback", "4", "exp", "control", 10.0, "shows", True),
-            ("common", "feedback", "4", "exp", "control", 8.0, "likes", True),
-            ("common", "feedback", "4", "exp", "control", 10.0, "shows", True),
-            ("common", "feedback", "4", "exp", "control", 8.0, "likes", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 11.0, "shows", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 3.0, "likes", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 11.0, "shows", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 3.0, "likes", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "3", "exp", "control", 11.0, "shows", True),
+            ("common", "all", "feedback", "3", "exp", "control", 7.0, "likes", True),
+            ("common", "all", "feedback", "3", "exp", "control", 11.0, "shows", True),
+            ("common", "all", "feedback", "3", "exp", "control", 7.0, "likes", True),
+            ("common", "all", "feedback", "4", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "4", "exp", "control", 8.0, "likes", True),
+            ("common", "all", "feedback", "4", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "4", "exp", "control", 8.0, "likes", True),
         ],
         [
-            "category",
+            "categoryName",
+            "categoryValue",
             "metricSource",
             "entityUid",
             "experimentUid",

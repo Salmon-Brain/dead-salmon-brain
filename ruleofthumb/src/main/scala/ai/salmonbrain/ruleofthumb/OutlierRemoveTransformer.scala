@@ -53,7 +53,8 @@ class OutlierRemoveTransformer(override val uid: String)
       $(experimentColumn),
       $(metricSourceColumn),
       $(metricNameColumn),
-      $(entityCategoryColumn)
+      $(entityCategoryNameColumn),
+      $(entityCategoryValueColumn)
     )
     val percentilesBound = dataset
       .groupBy(columns.head, columns: _*)

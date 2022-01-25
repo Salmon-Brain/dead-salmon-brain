@@ -178,7 +178,8 @@ class CumulativeMetricTransformer(override val uid: String)
       $(entityIdColumn),
       $(experimentColumn),
       $(metricSourceColumn),
-      $(entityCategoryColumn)
+      $(entityCategoryNameColumn),
+      $(entityCategoryValueColumn)
     ) ++
       (if (withName) Seq($(metricNameColumn)) else Seq[String]()) ++
       (if (withAdditive) Seq($(additiveColumn)) else Seq[String]())

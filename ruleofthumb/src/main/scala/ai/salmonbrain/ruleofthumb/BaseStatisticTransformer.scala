@@ -20,7 +20,8 @@ trait BaseStatisticTransformer
         StructField("metricName", StringType, nullable = false),
         StructField("isAdditive", BooleanType, nullable = false),
         StructField("metricSource", StringType, nullable = false),
-        StructField("category", StringType, nullable = false),
+        StructField("categoryName", StringType, nullable = false),
+        StructField("categoryValue", StringType, nullable = false),
         StructField(
           "statisticsData",
           Encoders.product[StatisticsReport].schema,
