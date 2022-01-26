@@ -16,8 +16,13 @@ def path(pytestconfig):
 @pytest.fixture(scope="session")
 def data_sample_for_outlier(spark: SparkSession):
     return spark.createDataFrame(
-        [("feedback", "1", "exp", "treatment", i, "shows", True) for i in range(100)],
         [
+            ("common", "all", "feedback", "1", "exp", "treatment", i, "shows", True)
+            for i in range(100)
+        ],
+        [
+            "categoryName",
+            "categoryValue",
             "metricSource",
             "entityUid",
             "experimentUid",
@@ -33,24 +38,26 @@ def data_sample_for_outlier(spark: SparkSession):
 def data_sample(spark: SparkSession):
     return spark.createDataFrame(
         [
-            ("feedback", "1", "exp", "treatment", 11.0, "shows", True),
-            ("feedback", "1", "exp", "treatment", 3.0, "likes", True),
-            ("feedback", "1", "exp", "treatment", 11.0, "shows", True),
-            ("feedback", "1", "exp", "treatment", 3.0, "likes", True),
-            ("feedback", "2", "exp", "treatment", 10.0, "shows", True),
-            ("feedback", "2", "exp", "treatment", 5.0, "likes", True),
-            ("feedback", "2", "exp", "treatment", 10.0, "shows", True),
-            ("feedback", "2", "exp", "treatment", 5.0, "likes", True),
-            ("feedback", "3", "exp", "control", 11.0, "shows", True),
-            ("feedback", "3", "exp", "control", 7.0, "likes", True),
-            ("feedback", "3", "exp", "control", 11.0, "shows", True),
-            ("feedback", "3", "exp", "control", 7.0, "likes", True),
-            ("feedback", "4", "exp", "control", 10.0, "shows", True),
-            ("feedback", "4", "exp", "control", 8.0, "likes", True),
-            ("feedback", "4", "exp", "control", 10.0, "shows", True),
-            ("feedback", "4", "exp", "control", 8.0, "likes", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 11.0, "shows", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 3.0, "likes", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 11.0, "shows", True),
+            ("common", "all", "feedback", "1", "exp", "treatment", 3.0, "likes", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "3", "exp", "control", 11.0, "shows", True),
+            ("common", "all", "feedback", "3", "exp", "control", 7.0, "likes", True),
+            ("common", "all", "feedback", "3", "exp", "control", 11.0, "shows", True),
+            ("common", "all", "feedback", "3", "exp", "control", 7.0, "likes", True),
+            ("common", "all", "feedback", "4", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "4", "exp", "control", 8.0, "likes", True),
+            ("common", "all", "feedback", "4", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "4", "exp", "control", 8.0, "likes", True),
         ],
         [
+            "categoryName",
+            "categoryValue",
             "metricSource",
             "entityUid",
             "experimentUid",
@@ -137,9 +144,7 @@ def test_autoStatisticsTransformer(data_sample: DataFrame):
     assert all([p > 0.05 for p in p_values])
 
 
-def test_outlierRemoveTransformer(
-    data_sample_for_outlier: DataFrame
-):
+def test_outlierRemoveTransformer(data_sample_for_outlier: DataFrame):
     outlier = OutlierRemoveTransformer(lowerPercentile=0.05, upperPercentile=0.95)
     result = outlier.transform(data_sample_for_outlier)
 

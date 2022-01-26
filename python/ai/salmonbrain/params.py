@@ -41,6 +41,20 @@ class BaseStatisticTransformerParameters(Params):
         typeConverter=TypeConverters.toString,
     )
 
+    entityCategoryNameColumn = Param(
+        Params._dummy(),
+        "entityCategoryNameColumn",
+        "column with experiment entity_id category name",
+        typeConverter=TypeConverters.toString,
+    )
+
+    entityCategoryValueColumn = Param(
+        Params._dummy(),
+        "entityCategoryValueColumn",
+        "column with experiment entity_id category value",
+        typeConverter=TypeConverters.toString,
+    )
+
     additiveColumn = Param(
         Params._dummy(),
         "additiveColumn",
@@ -69,6 +83,8 @@ class BaseStatisticTransformerParameters(Params):
         self._setDefault(experimentColumn="experimentUid")
         self._setDefault(variantColumn="variantId")
         self._setDefault(valueColumn="metricValue")
+        self._setDefault(entityCategoryNameColumn="categoryName")
+        self._setDefault(entityCategoryValueColumn="categoryValue")
         self._setDefault(additiveColumn="isAdditive")
         self._setDefault(controlName="control")
         self._setDefault(treatmentName="treatment")
@@ -90,6 +106,12 @@ class BaseStatisticTransformerParameters(Params):
 
     def setAdditiveColumn(self, value):
         return self._set(additiveColumn=value)
+
+    def setEntityCategoryNameColumn(self, value):
+        return self._set(entityCategoryNameColumn=value)
+
+    def setEntityCategoryValueColumn(self, value):
+        return self._set(entityCategoryValueColumn=value)
 
     def setControlName(self, value):
         return self._set(controlName=value)
