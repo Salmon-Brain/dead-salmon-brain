@@ -7,6 +7,8 @@ case class ExpData(
     experimentUid: String,
     metricValue: Double,
     metricName: String,
+    categoryName: String = "common",
+    categoryValue: String = "all",
     metricSource: String = "feedback",
     isAdditive: Boolean = true
 )

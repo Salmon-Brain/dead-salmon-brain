@@ -15,8 +15,8 @@ class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
           uplift = 0,
           controlSkew = 0.1,
           treatmentSkew = 0.1,
-          controlSize = 3000,
-          treatmentSize = 3000,
+          controlSize = 5000,
+          treatmentSize = 5000,
           withAggregation = false
         )
       )

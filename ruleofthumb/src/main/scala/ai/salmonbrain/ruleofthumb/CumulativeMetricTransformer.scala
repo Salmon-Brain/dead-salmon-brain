@@ -173,7 +173,14 @@ class CumulativeMetricTransformer(override val uid: String)
   }
 
   private def constructColumnsToAggregate(withName: Boolean, withAdditive: Boolean): Seq[String] = {
-    Seq($(variantColumn), $(entityIdColumn), $(experimentColumn), $(metricSourceColumn)) ++
+    Seq(
+      $(variantColumn),
+      $(entityIdColumn),
+      $(experimentColumn),
+      $(metricSourceColumn),
+      $(entityCategoryNameColumn),
+      $(entityCategoryValueColumn)
+    ) ++
       (if (withName) Seq($(metricNameColumn)) else Seq[String]()) ++
       (if (withAdditive) Seq($(additiveColumn)) else Seq[String]())
   }

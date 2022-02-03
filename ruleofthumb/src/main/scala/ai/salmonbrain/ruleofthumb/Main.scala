@@ -17,7 +17,6 @@ object Main {
     }
     val spark = builder.getOrCreate()
     val report = ReportBuilder.buildReport(config, spark)
-
     report.write
       .partitionBy("experimentUid")
       .mode(SaveMode.Overwrite)
