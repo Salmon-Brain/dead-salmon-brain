@@ -1,16 +1,17 @@
 package ai.salmonbrain.admin.service;
 
 import ai.salmonbrain.admin.dto.ExperimentDto;
+import ai.salmonbrain.admin.dto.ExperimentsPageDto;
 import ai.salmonbrain.admin.model.Experiment;
 import ai.salmonbrain.admin.model.ExperimentMetricData;
 import ai.salmonbrain.admin.repository.ExperimentRepository;
-import ai.salmonbrain.admin.repository.PageUtils;
 import ai.salmonbrain.experiment.api.dto.ReportDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,19 +33,24 @@ public class ExperimentService {
         this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
-    public ResponseEntity<List<ExperimentDto>> getExperiments(String sort,
-                                                              String order,
-                                                              Integer start,
-                                                              Integer end) {
-        PageRequest pr = PageUtils.of(start, end, sort, order);
-        Page<Experiment> page = repository.findAll(pr);
+    public ResponseEntity<ExperimentsPageDto> getExperiments(String filter,
+                                                             String sort,
+                                                             String order,
+                                                             Integer pageNumber,
+                                                             Integer pageSize) {
+
+        PageRequest pr = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(order), sort);
+        Page<Experiment> page = repository.findAllByExpUidContainingIgnoreCase(filter, pr);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
         List<ExperimentDto> list = page.getContent().stream()
                 .map(e -> modelMapper.map(e, ExperimentDto.class))
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(list, headers, HttpStatus.OK);
+        ExperimentsPageDto result = new ExperimentsPageDto();
+        result.setExperiments(list);
+        result.setTotalCount(page.getTotalElements());
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
     public ResponseEntity<ExperimentDto> getExperiment(Long id) {

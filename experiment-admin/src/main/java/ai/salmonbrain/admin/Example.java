@@ -14,6 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class Example {
+    private static final long HOUR = 3600000L;
+    private static final long DAY = 1000L * 60 * 60 * 24;
     private final CustomExperimentRepositoryImpl repository;
 
     @Autowired
@@ -37,18 +39,24 @@ public class Example {
     }
 
     private ExperimentMetricData getMetricData(int j, String metricName) {
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        double left = random.nextDouble(0, 0.1);
+        double right = left + random.nextDouble(0, 0.1);
         return new ExperimentMetricData(
                 metricName,
-                new Timestamp(System.currentTimeMillis() + j * 1000),
+                new Timestamp(System.currentTimeMillis() + j * DAY + random.nextLong(0, HOUR)),
                 new StatisticsData(
                         new StatResult(
-                                ThreadLocalRandom.current().nextDouble(0, 10),
-                                ThreadLocalRandom.current().nextDouble(0, 0.1),
-                                3, 4, 5,
-                                ThreadLocalRandom.current().nextDouble(0, 0.1),
-                                ThreadLocalRandom.current().nextDouble(0, 0.1),
-                                ThreadLocalRandom.current().nextDouble(0, 0.1),
-                                ThreadLocalRandom.current().nextDouble(0, 0.1),
+                                random.nextDouble(0, 10),
+                                random.nextDouble(0, 0.1),
+                                random.nextInt(10, 10000),
+                                random.nextDouble(10, 20),
+                                random.nextDouble(10, 20),
+                                random.nextDouble(0, 0.1),
+                                random.nextDouble(0, 0.1),
+                                left,
+                                right,
                                 "central_tendency_type"),
                         false, 100, 100, 0.1, 0.2, "test_type",
                         "metric_source", false
