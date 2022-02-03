@@ -7,6 +7,8 @@ public class ReportDto {
     private String experimentUid;
     private String metricName;
     private String metricSource;
+    private String categoryName;
+    private String categoryValue;
     private boolean isAdditive;
     private StatisticsDataDto statisticsData;
     private Timestamp ts;
@@ -39,7 +41,7 @@ public class ReportDto {
         return isAdditive;
     }
 
-    public void setAdditive(boolean additive) {
+    public void setIsAdditive(boolean additive) {
         isAdditive = additive;
     }
 
@@ -59,28 +61,46 @@ public class ReportDto {
         this.ts = ts;
     }
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryValue() {
+        return categoryValue;
+    }
+
+    public void setCategoryValue(String categoryValue) {
+        this.categoryValue = categoryValue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReportDto reportDto = (ReportDto) o;
-        return isAdditive == reportDto.isAdditive && Objects.equals(experimentUid, reportDto.experimentUid) && Objects.equals(metricName, reportDto.metricName) && Objects.equals(metricSource, reportDto.metricSource) && Objects.equals(statisticsData, reportDto.statisticsData) && Objects.equals(ts, reportDto.ts);
+        return isAdditive == reportDto.isAdditive
+                && Objects.equals(experimentUid, reportDto.experimentUid)
+                && Objects.equals(metricName, reportDto.metricName)
+                && Objects.equals(metricSource, reportDto.metricSource)
+                && Objects.equals(categoryName, reportDto.categoryName)
+                && Objects.equals(categoryValue, reportDto.categoryValue)
+                && Objects.equals(statisticsData, reportDto.statisticsData)
+                && Objects.equals(ts, reportDto.ts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(experimentUid, metricName, metricSource, isAdditive, statisticsData, ts);
-    }
-
-    @Override
-    public String toString() {
-        return "ReportDto{" +
-                "experimentUid='" + experimentUid + '\'' +
-                ", metricName='" + metricName + '\'' +
-                ", metricSource='" + metricSource + '\'' +
-                ", isAdditive='" + isAdditive + '\'' +
-                ", statisticsData=" + statisticsData +
-                ", ts=" + ts +
-                '}';
+        return Objects.hash(experimentUid,
+                metricName,
+                metricSource,
+                categoryName,
+                categoryValue,
+                isAdditive,
+                statisticsData,
+                ts);
     }
 }

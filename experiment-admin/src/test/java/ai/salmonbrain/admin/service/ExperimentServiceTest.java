@@ -18,9 +18,11 @@ class ExperimentServiceTest {
 
         ReportDto dto = new ReportDto();
         dto.setExperimentUid("expUid");
-        dto.setAdditive(true);
+        dto.setIsAdditive(true);
         dto.setMetricName("m");
         dto.setMetricSource("s");
+        dto.setCategoryName("categoryName");
+        dto.setCategoryValue("categoryValue");
         dto.setTs(new Timestamp(System.currentTimeMillis()));
         StatisticsDataDto data = new StatisticsDataDto();
         dto.setStatisticsData(data);
@@ -45,7 +47,6 @@ class ExperimentServiceTest {
 
         ExperimentMetricData metricData = modelMapper.map(dto, ExperimentMetricData.class);
         System.out.println(metricData);
-
     }
 
 }

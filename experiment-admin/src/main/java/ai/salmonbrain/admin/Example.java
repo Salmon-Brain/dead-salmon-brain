@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
@@ -28,17 +29,23 @@ public class Example {
         if (!"true".equals(System.getProperty("ai.salmonbrain.init.fakes", "false"))) {
             return;
         }
-        for (int m = 0; m < 3; m++) {
-            for (int i = 0; i < 100; i++) {
-                Experiment experiment = repository.findOrCreate("fakeExp" + i);
-                for (int j = 0; j < 20; j++) {
-                    repository.addStatToExperiment(experiment.getExpUid(), getMetricData(j, "metric_" + m));
+
+        for (String categoryValue : Arrays.asList("category1", "category2", "category2")) {
+            for (int m = 0; m < 3; m++) {
+                for (int i = 0; i < 100; i++) {
+                    Experiment experiment = repository.findOrCreate("fakeExp" + i);
+                    for (int j = 0; j < 20; j++) {
+                        repository.addStatToExperiment(
+                                experiment.getExpUid(),
+                                getMetricData(j, "metric_" + m, "category", categoryValue)
+                        );
+                    }
                 }
             }
         }
     }
 
-    private ExperimentMetricData getMetricData(int j, String metricName) {
+    private ExperimentMetricData getMetricData(int j, String metricName, String categoryName, String categoryValue) {
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double left = random.nextDouble(0, 0.1);
@@ -59,7 +66,7 @@ public class Example {
                                 right,
                                 "central_tendency_type"),
                         false, 100, 100, 0.1, 0.2, "test_type",
-                        "metric_source", false
+                        "metric_source", categoryName, categoryValue, false
                 )
         );
     }

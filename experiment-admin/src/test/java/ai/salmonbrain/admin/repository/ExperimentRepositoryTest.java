@@ -149,6 +149,8 @@ public class ExperimentRepositoryTest {
                         0.2,
                         "test",
                         "source",
+                        "categoryName",
+                        "categoryValue",
                         true
                 ));
     }

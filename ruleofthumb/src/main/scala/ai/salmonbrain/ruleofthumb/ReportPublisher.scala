@@ -6,7 +6,8 @@ import org.apache.http.HttpHeaders
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.spark.sql.{ DataFrame, Encoders }
+import org.apache.spark.sql.functions.current_timestamp
+import org.apache.spark.sql.{DataFrame, Encoders}
 import org.codehaus.jackson.map.ObjectMapper
 import org.slf4j.LoggerFactory
 
@@ -22,7 +23,10 @@ object ReportPublisher {
 
   private def sendReport(url: String, report: DataFrame): Unit = {
     val reportEncoder = Encoders.bean(classOf[ReportDto])
-    val encodedReport = report.as(reportEncoder)
+    val encodedReport = report
+      // TODO: replace current_timestamp with real report period end?
+      .withColumn("ts", current_timestamp())
+      .as(reportEncoder)
 
     encodedReport.foreachPartition((pIt: Iterator[ReportDto]) => {
       pIt.foreach(dto => {
