@@ -1,6 +1,5 @@
 package ai.salmonbrain.admin;
 
-import ai.salmonbrain.admin.model.Experiment;
 import ai.salmonbrain.admin.model.ExperimentMetricData;
 import ai.salmonbrain.admin.model.StatResult;
 import ai.salmonbrain.admin.model.StatisticsData;
@@ -10,8 +9,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class Example {
@@ -26,23 +30,36 @@ public class Example {
 
     @PostConstruct
     public void init() {
-        if (!"true".equals(System.getProperty("ai.salmonbrain.init.fakes", "false"))) {
-            return;
-        }
-
-        for (String categoryValue : Arrays.asList("category1", "category2", "category2")) {
-            for (int m = 0; m < 3; m++) {
-                for (int i = 0; i < 100; i++) {
-                    Experiment experiment = repository.findOrCreate("fakeExp" + i);
-                    for (int j = 0; j < 20; j++) {
-                        repository.addStatToExperiment(
-                                experiment.getExpUid(),
-                                getMetricData(j, "metric_" + m, "category", categoryValue)
-                        );
+        List<Integer> fakeCounts = getFakeCounts();
+        for (int expId = 0; expId < fakeCounts.get(0); expId++) {
+            List<ExperimentMetricData> datas = new ArrayList<>(3 * 3 * 20);
+            List<String> categoryValues = IntStream.rangeClosed(1, fakeCounts.get(1))
+                    .mapToObj(v -> "categoryValue" + v)
+                    .collect(Collectors.toList());
+            for (String categoryValue : categoryValues) {
+                for (int m = 0; m < fakeCounts.get(2); m++) {
+                    for (int j = 0; j < fakeCounts.get(3); j++) {
+                        datas.add(getMetricData(j, "metric_" + m, "category", categoryValue));
                     }
                 }
             }
+            repository.addStatToExperiment("fakeExp_" + expId, datas);
         }
+    }
+
+    private List<Integer> getFakeCounts() {
+        String expsData = System.getenv("SALMON_BRAIN_FAKE_EXPS_DATA");
+        if (expsData == null || expsData.isEmpty()) {
+            expsData = System.getProperty("SALMON_BRAIN_FAKE_EXPS_DATA");
+        }
+        if (expsData == null || expsData.isEmpty()) {
+            return Collections.emptyList();
+        }
+        String[] split = expsData.split(",");
+        if (split.length != 4) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(split).map(Integer::parseInt).collect(Collectors.toList());
     }
 
     private ExperimentMetricData getMetricData(int j, String metricName, String categoryName, String categoryValue) {

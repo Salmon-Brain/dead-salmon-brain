@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -51,12 +50,28 @@ public class CustomExperimentRepositoryImpl implements CustomExperimentRepositor
         Experiment experiment = findOrCreate(expUid);
         experiment.append(data);
         Timestamp ts = experiment.getTs();
-        if(data.getTs().after(ts)) {
+        if (data.getTs().after(ts)) {
             ts = data.getTs();
         }
         experiment.setTs(ts);
         data.setExperiment(experiment);
         em.merge(experiment);
         em.persist(data);
+    }
+
+    @Transactional
+    public void addStatToExperiment(String expUid, List<ExperimentMetricData> datas) {
+        Experiment experiment = findOrCreate(expUid);
+        for (ExperimentMetricData data : datas) {
+            experiment.append(data);
+            Timestamp ts = experiment.getTs();
+            if (data.getTs().after(ts)) {
+                ts = data.getTs();
+            }
+            experiment.setTs(ts);
+            data.setExperiment(experiment);
+            em.merge(experiment);
+            em.persist(data);
+        }
     }
 }
