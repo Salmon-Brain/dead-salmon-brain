@@ -31,6 +31,9 @@ public class Example {
     @PostConstruct
     public void init() {
         List<Integer> fakeCounts = getFakeCounts();
+        if(fakeCounts.isEmpty()) {
+            return;
+        }
         for (int expId = 0; expId < fakeCounts.get(0); expId++) {
             List<ExperimentMetricData> datas = new ArrayList<>(3 * 3 * 20);
             List<String> categoryValues = IntStream.rangeClosed(1, fakeCounts.get(1))
