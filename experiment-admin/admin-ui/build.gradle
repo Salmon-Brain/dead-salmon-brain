@@ -1,0 +1,31 @@
+import com.github.gradle.node.npm.task.NpxTask
+
+plugins {
+  id "java"
+  id "com.github.node-gradle.node" version "3.1.0"
+}
+
+node {
+  version = "16.13.2"
+  npmVersion = "8.1.2"
+}
+
+def buildTask = tasks.register("buildWebapp", NpxTask) {
+  command.set("ng")
+  args.set(Arrays.asList("build"))
+  dependsOn(tasks.npmInstall)
+  inputs.dir(project.fileTree("src").exclude("**/*.spec.ts"))
+  inputs.dir("node_modules")
+  inputs.files("angular.json", ".browserslistrc", "tsconfig.json", "tsconfig.app.json")
+  outputs.dir("${project.buildDir}/admin-ui")
+}
+
+sourceSets {
+  java {
+    main {
+      resources {
+        srcDir(buildTask)
+      }
+    }
+  }
+}

@@ -18,20 +18,20 @@ public class ExperimentsController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "report")
+    @RequestMapping(method = RequestMethod.POST, path = "/api/report")
     @ResponseBody
     ResponseEntity<String> postReport(@RequestBody ReportDto report) {
         service.updateReport(report);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "experiments/{id}")
+    @RequestMapping(method = RequestMethod.GET, path = "/api/experiments/{id}")
     @ResponseBody
     ResponseEntity<ExperimentDto> getExperiment(@PathVariable(value = "id") Long id) {
         return service.getExperiment(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "experiments")
+    @RequestMapping(method = RequestMethod.GET, path = "/api/experiments")
     @ResponseBody
     ResponseEntity<ExperimentsPageDto> getExperiments(
             @RequestParam(value = "filter", required = false, defaultValue = "") String filter,

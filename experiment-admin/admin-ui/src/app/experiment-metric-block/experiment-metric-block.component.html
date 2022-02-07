@@ -1,0 +1,11 @@
+<app-experiment-metric-chart [block]="block" [chartData]="block?.pValue" chartName="P-Value" [yAxis]="[0.01, 0.05]">
+</app-experiment-metric-chart>
+
+<app-experiment-metric-chart [block]="block" [chartData]="block?.percentage" chartName="Value change percent">
+</app-experiment-metric-chart>
+
+<app-experiment-metric-chart [block]="block" [chartData]="block?.controlCentralTendency" chartName="Control central tendency">
+</app-experiment-metric-chart>
+
+<app-experiment-metric-chart [block]="block" [chartData]="block?.treatmentCentralTendency" chartName="Treatment central tendency">
+</app-experiment-metric-chart>
