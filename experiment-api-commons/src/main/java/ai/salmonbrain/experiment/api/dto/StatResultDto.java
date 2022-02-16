@@ -1,7 +1,6 @@
 package ai.salmonbrain.experiment.api.dto;
 
 import java.util.Objects;
-
 public class StatResultDto {
     private double statistic;
     private double pValue;

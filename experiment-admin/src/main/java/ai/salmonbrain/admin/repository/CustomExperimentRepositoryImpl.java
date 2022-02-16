@@ -35,7 +35,7 @@ public class CustomExperimentRepositoryImpl implements CustomExperimentRepositor
         );
         List<Experiment> list = query.setParameter(1, expUid).getResultList();
         if (list.isEmpty()) {
-            Experiment entity = new Experiment(expUid, new Timestamp(System.currentTimeMillis()));
+            Experiment entity = new Experiment(expUid, getTs());
             em.persist(entity);
             return entity;
         } else {
@@ -43,6 +43,12 @@ public class CustomExperimentRepositoryImpl implements CustomExperimentRepositor
             Hibernate.initialize(experiment.getMetricData());
             return experiment;
         }
+    }
+
+    private static Timestamp getTs() {
+        long millis = System.currentTimeMillis();
+        // drop ms
+        return new Timestamp(millis / 1000 * 1000);
     }
 
     @Transactional

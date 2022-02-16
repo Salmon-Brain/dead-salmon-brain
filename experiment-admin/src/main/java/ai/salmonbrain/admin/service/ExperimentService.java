@@ -7,7 +7,6 @@ import ai.salmonbrain.admin.model.ExperimentMetricData;
 import ai.salmonbrain.admin.repository.ExperimentRepository;
 import ai.salmonbrain.experiment.api.dto.ReportDto;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,10 +26,10 @@ public class ExperimentService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ExperimentService(ExperimentRepository repository) {
+    public ExperimentService(ExperimentRepository repository,
+                             ModelMapper modelMapper) {
         this.repository = repository;
-        this.modelMapper = new ModelMapper();
-        this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        this.modelMapper = modelMapper;
     }
 
     public ResponseEntity<ExperimentsPageDto> getExperiments(String filter,

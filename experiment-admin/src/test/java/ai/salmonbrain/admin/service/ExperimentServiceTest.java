@@ -6,15 +6,13 @@ import ai.salmonbrain.experiment.api.dto.StatResultDto;
 import ai.salmonbrain.experiment.api.dto.StatisticsDataDto;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 
 import java.sql.Timestamp;
 
 class ExperimentServiceTest {
     @Test
     public void test() {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        ModelMapper modelMapper = new ModelMapperFactory().modelMapper();
 
         ReportDto dto = new ReportDto();
         dto.setExperimentUid("expUid");
@@ -47,6 +45,7 @@ class ExperimentServiceTest {
 
         ExperimentMetricData metricData = modelMapper.map(dto, ExperimentMetricData.class);
         System.out.println(metricData);
-    }
 
+
+    }
 }

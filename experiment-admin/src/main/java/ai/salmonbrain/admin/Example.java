@@ -1,8 +1,6 @@
 package ai.salmonbrain.admin;
 
 import ai.salmonbrain.admin.model.ExperimentMetricData;
-import ai.salmonbrain.admin.model.StatResult;
-import ai.salmonbrain.admin.model.StatisticsData;
 import ai.salmonbrain.admin.repository.CustomExperimentRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +29,7 @@ public class Example {
     @PostConstruct
     public void init() {
         List<Integer> fakeCounts = getFakeCounts();
-        if(fakeCounts.isEmpty()) {
+        if (fakeCounts.isEmpty()) {
             return;
         }
         for (int expId = 0; expId < fakeCounts.get(0); expId++) {
@@ -73,21 +71,26 @@ public class Example {
         return new ExperimentMetricData(
                 metricName,
                 new Timestamp(System.currentTimeMillis() + j * DAY + random.nextLong(0, HOUR)),
-                new StatisticsData(
-                        new StatResult(
-                                random.nextDouble(0, 10),
-                                random.nextDouble(0, 0.1),
-                                random.nextInt(10, 10000),
-                                random.nextDouble(10, 20),
-                                random.nextDouble(10, 20),
-                                random.nextDouble(0, 2),
-                                random.nextDouble(0, 2),
-                                left,
-                                right,
-                                "central_tendency_type"),
-                        false, 100, 100, 0.1, 0.2, "test_type",
-                        "metric_source", categoryName, categoryValue, false
-                )
+                categoryName,
+                categoryValue,
+                false,
+                100,
+                100,
+                "test_type",
+                0.1,
+                0.2,
+                false,
+                "metric_source",
+                random.nextDouble(0, 10),
+                random.nextDouble(0, 0.1),
+                random.nextInt(10, 10000),
+                random.nextDouble(10, 20),
+                random.nextDouble(10, 20),
+                random.nextDouble(0, 2),
+                random.nextDouble(0, 2),
+                left,
+                right,
+                "central_tendency_type"
         );
     }
 }

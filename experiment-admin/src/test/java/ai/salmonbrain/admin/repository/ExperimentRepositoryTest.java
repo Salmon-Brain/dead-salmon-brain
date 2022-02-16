@@ -2,8 +2,6 @@ package ai.salmonbrain.admin.repository;
 
 import ai.salmonbrain.admin.model.Experiment;
 import ai.salmonbrain.admin.model.ExperimentMetricData;
-import ai.salmonbrain.admin.model.StatResult;
-import ai.salmonbrain.admin.model.StatisticsData;
 import org.assertj.core.api.HamcrestCondition;
 import org.assertj.core.condition.AnyOf;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -20,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -68,9 +67,9 @@ public class ExperimentRepositoryTest {
 
     @Test
     public void filterByExpUid() {
-            repository.findOrCreate("someDogExp");
-            repository.findOrCreate("otherCatExp");
-            repository.findOrCreate("bestFishExp");
+        repository.findOrCreate("someDogExp");
+        repository.findOrCreate("otherCatExp");
+        repository.findOrCreate("bestFishExp");
 
         Page<Experiment> fish = repository.findAllByExpUidContainingIgnoreCase("fish", pr(0, 5, "id", "ASC"));
         assertThat(fish.getTotalElements()).isEqualTo(1);
@@ -100,7 +99,7 @@ public class ExperimentRepositoryTest {
                         .collect(Collectors.joining(","))
         ).isEqualTo("bestFishExp,otherCatExp,someDogExp");
 
-   }
+    }
 
     @Test
     public void saveMetricData() {
@@ -127,32 +126,30 @@ public class ExperimentRepositoryTest {
     }
 
     private ExperimentMetricData md() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
         return new ExperimentMetricData("m",
                 new Timestamp(1000 * ts.incrementAndGet()),
-                new StatisticsData(
-                        new StatResult(
-                                1,
-                                0.05,
-                                500,
-                                1,
-                                1,
-                                0.01,
-                                0.01,
-                                0.95,
-                                1.05,
-                                "type"
-                        ),
-                        false,
-                        1000,
-                        1000,
-                        0.1,
-                        0.2,
-                        "test",
-                        "source",
-                        "categoryName",
-                        "categoryValue",
-                        true
-                ));
+                "categoryName",
+                "categoryValue",
+                false,
+                100,
+                100,
+                "test_type",
+                0.1,
+                0.2,
+                false,
+                "metric_source",
+                random.nextDouble(0, 10),
+                random.nextDouble(0, 0.1),
+                random.nextInt(10, 10000),
+                random.nextDouble(10, 20),
+                random.nextDouble(10, 20),
+                random.nextDouble(0, 2),
+                random.nextDouble(0, 2),
+                0.95,
+                1.05,
+                "central_tendency_type"
+        );
     }
 
     private static PageRequest pr(int pageNumber, int pageSize, String sort, String order) {

@@ -25,6 +25,7 @@ dist/
 
 # JetBrains IDE
 .idea/
+out/
 
 # VS CODE IDE
 .vscode/

@@ -1,7 +1,5 @@
 package ai.salmonbrain.admin.dto;
 
-import ai.salmonbrain.admin.model.StatResult;
-
 import java.util.Objects;
 
 public class StatResultDto {
