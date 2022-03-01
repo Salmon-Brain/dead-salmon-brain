@@ -51,6 +51,13 @@ class CumulativeMetricTransformer(override val uid: String)
   )
   setDefault(numBuckets, -1)
 
+  val nonAdditiveAggFunc: Param[String] = new Param[String](
+    this,
+    "nonAdditiveAggFunc",
+    "non additive metrics aggregation"
+  )
+  setDefault(nonAdditiveAggFunc, "mean")
+
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sparkSession.implicits._
 
@@ -64,23 +71,29 @@ class CumulativeMetricTransformer(override val uid: String)
     )
 
     val columns = constructColumnsToAggregate(withName = true, withAdditive = true)
-
-    val additiveCumulativeMetrics = dataset
-      .filter($(additiveColumn))
+    val data = dataset
       .withColumn(
         $(entityIdColumn),
         if ($(numBuckets) > 0)
           uidToBucket($(numBuckets))(col($(entityIdColumn)), col($(experimentColumn)))
         else col($(entityIdColumn))
       )
+
+    val additiveCumulativeMetrics = data
+      .filter($(additiveColumn))
       .groupBy(
         columns.head,
         columns.tail: _*
       )
       .agg(sum($(valueColumn)) as $(valueColumn))
 
-    val nonAdditiveMetrics = dataset
+    val nonAdditiveMetrics = data
       .filter(!col($(additiveColumn)))
+      .groupBy(
+        columns.head,
+        columns.tail: _*
+      )
+      .agg(expr(s"${$(nonAdditiveAggFunc)}(${$(valueColumn)})") as $(valueColumn))
 
     val ratioValues = ($(numeratorNames) ++ $(denominatorNames)).distinct
 
@@ -143,6 +156,10 @@ class CumulativeMetricTransformer(override val uid: String)
   /** @group setParam */
   def setRatioNames(value: Array[String]): this.type =
     set(ratioNames, value)
+
+  /** @group setParam */
+  def setNonAdditiveAggFunc(value: String): this.type =
+    set(nonAdditiveAggFunc, value)
 
   private def ratioUdf(pairs: Seq[RatioMetricData]): UserDefinedFunction = udf {
     metrics: mutable.WrappedArray[Row] =>
