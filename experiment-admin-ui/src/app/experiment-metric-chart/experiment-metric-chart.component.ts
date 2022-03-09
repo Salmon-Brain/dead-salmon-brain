@@ -25,7 +25,7 @@ export class ExperimentMetricChartComponent implements OnInit {
   chartConstructor: string = 'chart';
 
   chartOptions: Highcharts.Options = {};
-  chartCallback: Highcharts.ChartCallbackFunction = function (chart) { }
+  chartCallback: Highcharts.ChartCallbackFunction = function (chart: any) { }
   updateFlag: boolean = false;
 
   constructor() { }
