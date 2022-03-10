@@ -41,6 +41,13 @@ class CumulativeMetricTransformer(
         typeConverter=TypeConverters.toListString,
     )
 
+    nonAdditiveAggFunc = Param(
+        Params._dummy(),
+        "nonAdditiveAggFunc",
+        "non additive metrics aggregation",
+        typeConverter=TypeConverters.toString,
+    )
+
     @keyword_only
     def __init__(
         self,
@@ -57,7 +64,8 @@ class CumulativeMetricTransformer(
         numBuckets=-1,
         numeratorNames=[],
         denominatorNames=[],
-        ratioNames=[]
+        ratioNames=[],
+        nonAdditiveAggFunc="mean"
     ):
         super(CumulativeMetricTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
@@ -67,6 +75,7 @@ class CumulativeMetricTransformer(
         self._setDefault(numeratorNames=[])
         self._setDefault(denominatorNames=[])
         self._setDefault(ratioNames=[])
+        self._setDefault(nonAdditiveAggFunc="mean")
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
 
@@ -86,7 +95,8 @@ class CumulativeMetricTransformer(
         numBuckets=-1,
         numeratorNames=[],
         denominatorNames=[],
-        ratioNames=[]
+        ratioNames=[],
+        nonAdditiveAggFunc="mean"
     ):
         kwargs = self._input_kwargs
         return self._set(**kwargs)
@@ -99,6 +109,9 @@ class CumulativeMetricTransformer(
 
     def setRatioNames(self, value):
         return self._set(ratioNames=value)
+
+    def setNonAdditiveAggFunc(self, value):
+        return self._set(nonAdditiveAggFunc=value)
 
 
 class StatisticTransformer:
