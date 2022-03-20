@@ -5,6 +5,7 @@ from ai.salmonbrain.ruleofthumb import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
+    AutoStatisticsTransformer
 )
 
 
@@ -135,8 +136,8 @@ def test_mannWhitneyStatisticsTransformer(data_sample: DataFrame):
 
 def test_autoStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
-    welch = WelchStatisticsTransformer()
-    result = welch.transform(cum.transform(data_sample))
+    auto = AutoStatisticsTransformer()
+    result = auto.transform(cum.transform(data_sample))
 
     p_values = [
         i["pValue"] for i in result.select("statisticsData.statResult.pValue").collect()
