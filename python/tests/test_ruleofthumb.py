@@ -5,6 +5,7 @@ from ai.salmonbrain.ruleofthumb import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
+    AutoStatisticsTransformer
 )
 
 
@@ -46,6 +47,12 @@ def data_sample(spark: SparkSession):
             ("common", "all", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
             ("common", "all", "feedback", "2", "exp", "treatment", 10.0, "shows", True),
             ("common", "all", "feedback", "2", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "3", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "3", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "4", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "4", "exp", "treatment", 5.0, "likes", True),
+            ("common", "all", "feedback", "5", "exp", "treatment", 10.0, "shows", True),
+            ("common", "all", "feedback", "5", "exp", "treatment", 5.0, "likes", True),
             ("common", "all", "feedback", "3", "exp", "control", 11.0, "shows", True),
             ("common", "all", "feedback", "3", "exp", "control", 7.0, "likes", True),
             ("common", "all", "feedback", "3", "exp", "control", 11.0, "shows", True),
@@ -54,6 +61,12 @@ def data_sample(spark: SparkSession):
             ("common", "all", "feedback", "4", "exp", "control", 8.0, "likes", True),
             ("common", "all", "feedback", "4", "exp", "control", 10.0, "shows", True),
             ("common", "all", "feedback", "4", "exp", "control", 8.0, "likes", True),
+            ("common", "all", "feedback", "5", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "5", "exp", "control", 8.0, "likes", True),
+            ("common", "all", "feedback", "6", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "6", "exp", "control", 5.0, "likes", True),
+            ("common", "all", "feedback", "7", "exp", "control", 10.0, "shows", True),
+            ("common", "all", "feedback", "7", "exp", "control", 5.0, "likes", True),
         ],
         [
             "categoryName",
@@ -135,8 +148,8 @@ def test_mannWhitneyStatisticsTransformer(data_sample: DataFrame):
 
 def test_autoStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
-    welch = WelchStatisticsTransformer()
-    result = welch.transform(cum.transform(data_sample))
+    auto = AutoStatisticsTransformer()
+    result = auto.transform(cum.transform(data_sample))
 
     p_values = [
         i["pValue"] for i in result.select("statisticsData.statResult.pValue").collect()
