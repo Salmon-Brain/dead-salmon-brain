@@ -6,6 +6,7 @@ import org.apache.commons.math3.stat.inference.MannWhitneyUTest
 
 object MannWhitneyTest extends BaseStatTest {
   val median = new Median()
+  val MINIMUM_SAMPLE_SIZE = 5
 
   def mannWhitneyTest(
       control: Array[Double],
@@ -13,48 +14,64 @@ object MannWhitneyTest extends BaseStatTest {
       alpha: Double,
       beta: Double
   ): StatResult = {
-    assert(alpha < 1)
-    val mannWhitneyUTest = new MannWhitneyUTest()
-    val uStatistic = mannWhitneyUTest.mannWhitneyU(control, treatment)
-    val pValue = mannWhitneyUTest.mannWhitneyUTest(control, treatment)
-    val controlMedian = median.evaluate(control)
-    val treatmentMedian = median.evaluate(treatment)
-    val treatmentMedianVariance = medianVariance(treatment)
-    val controlMedianVariance = medianVariance(control)
-    val std = math.sqrt(treatmentMedianVariance + controlMedianVariance)
-    val size = math.max(control.length, treatment.length)
+    assert(alpha < 1 && beta < 1)
+    math.min(control.length, treatment.length) match {
+      case sampleSize if sampleSize >= MINIMUM_SAMPLE_SIZE =>
+        val mannWhitneyUTest = new MannWhitneyUTest()
+        val uStatistic = mannWhitneyUTest.mannWhitneyU(control, treatment)
+        val pValue = mannWhitneyUTest.mannWhitneyUTest(control, treatment)
+        val controlMedian = median.evaluate(control)
+        val treatmentMedian = median.evaluate(treatment)
+        val treatmentMedianVariance = medianVariance(treatment)
+        val controlMedianVariance = medianVariance(control)
+        val std = math.sqrt(treatmentMedianVariance + controlMedianVariance)
+        val size = math.max(control.length, treatment.length)
 
-    val ci = CI(
-      controlMedian,
-      controlMedianVariance,
-      treatmentMedian,
-      treatmentMedianVariance,
-      std,
-      normalDistribution.inverseCumulativeProbability(alpha / 2),
-      normalDistribution.inverseCumulativeProbability(1 - alpha / 2),
-      size
-    )
-    val sampleSize = sampleSizeEstimation(
-      alpha,
-      beta,
-      treatmentMedian,
-      controlMedian,
-      treatment.length,
-      control.length
-    )
+        val ci = CI(
+          controlMedian,
+          controlMedianVariance,
+          treatmentMedian,
+          treatmentMedianVariance,
+          std,
+          normalDistribution.inverseCumulativeProbability(alpha / 2),
+          normalDistribution.inverseCumulativeProbability(1 - alpha / 2),
+          size
+        )
+        val sampleSize = sampleSizeEstimation(
+          alpha,
+          beta,
+          treatmentMedian,
+          controlMedian,
+          treatment.length,
+          control.length
+        )
 
-    StatResult(
-      uStatistic,
-      pValue,
-      sampleSize,
-      controlMedian,
-      treatmentMedian,
-      controlMedianVariance,
-      treatmentMedianVariance,
-      ci.lowerPercent,
-      ci.upperPercent,
-      CentralTendency.MEDIAN.toString
-    )
+        StatResult(
+          uStatistic,
+          pValue,
+          sampleSize,
+          controlMedian,
+          treatmentMedian,
+          controlMedianVariance,
+          treatmentMedianVariance,
+          ci.lowerPercent,
+          ci.upperPercent,
+          CentralTendency.MEDIAN.toString
+        )
+      case _ =>
+        StatResult(
+          Double.NaN,
+          Double.NaN,
+          Long.MinValue,
+          Double.NaN,
+          Double.NaN,
+          Double.NaN,
+          Double.NaN,
+          Double.NaN,
+          Double.NaN,
+          CentralTendency.MEDIAN.toString
+        )
+    }
   }
 
   /*
