@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ExperimentMetricChartComponent } from './experiment-metric-chart.component';
+import {ExperimentMetricChartComponent} from './experiment-metric-chart.component';
 
 describe('ExperimentMetricChartComponent', () => {
   let component: ExperimentMetricChartComponent;
@@ -8,9 +8,9 @@ describe('ExperimentMetricChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExperimentMetricChartComponent ]
+      declarations: [ExperimentMetricChartComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

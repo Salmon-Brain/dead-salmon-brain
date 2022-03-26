@@ -55,11 +55,11 @@ public class CustomExperimentRepositoryImpl implements CustomExperimentRepositor
     public void addStatToExperiment(String expUid, ExperimentMetricData data) {
         Experiment experiment = findOrCreate(expUid);
         experiment.append(data);
-        Timestamp ts = experiment.getTs();
-        if (data.getTs().after(ts)) {
-            ts = data.getTs();
+        Timestamp timestamp = experiment.getTimestamp();
+        if (data.getTimestamp().after(timestamp)) {
+            timestamp = data.getTimestamp();
         }
-        experiment.setTs(ts);
+        experiment.setTimestamp(timestamp);
         data.setExperiment(experiment);
         em.merge(experiment);
         em.persist(data);
@@ -70,11 +70,11 @@ public class CustomExperimentRepositoryImpl implements CustomExperimentRepositor
         Experiment experiment = findOrCreate(expUid);
         for (ExperimentMetricData data : datas) {
             experiment.append(data);
-            Timestamp ts = experiment.getTs();
-            if (data.getTs().after(ts)) {
-                ts = data.getTs();
+            Timestamp timestamp = experiment.getTimestamp();
+            if (data.getTimestamp().after(timestamp)) {
+                timestamp = data.getTimestamp();
             }
-            experiment.setTs(ts);
+            experiment.setTimestamp(timestamp);
             data.setExperiment(experiment);
             em.merge(experiment);
             em.persist(data);

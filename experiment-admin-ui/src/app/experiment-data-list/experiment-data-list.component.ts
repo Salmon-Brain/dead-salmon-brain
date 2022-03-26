@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, fromEvent, tap } from 'rxjs';
-import { ExperimentDataSource } from '../services/eperimentDataSource';
-import { ExperimentService } from '../services/experiment.service';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject, debounceTime, distinctUntilChanged, fromEvent, tap} from 'rxjs';
+import {ExperimentDataSource} from '../services/eperimentDataSource';
+import {ExperimentService} from '../services/experiment.service';
 
 
 @Component({
@@ -15,10 +15,10 @@ import { ExperimentService } from '../services/experiment.service';
 export class ExperimentDataListComponent implements OnInit, AfterViewInit {
 
   dataSource: ExperimentDataSource;
-  displayedColumns = ["id", "expUid", "ts"];
+  displayedColumns = ["id", "expUid", "timestamp"];
   totalCount: BehaviorSubject<number>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('input') input!: ElementRef;
 

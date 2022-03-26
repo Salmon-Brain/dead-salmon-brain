@@ -14,16 +14,16 @@ public class Experiment {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
     private String expUid;
-    private Timestamp ts;
+    private Timestamp timestamp;
     @OneToMany(mappedBy = "experiment", fetch = FetchType.LAZY)
     private List<ExperimentMetricData> metricData;
 
     public Experiment() {
     }
 
-    public Experiment(String expUid, Timestamp ts) {
+    public Experiment(String expUid, Timestamp timestamp) {
         this.expUid = expUid;
-        this.ts = ts;
+        this.timestamp = timestamp;
     }
 
     public Long getId() {
@@ -42,12 +42,12 @@ public class Experiment {
         this.expUid = expUid;
     }
 
-    public Timestamp getTs() {
-        return ts;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setTs(Timestamp ts) {
-        this.ts = ts;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public List<ExperimentMetricData> getMetricData() {
@@ -70,12 +70,12 @@ public class Experiment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Experiment that = (Experiment) o;
-        return Objects.equals(id, that.id) && Objects.equals(expUid, that.expUid) && Objects.equals(ts, that.ts);
+        return Objects.equals(id, that.id) && Objects.equals(expUid, that.expUid) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expUid, ts);
+        return Objects.hash(id, expUid, timestamp);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class Experiment {
         return "Experiment{" +
                 "id=" + id +
                 ", expUid='" + expUid + '\'' +
-                ", ts=" + ts +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

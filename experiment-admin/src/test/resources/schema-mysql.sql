@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS experiment;
 CREATE TABLE IF NOT EXISTS experiment (
     id bigint NOT NULL AUTO_INCREMENT,
     exp_uid VARCHAR(127) NOT NULL,
-    ts timestamp NOT NULL,
+    timestamp timestamp NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY (exp_uid)
 ) ENGINE=InnoDB;
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS experiment_metric_data (
   treatment_central_tendency double NOT NULL,
   treatment_size bigint NOT NULL,
   treatment_variance double NOT NULL,
-  ts datetime(6) NOT NULL,
+  timestamp timestamp NOT NULL,
   experiment_id bigint NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY (experiment_id, metric_name, category_name, category_value, ts),
+  UNIQUE KEY (experiment_id, metric_name, category_name, category_value, timestamp),
   CONSTRAINT FOREIGN KEY (experiment_id) REFERENCES experiment (id)
 ) ENGINE=InnoDB;

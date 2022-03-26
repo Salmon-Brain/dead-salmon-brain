@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ExperimentDto {
     private Long id;
     private String expUid;
-    private Timestamp ts;
+    private Timestamp timestamp;
     private List<ExperimentMetricDataDto> metricData;
 
     public Long getId() {
@@ -27,12 +27,12 @@ public class ExperimentDto {
         this.expUid = expUid;
     }
 
-    public Timestamp getTs() {
-        return ts;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setTs(Timestamp ts) {
-        this.ts = ts;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public List<ExperimentMetricDataDto> getMetricData() {
@@ -48,12 +48,12 @@ public class ExperimentDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExperimentDto that = (ExperimentDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(expUid, that.expUid) && Objects.equals(ts, that.ts) && Objects.equals(metricData, that.metricData);
+        return Objects.equals(id, that.id) && Objects.equals(expUid, that.expUid) && Objects.equals(timestamp, that.timestamp) && Objects.equals(metricData, that.metricData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expUid, ts, metricData);
+        return Objects.hash(id, expUid, timestamp, metricData);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ExperimentDto {
         return "ExperimentDto{" +
                 "id=" + id +
                 ", expUid='" + expUid + '\'' +
-                ", ts=" + ts +
+                ", timestamp=" + timestamp +
                 ", metricData=" + metricData +
                 '}';
     }

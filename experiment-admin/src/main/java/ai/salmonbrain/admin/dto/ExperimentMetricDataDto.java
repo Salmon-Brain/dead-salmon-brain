@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class ExperimentMetricDataDto {
     private String metricName;
-    private Timestamp ts;
+    private Timestamp timestamp;
     private StatisticsDataDto statisticsData;
 
     public String getMetricName() {
@@ -16,12 +16,12 @@ public class ExperimentMetricDataDto {
         this.metricName = metricName;
     }
 
-    public Timestamp getTs() {
-        return ts;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setTs(Timestamp ts) {
-        this.ts = ts;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public StatisticsDataDto getStatisticsData() {
@@ -37,19 +37,19 @@ public class ExperimentMetricDataDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExperimentMetricDataDto that = (ExperimentMetricDataDto) o;
-        return Objects.equals(metricName, that.metricName) && Objects.equals(ts, that.ts) && Objects.equals(statisticsData, that.statisticsData);
+        return Objects.equals(metricName, that.metricName) && Objects.equals(timestamp, that.timestamp) && Objects.equals(statisticsData, that.statisticsData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(metricName, ts, statisticsData);
+        return Objects.hash(metricName, timestamp, statisticsData);
     }
 
     @Override
     public String toString() {
         return "ExperimentMetricDataDto{" +
                 "metricName='" + metricName + '\'' +
-                ", ts=" + ts +
+                ", timestamp=" + timestamp +
                 ", statisticsData=" + statisticsData +
                 '}';
     }

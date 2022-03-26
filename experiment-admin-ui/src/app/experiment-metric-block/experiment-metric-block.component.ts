@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MetricBlock } from '../models/chartData';
+import {Component, Input, OnInit} from '@angular/core';
+import {MetricBlock} from '../models/chartData';
 
 @Component({
   selector: 'app-experiment-metric-block',
@@ -11,7 +11,8 @@ export class ExperimentMetricBlockComponent implements OnInit {
   @Input()
   block?: MetricBlock;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

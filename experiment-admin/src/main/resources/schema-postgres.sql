@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS experiment
 (
     id SERIAL PRIMARY KEY,
     exp_uid VARCHAR(128) NOT NULL,
-    ts timestamp NOT NULL,
+    timestamp timestamp NOT NULL,
     UNIQUE(exp_uid)
 );
 
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS experiment_metric_data (
     id SERIAL PRIMARY KEY,
     experiment_id bigint NOT NULL,
     metric_name VARCHAR(128) NOT NULL,
-    ts timestamp NOT NULL,
+    timestamp timestamp NOT NULL,
     alpha double precision NOT NULL,
     beta double precision NOT NULL,
     category_name VARCHAR(128) NOT NULL,
@@ -31,5 +31,5 @@ CREATE TABLE IF NOT EXISTS experiment_metric_data (
     treatment_central_tendency double precision NOT NULL,
     treatment_size bigint NOT NULL,
     treatment_variance double precision NOT NULL,
-    UNIQUE (experiment_id, metric_name, ts, category_name, category_value)
+    UNIQUE (experiment_id, metric_name, timestamp, category_name, category_value)
 );

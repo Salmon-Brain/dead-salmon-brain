@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { ChartData, MetricBlock } from '../models/chartData';
+import {ChartData, MetricBlock} from '../models/chartData';
 
 @Component({
   selector: 'app-experiment-metric-chart',
@@ -25,10 +25,12 @@ export class ExperimentMetricChartComponent implements OnInit {
   chartConstructor: string = 'chart';
 
   chartOptions: Highcharts.Options = {};
-  chartCallback: Highcharts.ChartCallbackFunction = function (chart: any) { }
+  chartCallback: Highcharts.ChartCallbackFunction = function (chart: any) {
+  }
   updateFlag: boolean = false;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
     let series: Highcharts.SeriesOptionsType[] = [];

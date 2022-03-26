@@ -1,40 +1,41 @@
 <h2>Experiments</h2>
 <div class="experiments">
-    <mat-form-field>
-        <input matInput placeholder="Filter experiments" #input>
-    </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Filter experiments" #input>
+  </mat-form-field>
 
-    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-        <mat-spinner></mat-spinner>
-    </div>
+  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
 
-    <mat-table class="experiments-table mat-elevation-z8" [dataSource]="dataSource"
-         matSort matSortActive="id" matSortDirection="asc" matSortDisableClear  color="warn">
+  <mat-table class="experiments-table mat-elevation-z8" [dataSource]="dataSource"
+             matSort matSortActive="id" matSortDirection="asc" matSortDisableClear color="warn">
 
-        <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header="">#</mat-header-cell>
-            <mat-cell class="id-cell" *matCellDef="let experiment">{{experiment.id}}</mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="">#</mat-header-cell>
+      <mat-cell class="id-cell" *matCellDef="let experiment">{{experiment.id}}</mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="expUid">
-            <mat-header-cell *matHeaderCellDef mat-sort-header="">Name</mat-header-cell>
-            <mat-cell class="name-cell"
-                    *matCellDef="let experiment">{{experiment.expUid}}</mat-cell>
+    <ng-container matColumnDef="expUid">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="">Name</mat-header-cell>
+      <mat-cell class="name-cell"
+                *matCellDef="let experiment">{{experiment.expUid}}</mat-cell>
 
-        </ng-container>
+    </ng-container>
 
-        <ng-container matColumnDef="ts">
-            <mat-header-cell *matHeaderCellDef mat-sort-header="">Date</mat-header-cell>
-            <mat-cell class="date-cell"
-                    *matCellDef="let experiment">{{experiment.ts | date:'d MMMM y - HH:mm'}}</mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="timestamp">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="">Date</mat-header-cell>
+      <mat-cell class="date-cell"
+                *matCellDef="let experiment">{{experiment.timestamp | date:'d MMMM y - HH:mm'}}</mat-cell>
+    </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *matRowDef="let row; columns: displayedColumns" [routerLink]="'/ui/experimentView/' + row.id" class="row-hover"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" [routerLink]="'/ui/experimentView/' + row.id"
+             class="row-hover"></mat-row>
 
-    </mat-table>
+  </mat-table>
 </div>
 
 <mat-paginator [length]="totalCount.getValue()" [pageSize]="10"
-[pageSizeOptions]="[10, 25, 50]"></mat-paginator>
+               [pageSizeOptions]="[10, 25, 50]"></mat-paginator>

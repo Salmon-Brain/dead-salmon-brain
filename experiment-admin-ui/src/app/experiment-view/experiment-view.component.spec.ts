@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ExperimentViewComponent } from './experiment-view.component';
+import {ExperimentViewComponent} from './experiment-view.component';
 
 describe('ExperimentViewComponent', () => {
   let component: ExperimentViewComponent;
@@ -8,9 +8,9 @@ describe('ExperimentViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExperimentViewComponent ]
+      declarations: [ExperimentViewComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

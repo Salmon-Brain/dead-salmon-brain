@@ -29,7 +29,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 public class ExperimentRepositoryTest {
 
-    private final AtomicLong ts = new AtomicLong(0);
+    private final AtomicLong timestamp = new AtomicLong(0);
 
     @Autowired
     private ExperimentRepository repository;
@@ -120,15 +120,15 @@ public class ExperimentRepositoryTest {
         Experiment exp2 = repository.findOrCreate("exp1");
         assertThat(exp2.getMetricData()).isNotNull();
         assertThat(exp2.getMetricData().size()).isEqualTo(3);
-        assertThat(exp2.getMetricData().get(0).getTs()).isEqualTo(md1.getTs());
-        assertThat(exp2.getMetricData().get(1).getTs()).isEqualTo(md2.getTs());
-        assertThat(exp2.getMetricData().get(2).getTs()).isEqualTo(md3.getTs());
+        assertThat(exp2.getMetricData().get(0).getTimestamp()).isEqualTo(md1.getTimestamp());
+        assertThat(exp2.getMetricData().get(1).getTimestamp()).isEqualTo(md2.getTimestamp());
+        assertThat(exp2.getMetricData().get(2).getTimestamp()).isEqualTo(md3.getTimestamp());
     }
 
     private ExperimentMetricData md() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         return new ExperimentMetricData("m",
-                new Timestamp(1000 * ts.incrementAndGet()),
+                new Timestamp(1000 * timestamp.incrementAndGet()),
                 "categoryName",
                 "categoryValue",
                 false,

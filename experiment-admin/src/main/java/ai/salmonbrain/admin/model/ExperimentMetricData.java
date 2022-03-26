@@ -13,7 +13,7 @@ public class ExperimentMetricData {
     @ManyToOne
     private Experiment experiment;
     private String metricName;
-    private Timestamp ts;
+    private Timestamp timestamp;
     private String categoryName;
     private String categoryValue;
 
@@ -41,7 +41,7 @@ public class ExperimentMetricData {
     }
 
     public ExperimentMetricData(String metricName,
-                                Timestamp ts,
+                                Timestamp timestamp,
                                 String categoryName,
                                 String categoryValue,
                                 boolean srm,
@@ -63,7 +63,7 @@ public class ExperimentMetricData {
                                 double percentageRight,
                                 String centralTendencyType) {
         this.metricName = metricName;
-        this.ts = ts;
+        this.timestamp = timestamp;
         this.categoryName = categoryName;
         this.categoryValue = categoryValue;
         this.srm = srm;
@@ -110,12 +110,12 @@ public class ExperimentMetricData {
         this.metricName = metricName;
     }
 
-    public Timestamp getTs() {
-        return ts;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setTs(Timestamp ts) {
-        this.ts = ts;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public boolean isSrm() {
@@ -301,7 +301,7 @@ public class ExperimentMetricData {
                 && Objects.equals(id, that.id)
                 && Objects.equals(experiment, that.experiment)
                 && Objects.equals(metricName, that.metricName)
-                && Objects.equals(ts, that.ts)
+                && Objects.equals(timestamp, that.timestamp)
                 && Objects.equals(testType, that.testType)
                 && Objects.equals(metricSource, that.metricSource)
                 && Objects.equals(categoryName, that.categoryName)
@@ -311,7 +311,7 @@ public class ExperimentMetricData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, experiment, metricName, ts, srm, controlSize, treatmentSize, testType,
+        return Objects.hash(id, experiment, metricName, timestamp, srm, controlSize, treatmentSize, testType,
                 alpha, beta, isAdditive, metricSource, categoryName, categoryValue, statistic, pValue,
                 requiredSampleSizeByVariant, controlCentralTendency, treatmentCentralTendency, controlVariance,
                 treatmentVariance, percentageLeft, percentageRight, centralTendencyType);
@@ -323,7 +323,7 @@ public class ExperimentMetricData {
                 "id=" + id +
                 ", experiment=" + experiment +
                 ", metricName='" + metricName + '\'' +
-                ", ts=" + ts +
+                ", timestamp=" + timestamp +
                 ", srm=" + srm +
                 ", controlSize=" + controlSize +
                 ", treatmentSize=" + treatmentSize +

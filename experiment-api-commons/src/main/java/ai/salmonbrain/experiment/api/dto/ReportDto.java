@@ -11,7 +11,7 @@ public class ReportDto {
     private String categoryValue;
     private boolean isAdditive;
     private StatisticsDataDto statisticsData;
-    private Timestamp ts;
+    private Timestamp timestamp;
 
     public String getExperimentUid() {
         return experimentUid;
@@ -41,7 +41,7 @@ public class ReportDto {
         return isAdditive;
     }
 
-    public void setIsAdditive(boolean additive) {
+    public void setAdditive(boolean additive) {
         isAdditive = additive;
     }
 
@@ -53,12 +53,16 @@ public class ReportDto {
         this.statisticsData = statisticsData;
     }
 
-    public Timestamp getTs() {
-        return ts;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setTs(Timestamp ts) {
-        this.ts = ts;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setTs(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getCategoryName() {
@@ -89,7 +93,7 @@ public class ReportDto {
                 && Objects.equals(categoryName, reportDto.categoryName)
                 && Objects.equals(categoryValue, reportDto.categoryValue)
                 && Objects.equals(statisticsData, reportDto.statisticsData)
-                && Objects.equals(ts, reportDto.ts);
+                && Objects.equals(timestamp, reportDto.timestamp);
     }
 
     @Override
@@ -101,6 +105,20 @@ public class ReportDto {
                 categoryValue,
                 isAdditive,
                 statisticsData,
-                ts);
+                timestamp);
+    }
+
+    @Override
+    public String toString() {
+        return "ReportDto{" +
+                "experimentUid='" + experimentUid + '\'' +
+                ", metricName='" + metricName + '\'' +
+                ", metricSource='" + metricSource + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", categoryValue='" + categoryValue + '\'' +
+                ", isAdditive=" + isAdditive +
+                ", statisticsData=" + statisticsData +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

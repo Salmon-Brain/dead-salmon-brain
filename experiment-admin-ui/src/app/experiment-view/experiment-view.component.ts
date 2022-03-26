@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ChartData, LineData, MetricBlock } from '../models/chartData';
-import { ExperimentService } from '../services/experiment.service';
-import { ExperimentData, StatResult } from '../models/experimentMetrics';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
+import {ChartData, LineData, MetricBlock} from '../models/chartData';
+import {ExperimentService} from '../services/experiment.service';
+import {ExperimentData, StatResult} from '../models/experimentMetrics';
 
 @Component({
   selector: 'app-experiment-view',
@@ -54,19 +54,19 @@ export class ExperimentViewComponent implements OnInit {
           this.blocks.set(key, block);
         }
 
-        this.append(block.pValue, "p-value", m.ts, statResult.pvalue)
+        this.append(block.pValue, "p-value", m.timestamp, statResult.pvalue)
 
-        this.append(block.controlCentralTendency, "value", m.ts, statResult.controlCentralTendency)
-        this.append(block.controlCentralTendency, "left", m.ts, statResult.controlCentralTendency + statResult.controlVariance)
-        this.append(block.controlCentralTendency, "right", m.ts, statResult.controlCentralTendency - statResult.controlVariance)
+        this.append(block.controlCentralTendency, "value", m.timestamp, statResult.controlCentralTendency)
+        this.append(block.controlCentralTendency, "left", m.timestamp, statResult.controlCentralTendency + statResult.controlVariance)
+        this.append(block.controlCentralTendency, "right", m.timestamp, statResult.controlCentralTendency - statResult.controlVariance)
 
-        this.append(block.treatmentCentralTendency, "value", m.ts, statResult.treatmentCentralTendency)
-        this.append(block.treatmentCentralTendency, "left", m.ts, statResult.treatmentCentralTendency + statResult.treatmentVariance)
-        this.append(block.treatmentCentralTendency, "right", m.ts, statResult.treatmentCentralTendency - statResult.treatmentVariance)
+        this.append(block.treatmentCentralTendency, "value", m.timestamp, statResult.treatmentCentralTendency)
+        this.append(block.treatmentCentralTendency, "left", m.timestamp, statResult.treatmentCentralTendency + statResult.treatmentVariance)
+        this.append(block.treatmentCentralTendency, "right", m.timestamp, statResult.treatmentCentralTendency - statResult.treatmentVariance)
 
-        this.append(block.percentage, "left", m.ts, statResult.percentageLeft)
-        this.append(block.percentage, "mid", m.ts, (statResult.percentageRight + statResult.percentageLeft) / 2)
-        this.append(block.percentage, "right", m.ts, statResult.percentageRight)
+        this.append(block.percentage, "left", m.timestamp, statResult.percentageLeft)
+        this.append(block.percentage, "mid", m.timestamp, (statResult.percentageRight + statResult.percentageLeft) / 2)
+        this.append(block.percentage, "right", m.timestamp, statResult.percentageRight)
       })
     })
   }
