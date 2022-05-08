@@ -19,7 +19,6 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
   def this() = this(Identifiable.randomUID("mannWhitneyStatisticsTransformer"))
 
   override def transform(dataset: Dataset[_]): DataFrame = {
-    checkVariants(dataset)
     dataset
       .groupBy(
         $(experimentColumn),
@@ -35,7 +34,10 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
       )
       .withColumn(
         "statisticsData",
-        doStatistic($(alpha), $(beta))(col($(controlName)), col($(treatmentName)))
+        doStatistic($(alpha), $(beta), $(minValidSampleSize))(
+          col($(controlName)),
+          col($(treatmentName))
+        )
       )
       .drop("control", "treatment")
   }
@@ -44,23 +46,37 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
 
   override def transformSchema(schema: StructType): StructType = schema
 
-  def doStatistic(alpha: Double, beta: Double): UserDefinedFunction = udf {
+  def doStatistic(alpha: Double, beta: Double, minValidSampleSize: Int): UserDefinedFunction = udf {
     (
         control: mutable.WrappedArray[Double],
         treatment: mutable.WrappedArray[Double]
     ) =>
-      val statResult =
-        MannWhitneyTest.mannWhitneyTest(control.toArray, treatment.toArray, alpha, beta)
-      val controlSize = control.length
-      val treatmentSize = treatment.length
+      val controlSize = Option(control).getOrElse(mutable.WrappedArray.empty).length
+      val treatmentSize = Option(treatment).getOrElse(mutable.WrappedArray.empty).length
+      val isEnoughData = math.min(controlSize, treatmentSize) >= minValidSampleSize
+      val (statResult, srmResult) =
+        if (isEnoughData)
+          (
+            MannWhitneyTest.mannWhitneyTest(
+              control.toArray,
+              treatment.toArray,
+              alpha,
+              beta
+            ),
+            srm(controlSize, treatmentSize, $(srmAlpha))
+          )
+        else (getInvalidStatResult(CentralTendency.MEDIAN), false)
+
       StatisticsReport(
         statResult,
         alpha,
         beta,
-        srm(controlSize, treatmentSize, $(srmAlpha)),
+        minValidSampleSize,
+        srmResult,
         controlSize,
         treatmentSize,
-        TestType.MANN_WHITNEY.toString
+        TestType.MANN_WHITNEY.toString,
+        isEnoughData
       )
   }
 }

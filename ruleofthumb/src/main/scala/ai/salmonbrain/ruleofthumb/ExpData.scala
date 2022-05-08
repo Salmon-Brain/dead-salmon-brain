@@ -17,10 +17,12 @@ case class StatisticsReport(
     statResult: StatResult,
     alpha: Double,
     beta: Double,
+    minValidSampleSize: Int,
     srm: Boolean,
     controlSize: Long,
     treatmentSize: Long,
-    testType: String
+    testType: String,
+    isEnoughData: Boolean
 )
 
 case class CI(

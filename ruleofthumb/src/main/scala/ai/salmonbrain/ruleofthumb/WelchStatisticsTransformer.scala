@@ -15,7 +15,6 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     import dataset.sqlContext.implicits._
-    checkVariants(dataset)
     dataset
       .groupBy(
         $(experimentColumn),
@@ -33,27 +32,39 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
           count(col($(valueColumn))) as "length"
         )
       )
-      .withColumn("statisticsData", doStatistic($(alpha), $(beta))($"control", $"treatment"))
+      .withColumn(
+        "statisticsData",
+        doStatistic($(alpha), $(beta), $(minValidSampleSize))($"control", $"treatment")
+      )
       .drop("control", "treatment")
   }
 
-  def doStatistic(alpha: Double, beta: Double): UserDefinedFunction = udf {
+  def doStatistic(alpha: Double, beta: Double, minValidSampleSize: Int): UserDefinedFunction = udf {
     (
         control: Row,
         treatment: Row
     ) =>
-      val statResult = WelchTTest.welchTTest(control, treatment, alpha, beta)
       val controlSize = control.getAs[Long]("length")
       val treatmentSize = treatment.getAs[Long]("length")
+      val isEnoughData = math.min(controlSize, treatmentSize) >= minValidSampleSize
 
+      val (statResult, srmResult) =
+        if (isEnoughData)
+          (
+            WelchTTest.welchTTest(control, treatment, alpha, beta),
+            srm(controlSize.toInt, treatmentSize.toInt, $(srmAlpha))
+          )
+        else (getInvalidStatResult(CentralTendency.MEAN), false)
       StatisticsReport(
         statResult,
         alpha,
         beta,
-        srm(controlSize.toInt, treatmentSize.toInt, $(srmAlpha)),
+        minValidSampleSize,
+        srmResult,
         controlSize,
         treatmentSize,
-        TestType.WELCH.toString
+        TestType.WELCH.toString,
+        isEnoughData
       )
   }
 }
