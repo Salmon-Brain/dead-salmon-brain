@@ -165,5 +165,5 @@ class BasicStatInferenceParameters(Params):
     def setSrmAlpha(self, value):
         return self._set(srmAlpha=value)
 
-    def minValidSampleSize(self, value):
+    def setMinValidSampleSize(self, value):
         return self._set(minValidSampleSize=value)
