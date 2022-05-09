@@ -9,6 +9,7 @@ import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ DataFrame, Dataset }
 
 import scala.collection.mutable
+import scala.collection.mutable.WrappedArray.make
 
 /**
  * Transformer to apply Mann–Whitney U test
@@ -51,8 +52,8 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
         control: mutable.WrappedArray[Double],
         treatment: mutable.WrappedArray[Double]
     ) =>
-      val controlSize = Option(control).getOrElse(mutable.WrappedArray.empty).length
-      val treatmentSize = Option(treatment).getOrElse(mutable.WrappedArray.empty).length
+      val controlSize = Option(control).getOrElse(make[Double](Array())).length
+      val treatmentSize = Option(treatment).getOrElse(make[Double](Array())).length
       val isEnoughData = math.min(controlSize, treatmentSize) >= minValidSampleSize
       val (statResult, srmResult) =
         if (isEnoughData)

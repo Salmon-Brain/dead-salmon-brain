@@ -142,11 +142,19 @@ class BasicStatInferenceParameters(Params):
         typeConverter=TypeConverters.toFloat,
     )
 
+    minValidSampleSize = Param(
+        Params._dummy(),
+        "minValidSampleSize",
+        "parameter for skip invalid groups",
+        typeConverter=TypeConverters.toInt,
+    )
+
     def __init__(self):
         super(BasicStatInferenceParameters, self).__init__()
         self._setDefault(alpha=0.05)
         self._setDefault(beta=0.2)
         self._setDefault(srmAlpha=0.05)
+        self._setDefault(minValidSampleSize=10)
 
     def setAlpha(self, value):
         return self._set(alpha=value)
@@ -156,3 +164,6 @@ class BasicStatInferenceParameters(Params):
 
     def setSrmAlpha(self, value):
         return self._set(srmAlpha=value)
+
+    def minValidSampleSize(self, value):
+        return self._set(minValidSampleSize=value)
