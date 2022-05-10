@@ -21,6 +21,8 @@ object Main {
       .partitionBy("experimentUid")
       .mode(SaveMode.Overwrite)
       .json(config.output)
+
+    ReportPublisher.publishReport(config, report)
   }
 
 }

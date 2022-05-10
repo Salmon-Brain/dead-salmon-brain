@@ -1,0 +1,8 @@
+<a routerLink="/ui/dashboard">Experiments list</a>
+<h1>Experiment # {{experiment?.id}} / {{experiment?.expUid}} view</h1>
+
+<h2>Last update: <span>{{experiment?.timestamp | date :'d MMMM y - HH:mm'}}</span></h2>
+
+<div *ngFor="let item of blocks | keyvalue">
+  <app-experiment-metric-block [block]="item.value"></app-experiment-metric-block>
+</div>
