@@ -5,7 +5,7 @@ from ai.salmonbrain.ruleofthumb import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
-    AutoStatisticsTransformer
+    AutoStatisticsTransformer,
 )
 
 
@@ -126,7 +126,7 @@ def test_cumulativeMetricTransformer(data_sample: DataFrame):
 
 def test_welchStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
-    welch = WelchStatisticsTransformer()
+    welch = WelchStatisticsTransformer(minValidSampleSize=3)
     result = welch.transform(cum.transform(data_sample))
 
     p_values = [
@@ -137,7 +137,7 @@ def test_welchStatisticsTransformer(data_sample: DataFrame):
 
 def test_mannWhitneyStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
-    welch = WelchStatisticsTransformer()
+    welch = WelchStatisticsTransformer(minValidSampleSize=3)
     result = welch.transform(cum.transform(data_sample))
 
     p_values = [
@@ -148,7 +148,7 @@ def test_mannWhitneyStatisticsTransformer(data_sample: DataFrame):
 
 def test_autoStatisticsTransformer(data_sample: DataFrame):
     cum = CumulativeMetricTransformer()
-    auto = AutoStatisticsTransformer()
+    auto = AutoStatisticsTransformer(minValidSampleSize=3)
     result = auto.transform(cum.transform(data_sample))
 
     p_values = [

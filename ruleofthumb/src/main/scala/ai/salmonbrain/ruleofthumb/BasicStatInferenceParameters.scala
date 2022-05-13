@@ -24,6 +24,24 @@ trait BasicStatInferenceParameters extends Params {
   )
   setDefault(srmAlpha, 0.05)
 
+  val minValidSampleSize: Param[Int] = new Param[Int](
+    this,
+    "minValidSampleSize",
+    "parameter for skip invalid groups"
+  )
+  setDefault(minValidSampleSize, 10)
+
+  val useLinearApproximationForVariance: Param[Boolean] = new Param[Boolean](
+    this,
+    "useLinearApproximationForVariance",
+    "parameter for control variance computing method for nonparametric tests"
+  )
+  setDefault(useLinearApproximationForVariance, false)
+
+  /** @group setParam */
+  def setUseLinearApproximationForVariance(value: Boolean): this.type =
+    set(useLinearApproximationForVariance, value)
+
   /** @group setParam */
   def setAlpha(value: Double): this.type =
     set(alpha, value)
@@ -35,5 +53,9 @@ trait BasicStatInferenceParameters extends Params {
   /** @group setParam */
   def setSrmAlpha(value: Double): this.type =
     set(srmAlpha, value)
+
+  /** @group setParam */
+  def setMinValidSampleSize(value: Int): this.type =
+    set(minValidSampleSize, value)
 
 }

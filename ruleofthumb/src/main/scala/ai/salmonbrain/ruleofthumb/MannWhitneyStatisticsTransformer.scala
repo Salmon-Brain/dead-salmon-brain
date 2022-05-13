@@ -9,6 +9,7 @@ import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ DataFrame, Dataset }
 
 import scala.collection.mutable
+import scala.collection.mutable.WrappedArray.make
 
 /**
  * Transformer to apply Mann–Whitney U test
@@ -19,7 +20,6 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
   def this() = this(Identifiable.randomUID("mannWhitneyStatisticsTransformer"))
 
   override def transform(dataset: Dataset[_]): DataFrame = {
-    checkVariants(dataset)
     dataset
       .groupBy(
         $(experimentColumn),
@@ -35,7 +35,10 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
       )
       .withColumn(
         "statisticsData",
-        doStatistic($(alpha), $(beta))(col($(controlName)), col($(treatmentName)))
+        doStatistic($(alpha), $(beta), $(minValidSampleSize), $(useLinearApproximationForVariance))(
+          col($(controlName)),
+          col($(treatmentName))
+        )
       )
       .drop("control", "treatment")
   }
@@ -44,23 +47,43 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
 
   override def transformSchema(schema: StructType): StructType = schema
 
-  def doStatistic(alpha: Double, beta: Double): UserDefinedFunction = udf {
+  def doStatistic(
+      alpha: Double,
+      beta: Double,
+      minValidSampleSize: Int,
+      useLinearApproximationForVariance: Boolean
+  ): UserDefinedFunction = udf {
     (
         control: mutable.WrappedArray[Double],
         treatment: mutable.WrappedArray[Double]
     ) =>
-      val statResult =
-        MannWhitneyTest.mannWhitneyTest(control.toArray, treatment.toArray, alpha, beta)
-      val controlSize = control.length
-      val treatmentSize = treatment.length
+      val controlSize = Option(control).getOrElse(make[Double](Array())).length
+      val treatmentSize = Option(treatment).getOrElse(make[Double](Array())).length
+      val isEnoughData = math.min(controlSize, treatmentSize) >= minValidSampleSize
+      val (statResult, srmResult) =
+        if (isEnoughData)
+          (
+            MannWhitneyTest.mannWhitneyTest(
+              control.toArray,
+              treatment.toArray,
+              alpha,
+              beta,
+              useLinearApproximationForVariance
+            ),
+            srm(controlSize, treatmentSize, $(srmAlpha))
+          )
+        else (getInvalidStatResult(CentralTendency.MEDIAN), false)
+
       StatisticsReport(
         statResult,
         alpha,
         beta,
-        srm(controlSize, treatmentSize, $(srmAlpha)),
+        minValidSampleSize,
+        srmResult,
         controlSize,
         treatmentSize,
-        TestType.MANN_WHITNEY.toString
+        TestType.MANN_WHITNEY.toString,
+        isEnoughData
       )
   }
 }

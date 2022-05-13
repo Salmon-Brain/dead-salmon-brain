@@ -1,30 +1,53 @@
 package ai.salmonbrain.ruleofthumb
 
 import org.apache.commons.math3.distribution.BinomialDistribution
+import org.apache.commons.math3.stat.descriptive.moment.Variance
 import org.apache.commons.math3.stat.descriptive.rank.Median
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest
 
 object MannWhitneyTest extends BaseStatTest {
   val median = new Median()
-  val MINIMUM_SAMPLE_SIZE = 5
+  val variance = new Variance()
 
   def mannWhitneyTest(
       control: Array[Double],
       treatment: Array[Double],
       alpha: Double,
-      beta: Double
+      beta: Double,
+      useLinearApproximationForVariance: Boolean
   ): StatResult = {
     assert(alpha < 1 && beta < 1)
-    math.min(control.length, treatment.length) match {
-      case sampleSize if sampleSize >= MINIMUM_SAMPLE_SIZE =>
+    val controlMedian = median.evaluate(control)
+    val treatmentMedian = median.evaluate(treatment)
+
+    val (treatmentMedianVariance, controlMedianVariance) =
+      if (useLinearApproximationForVariance)
+        (medianVariance(treatment), medianVariance(control))
+      else (variance.evaluate(treatment), variance.evaluate(control))
+
+    (treatmentMedianVariance, controlMedianVariance) match {
+      case x if x._1 < EPS || x._2 < EPS =>
+        StatResult(
+          Double.NaN,
+          Double.NaN,
+          -1,
+          controlMedian,
+          treatmentMedian,
+          controlMedianVariance,
+          treatmentMedianVariance,
+          Double.NaN,
+          Double.NaN,
+          CentralTendency.MEDIAN.toString,
+          isZeroVariance = true
+        )
+      case _ =>
         val mannWhitneyUTest = new MannWhitneyUTest()
         val uStatistic = mannWhitneyUTest.mannWhitneyU(control, treatment)
         val pValue = mannWhitneyUTest.mannWhitneyUTest(control, treatment)
-        val controlMedian = median.evaluate(control)
-        val treatmentMedian = median.evaluate(treatment)
-        val treatmentMedianVariance = medianVariance(treatment)
-        val controlMedianVariance = medianVariance(control)
-        val std = math.sqrt(treatmentMedianVariance + controlMedianVariance)
+
+        val std = math.sqrt(
+          controlMedianVariance / control.length + treatmentMedianVariance / treatment.length
+        )
         val size = math.max(control.length, treatment.length)
 
         val ci = CI(
@@ -37,6 +60,7 @@ object MannWhitneyTest extends BaseStatTest {
           normalDistribution.inverseCumulativeProbability(1 - alpha / 2),
           size
         )
+
         val sampleSize = sampleSizeEstimation(
           alpha,
           beta,
@@ -56,20 +80,8 @@ object MannWhitneyTest extends BaseStatTest {
           treatmentMedianVariance,
           ci.lowerPercent,
           ci.upperPercent,
-          CentralTendency.MEDIAN.toString
-        )
-      case _ =>
-        StatResult(
-          Double.NaN,
-          Double.NaN,
-          Long.MinValue,
-          Double.NaN,
-          Double.NaN,
-          Double.NaN,
-          Double.NaN,
-          Double.NaN,
-          Double.NaN,
-          CentralTendency.MEDIAN.toString
+          CentralTendency.MEDIAN.toString,
+          isZeroVariance = false
         )
     }
   }

@@ -142,11 +142,27 @@ class BasicStatInferenceParameters(Params):
         typeConverter=TypeConverters.toFloat,
     )
 
+    minValidSampleSize = Param(
+        Params._dummy(),
+        "minValidSampleSize",
+        "parameter for skip invalid groups",
+        typeConverter=TypeConverters.toInt,
+    )
+
+    useLinearApproximationForVariance = Param(
+        Params._dummy(),
+        "useLinearApproximationForVariance",
+        "parameter for control variance computing method for nonparametric tests",
+        typeConverter=TypeConverters.toBoolean,
+    )
+
     def __init__(self):
         super(BasicStatInferenceParameters, self).__init__()
         self._setDefault(alpha=0.05)
         self._setDefault(beta=0.2)
         self._setDefault(srmAlpha=0.05)
+        self._setDefault(minValidSampleSize=10)
+        self._setDefault(useLinearApproximationForVariance=False)
 
     def setAlpha(self, value):
         return self._set(alpha=value)
@@ -156,3 +172,9 @@ class BasicStatInferenceParameters(Params):
 
     def setSrmAlpha(self, value):
         return self._set(srmAlpha=value)
+
+    def setMinValidSampleSize(self, value):
+        return self._set(minValidSampleSize=value)
+
+    def setUseLinearApproximationForVariance(self, value):
+        return self._set(useLinearApproximationForVariance=value)
