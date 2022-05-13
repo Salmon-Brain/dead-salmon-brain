@@ -45,7 +45,9 @@ object MannWhitneyTest extends BaseStatTest {
         val uStatistic = mannWhitneyUTest.mannWhitneyU(control, treatment)
         val pValue = mannWhitneyUTest.mannWhitneyUTest(control, treatment)
 
-        val std = math.sqrt(treatmentMedianVariance + controlMedianVariance)
+        val std = math.sqrt(
+          controlMedianVariance / control.length + treatmentMedianVariance / treatment.length
+        )
         val size = math.max(control.length, treatment.length)
 
         val ci = CI(
