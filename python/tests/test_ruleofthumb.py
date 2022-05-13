@@ -5,7 +5,7 @@ from ai.salmonbrain.ruleofthumb import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,
-    AutoStatisticsTransformer
+    AutoStatisticsTransformer,
 )
 
 

@@ -35,7 +35,7 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
       )
       .withColumn(
         "statisticsData",
-        doStatistic($(alpha), $(beta), $(minValidSampleSize))(
+        doStatistic($(alpha), $(beta), $(minValidSampleSize), $(useLinearApproximationForVariance))(
           col($(controlName)),
           col($(treatmentName))
         )
@@ -47,7 +47,12 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
 
   override def transformSchema(schema: StructType): StructType = schema
 
-  def doStatistic(alpha: Double, beta: Double, minValidSampleSize: Int): UserDefinedFunction = udf {
+  def doStatistic(
+      alpha: Double,
+      beta: Double,
+      minValidSampleSize: Int,
+      useLinearApproximationForVariance: Boolean
+  ): UserDefinedFunction = udf {
     (
         control: mutable.WrappedArray[Double],
         treatment: mutable.WrappedArray[Double]
@@ -62,7 +67,8 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
               control.toArray,
               treatment.toArray,
               alpha,
-              beta
+              beta,
+              useLinearApproximationForVariance
             ),
             srm(controlSize, treatmentSize, $(srmAlpha))
           )

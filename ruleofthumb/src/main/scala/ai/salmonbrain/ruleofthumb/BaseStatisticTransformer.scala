@@ -48,14 +48,15 @@ trait BaseStatisticTransformer
     StatResult(
       Double.NaN,
       Double.NaN,
-      Long.MinValue,
+      -1,
       Double.NaN,
       Double.NaN,
       Double.NaN,
       Double.NaN,
       Double.NaN,
       Double.NaN,
-      centralTendency.toString
+      centralTendency.toString,
+      isZeroVariance = false
     )
   }
 }

@@ -49,7 +49,9 @@ object WelchTTest extends BaseStatTest {
           controlVariance,
           treatmentVariance,
           Double.NaN,
-          Double.NaN
+          Double.NaN,
+          CentralTendency.MEAN.toString,
+          isZeroVariance = true
         )
       case _ =>
         val qt = controlVariance / controlSampleSize + treatmentVariance / treatmentSampleSize
@@ -96,7 +98,9 @@ object WelchTTest extends BaseStatTest {
           controlVariance,
           treatmentVariance,
           ci.lowerPercent,
-          ci.upperPercent
+          ci.upperPercent,
+          CentralTendency.MEAN.toString,
+          isZeroVariance = false
         )
     }
   }

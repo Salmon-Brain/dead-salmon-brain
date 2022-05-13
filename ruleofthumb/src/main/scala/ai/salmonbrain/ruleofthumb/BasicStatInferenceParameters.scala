@@ -31,6 +31,17 @@ trait BasicStatInferenceParameters extends Params {
   )
   setDefault(minValidSampleSize, 10)
 
+  val useLinearApproximationForVariance: Param[Boolean] = new Param[Boolean](
+    this,
+    "useLinearApproximationForVariance",
+    "parameter for control variance computing method for nonparametric tests"
+  )
+  setDefault(useLinearApproximationForVariance, false)
+
+  /** @group setParam */
+  def setUseLinearApproximationForVariance(value: Boolean): this.type =
+    set(useLinearApproximationForVariance, value)
+
   /** @group setParam */
   def setAlpha(value: Double): this.type =
     set(alpha, value)

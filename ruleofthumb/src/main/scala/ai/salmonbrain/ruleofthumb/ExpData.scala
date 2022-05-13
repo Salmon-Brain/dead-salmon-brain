@@ -68,7 +68,8 @@ case class StatResult(
     treatmentVariance: Double,
     percentageLeft: Double,
     percentageRight: Double,
-    centralTendencyType: String = CentralTendency.MEAN.toString
+    centralTendencyType: String,
+    isZeroVariance: Boolean
 )
 
 case class Metric(metricName: String, metricValue: Double)
