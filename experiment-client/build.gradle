@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'ai.salmonbrain'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.testng:testng:7.4.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
