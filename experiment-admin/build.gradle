@@ -37,6 +37,6 @@ bootRun {
     systemProperties = System.properties
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+test {
+    useTestNG()
 }
