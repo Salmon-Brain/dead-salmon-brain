@@ -16,3 +16,7 @@ dependencies {
 test {
     useTestNG()
 }
+
+archivesBaseName = "${project.name}"
+
+apply from: "$rootDir/gradle/java-publication.gradle"

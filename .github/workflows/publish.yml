@@ -2,6 +2,7 @@ name: Publish package to Maven Central and PIP
 on:
   release:
     types: [created]
+    tags: ruleofthumb.*
 jobs:
   publishJvmOnMavenCentral:
     runs-on: ubuntu-latest
@@ -40,6 +41,29 @@ jobs:
         env:
           SCALA_VERSION: ${{ matrix.scala-version }}
           SPARK_VERSION: ${{ matrix.spark-version }}
+          SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
+          SONATYPE_PWD: ${{ secrets.SONATYPE_PWD }}
+          PGP_KEY: ${{ secrets.PGP_KEY }}
+          PGP_PWD: ${{ secrets.PGP_PWD }}
+  publishClientJvmOnMavenCentral:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Perform build
+        run: ./gradlew :experiment-client:build :experiment-client:publishToMavenLocal
+      - name: Release to Maven Central
+        run: ./gradlew :experiment-client:publishToSonatype closeAndReleaseStagingRepository -i
+        env:
           SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
           SONATYPE_PWD: ${{ secrets.SONATYPE_PWD }}
           PGP_KEY: ${{ secrets.PGP_KEY }}
