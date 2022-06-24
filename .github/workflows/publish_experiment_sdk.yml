@@ -19,9 +19,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Perform build
-        run: ./gradlew :experiment-client:build :experiment-client:publishToMavenLocal
+        run: ./gradlew :experiment-sdk:build :experiment-sdk:publishToMavenLocal
       - name: Release to Maven Central
-        run: ./gradlew :experiment-client:publishToSonatype closeAndReleaseStagingRepository -i
+        run: ./gradlew :experiment-sdk:publishToSonatype closeAndReleaseStagingRepository -i
         env:
           SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
           SONATYPE_PWD: ${{ secrets.SONATYPE_PWD }}
