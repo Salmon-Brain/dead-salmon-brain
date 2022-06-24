@@ -1,2 +1,2 @@
 rootProject.name = 'salmon-brain'
-include ('ruleofthumb', 'experiment-admin', 'experiment-admin-ui', 'experiment-api-commons')
+include ('ruleofthumb', 'experiment-admin', 'experiment-admin-ui', 'experiment-api-commons', 'experiment-client')
