@@ -38,7 +38,6 @@ publishing {
             version = project.version
             pom {
                 name = artifactId
-                description = "Apache Spark based framework for analysis A/B experiments"
 
                 url = "https://github.com/Salmon-Brain/dead-salmon-brain"
                 licenses {

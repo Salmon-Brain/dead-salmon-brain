@@ -17,6 +17,7 @@ test {
     useTestNG()
 }
 
+description = "Client SDK for A/B experimets configuration"
 archivesBaseName = "${project.name}"
 
 apply from: "$rootDir/gradle/java-publication.gradle"

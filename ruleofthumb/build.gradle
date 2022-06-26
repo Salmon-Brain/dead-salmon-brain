@@ -66,5 +66,6 @@ task pythonTest(type: Exec) {
 pythonTest.dependsOn test
 
 archivesBaseName = "${project.name}_${sparkVersion}_${scalaVersionShort}"
+description = "Apache Spark based framework for analysis A/B experiments"
 
 apply from: "$rootDir/gradle/java-publication.gradle"
