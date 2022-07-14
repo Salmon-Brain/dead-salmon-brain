@@ -1,13 +1,9 @@
 package ai.salmonbrain.events;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.util.Objects;
 import java.util.UUID;
 
-public class Event {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
+public abstract class Event {
     private final String uuid = UUID.randomUUID().toString();
     private final long timestamp = System.currentTimeMillis();
 
@@ -19,7 +15,24 @@ public class Event {
         return timestamp;
     }
 
-    public final String toJson() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(this);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Event)) return false;
+        Event event = (Event) o;
+        return getTimestamp() == event.getTimestamp() && Objects.equals(uuid, event.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, getTimestamp());
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "uuid='" + uuid + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

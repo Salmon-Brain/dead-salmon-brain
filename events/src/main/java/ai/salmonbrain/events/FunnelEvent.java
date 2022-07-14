@@ -1,11 +1,13 @@
 package ai.salmonbrain.events;
 
+import java.util.Objects;
+
 public class FunnelEvent extends ExperimentEvent {
-    public static final EventType TYPE = EventType.FUNNEL;
+    public final EventType TYPE = EventType.FUNNEL;
     private short step;
     private String stepName;
     private String funnelName;
-    private Double value;
+    private double value;
 
     public FunnelEvent(){}
 
@@ -51,21 +53,36 @@ public class FunnelEvent extends ExperimentEvent {
         this.funnelName = funnelName;
     }
 
-    public Double getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
         return "FunnelEvent{" +
-                "step=" + step +
+                "TYPE=" + TYPE +
+                ", step=" + step +
                 ", stepName='" + stepName + '\'' +
                 ", funnelName='" + funnelName + '\'' +
                 ", value=" + value +
-                '}';
+                "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FunnelEvent)) return false;
+        if (!super.equals(o)) return false;
+        FunnelEvent that = (FunnelEvent) o;
+        return getStep() == that.getStep() && TYPE == that.TYPE && Objects.equals(getStepName(), that.getStepName()) && Objects.equals(getFunnelName(), that.getFunnelName()) && Objects.equals(getValue(), that.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), TYPE, getStep(), getStepName(), getFunnelName(), getValue());
     }
 }

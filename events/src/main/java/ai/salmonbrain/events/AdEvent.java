@@ -1,15 +1,18 @@
 package ai.salmonbrain.events;
 
 public class AdEvent extends ExperimentEvent{
-    public static final EventType TYPE = EventType.AD;
+    public final EventType TYPE = EventType.AD;
     private String sdkName;
     private String placement;
-    private String type;
+    private String adType;
     private String action;
     private String error;
-    private Long duration;
+    private long duration;
     private boolean isFirst;
 
+    public AdEvent() {
+
+    }
 
     public AdEvent(
             String entityUid,
@@ -19,7 +22,7 @@ public class AdEvent extends ExperimentEvent{
             String experimentUid,
             String sdkName,
             String placement,
-            String type,
+            String adType,
             String action,
             String error,
             Long duration,
@@ -28,7 +31,7 @@ public class AdEvent extends ExperimentEvent{
         super(entityUid, categoryName, categoryValue, variantId, experimentUid);
         this.sdkName = sdkName;
         this.placement = placement;
-        this.type = type;
+        this.adType = adType;
         this.action = action;
         this.error = error;
         this.duration = duration;
@@ -51,12 +54,12 @@ public class AdEvent extends ExperimentEvent{
         this.placement = placement;
     }
 
-    public String getType() {
-        return type;
+    public String getAdType() {
+        return adType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAdType(String type) {
+        this.adType = type;
     }
 
     public String getAction() {
@@ -75,11 +78,11 @@ public class AdEvent extends ExperimentEvent{
         this.error = error;
     }
 
-    public Long getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
@@ -94,13 +97,14 @@ public class AdEvent extends ExperimentEvent{
     @Override
     public String toString() {
         return "AdEvent{" +
-                "sdkName='" + sdkName + '\'' +
+                "TYPE=" + TYPE +
+                ", sdkName='" + sdkName + '\'' +
                 ", placement='" + placement + '\'' +
-                ", type='" + type + '\'' +
+                ", adType='" + adType + '\'' +
                 ", action='" + action + '\'' +
                 ", error='" + error + '\'' +
                 ", duration=" + duration +
                 ", isFirst=" + isFirst +
-                '}';
+                "} " + super.toString();
     }
 }

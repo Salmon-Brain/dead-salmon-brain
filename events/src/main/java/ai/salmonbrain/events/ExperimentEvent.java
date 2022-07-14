@@ -1,16 +1,15 @@
 package ai.salmonbrain.events;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ExperimentEvent extends Event{
+public abstract class ExperimentEvent extends Event {
     private String entityUid;
     private String categoryName;
     private String categoryValue;
     private String variantId;
     private String experimentUid;
 
-    public ExperimentEvent(){
+    public ExperimentEvent() {
     }
 
     public ExperimentEvent(String entityUid, String categoryName, String categoryValue, String variantId, String experimentUid) {
@@ -63,6 +62,20 @@ public class ExperimentEvent extends Event{
 
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ExperimentEvent)) return false;
+        if (!super.equals(o)) return false;
+        ExperimentEvent that = (ExperimentEvent) o;
+        return Objects.equals(getEntityUid(), that.getEntityUid()) && Objects.equals(getCategoryName(), that.getCategoryName()) && Objects.equals(getCategoryValue(), that.getCategoryValue()) && Objects.equals(getVariantId(), that.getVariantId()) && Objects.equals(getExperimentUid(), that.getExperimentUid());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getEntityUid(), getCategoryName(), getCategoryValue(), getVariantId(), getExperimentUid());
+    }
+
+    @Override
     public String toString() {
         return "ExperimentEvent{" +
                 "entityUid='" + entityUid + '\'' +
@@ -70,7 +83,7 @@ public class ExperimentEvent extends Event{
                 ", categoryValue='" + categoryValue + '\'' +
                 ", variantId='" + variantId + '\'' +
                 ", experimentUid='" + experimentUid + '\'' +
-                '}';
+                "} " + super.toString();
     }
 }
 

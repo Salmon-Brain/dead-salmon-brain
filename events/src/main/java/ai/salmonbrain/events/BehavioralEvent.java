@@ -1,8 +1,9 @@
 package ai.salmonbrain.events;
 
+import java.util.Objects;
 
 public class BehavioralEvent extends ExperimentEvent {
-    public static final EventType TYPE = EventType.BEHAVIOUR;
+    public final EventType TYPE = EventType.BEHAVIOUR;
     private String eventId;
     private double value;
     public BehavioralEvent(){}
@@ -38,10 +39,25 @@ public class BehavioralEvent extends ExperimentEvent {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BehavioralEvent)) return false;
+        if (!super.equals(o)) return false;
+        BehavioralEvent that = (BehavioralEvent) o;
+        return Double.compare(that.getValue(), getValue()) == 0 && TYPE == that.TYPE && Objects.equals(getEventId(), that.getEventId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), TYPE, getEventId(), getValue());
+    }
+
+    @Override
     public String toString() {
-        return "UiEvent{" +
-                "eventId='" + eventId + '\'' +
+        return "BehavioralEvent{" +
+                "TYPE=" + TYPE +
+                ", eventId='" + eventId + '\'' +
                 ", value=" + value +
-                '}';
+                "} " + super.toString();
     }
 }

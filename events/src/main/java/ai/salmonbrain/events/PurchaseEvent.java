@@ -1,12 +1,14 @@
 package ai.salmonbrain.events;
 
 
+import java.util.Objects;
+
 public class PurchaseEvent extends ExperimentEvent {
-    public static final EventType TYPE = EventType.PURCHASE;
+    public final EventType TYPE = EventType.PURCHASE;
     private String place;
     private String itemType;
     private String itemId;
-    private Long amount;
+    private long amount;
     private String currency;
 
     public PurchaseEvent(){}
@@ -55,11 +57,11 @@ public class PurchaseEvent extends ExperimentEvent {
         this.itemId = itemId;
     }
 
-    public Long getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
@@ -72,13 +74,28 @@ public class PurchaseEvent extends ExperimentEvent {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PurchaseEvent)) return false;
+        if (!super.equals(o)) return false;
+        PurchaseEvent that = (PurchaseEvent) o;
+        return TYPE == that.TYPE && Objects.equals(getPlace(), that.getPlace()) && Objects.equals(getItemType(), that.getItemType()) && Objects.equals(getItemId(), that.getItemId()) && Objects.equals(getAmount(), that.getAmount()) && Objects.equals(getCurrency(), that.getCurrency());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), TYPE, getPlace(), getItemType(), getItemId(), getAmount(), getCurrency());
+    }
+
+    @Override
     public String toString() {
         return "PurchaseEvent{" +
-                "place='" + place + '\'' +
+                "TYPE=" + TYPE +
+                ", place='" + place + '\'' +
                 ", itemType='" + itemType + '\'' +
-                ", itemId=" + itemId +
+                ", itemId='" + itemId + '\'' +
                 ", amount=" + amount +
                 ", currency='" + currency + '\'' +
-                '}';
+                "} " + super.toString();
     }
 }
