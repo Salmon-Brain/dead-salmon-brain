@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'ai.salmonbrain'
-version '0.0.1'
+version '0.0.2'
 
 repositories {
     mavenCentral()
@@ -11,6 +11,9 @@ repositories {
 
 dependencies {
     testImplementation 'org.testng:testng:7.4.0'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2'
+    testImplementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
+    testImplementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
 }
 
 test {
