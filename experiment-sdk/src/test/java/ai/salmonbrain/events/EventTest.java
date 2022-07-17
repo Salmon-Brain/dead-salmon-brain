@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-public class EventTests {
+public class EventTest {
     private static final ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
     @Test
     public void serdeBehavioralEventTest() throws JsonProcessingException {
