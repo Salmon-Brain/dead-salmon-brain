@@ -52,14 +52,17 @@ class WelchStatisticsTransformer(override val uid: String) extends BaseStatistic
         if (isEnoughData)
           (
             WelchTTest.welchTTest(control, treatment, alpha, beta),
-            srm(controlSize.toInt, treatmentSize.toInt, $(srmAlpha))
+            srm(controlSize.toInt, treatmentSize.toInt)
           )
-        else (getInvalidStatResult(CentralTendency.MEAN), false)
+        else (getInvalidStatResult(CentralTendency.MEAN), -1d)
+
       StatisticsReport(
         statResult,
         alpha,
         beta,
         minValidSampleSize,
+        srmResult < $(srmAlpha),
+        $(srmAlpha),
         srmResult,
         controlSize,
         treatmentSize,

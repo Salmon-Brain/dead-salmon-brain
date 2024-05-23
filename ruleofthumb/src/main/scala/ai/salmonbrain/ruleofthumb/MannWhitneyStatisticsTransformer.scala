@@ -70,15 +70,17 @@ class MannWhitneyStatisticsTransformer(override val uid: String) extends BaseSta
               beta,
               useLinearApproximationForVariance
             ),
-            srm(controlSize, treatmentSize, $(srmAlpha))
+            srm(controlSize, treatmentSize)
           )
-        else (getInvalidStatResult(CentralTendency.MEDIAN), false)
+        else (getInvalidStatResult(CentralTendency.MEDIAN), -1d)
 
       StatisticsReport(
         statResult,
         alpha,
         beta,
         minValidSampleSize,
+        srmResult < $(srmAlpha),
+        $(srmAlpha),
         srmResult,
         controlSize,
         treatmentSize,
