@@ -1,11 +1,10 @@
 name: Publish SDK package to Maven Central
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+
 jobs:
   publishClientJvmOnMavenCentral:
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && contains(github.ref, 'sdk')
     permissions:
       contents: read
       packages: write

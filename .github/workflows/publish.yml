@@ -1,11 +1,10 @@
 name: Publish package to Maven Central and PIP
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+
 jobs:
   publishJvmOnMavenCentral:
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && contains(github.ref, 'ruleofthumb')
     permissions:
       contents: read
       packages: write
@@ -44,7 +43,6 @@ jobs:
   publishPython:
     needs: publishJvmOnMavenCentral
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && contains(github.ref, 'ruleofthumb')
     permissions:
       contents: read
       packages: write
