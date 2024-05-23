@@ -18,7 +18,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     python_requires=">=3.6",
-    install_requires=["pyspark>=2.3.0", "numpy"],
+    install_requires=["pyspark>=3.0.0", "numpy"],
     tests_require=["pytest"],
     project_urls={
         "Source code": "https://github.com/Salmon-Brain/dead-salmon-brain/tree/main/python",
