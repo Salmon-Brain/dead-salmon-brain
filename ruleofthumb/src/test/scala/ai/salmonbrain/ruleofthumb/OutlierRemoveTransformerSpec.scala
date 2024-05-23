@@ -11,4 +11,10 @@ class OutlierRemoveTransformerSpec extends AnyFlatSpec with SparkHelper with Mat
     val clearData = new OutlierRemoveTransformer().transform(data)
     assert(clearData.count() == 26)
   }
+
+  "OutlierRemoveTransformerSpec with 0 lower percentile" should "be" in {
+    val data = generateDataForWelchTest()
+    val clearData = new OutlierRemoveTransformer().setLowerPercentile(0).transform(data)
+    assert(clearData.count() == 28)
+  }
 }

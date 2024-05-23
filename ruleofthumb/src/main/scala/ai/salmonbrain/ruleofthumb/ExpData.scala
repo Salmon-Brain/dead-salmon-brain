@@ -19,6 +19,8 @@ case class StatisticsReport(
     beta: Double,
     minValidSampleSize: Int,
     srm: Boolean,
+    srmAlpha: Double,
+    pValueSrm: Double,
     controlSize: Long,
     treatmentSize: Long,
     testType: String,

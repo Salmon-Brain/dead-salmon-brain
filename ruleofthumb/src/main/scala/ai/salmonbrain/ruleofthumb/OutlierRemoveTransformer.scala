@@ -39,14 +39,33 @@ class OutlierRemoveTransformer(override val uid: String)
     set(upperPercentile, value)
 
   override def transform(dataset: Dataset[_]): DataFrame = {
-    assert($(lowerPercentile) > 0 && $(lowerPercentile) < 1, "lowerPercentile must be in (0, 1)")
     assert($(upperPercentile) > 0 && $(upperPercentile) < 1, "upperPercentile must be in (0, 1)")
     assert(
       $(upperPercentile) > $(lowerPercentile),
       "upperPercentile must be greater than lowerPercentile"
     )
 
+    val isDisabledLower = $(lowerPercentile) <= 0
+
     import dataset.sparkSession.implicits._
+
+    val aggFunc = Seq(
+      callUDF("percentile_approx", col($(valueColumn)), lit($(upperPercentile))) as "rightBound"
+    ) ++
+      (if (isDisabledLower) Seq()
+       else
+         Seq(
+           callUDF(
+             "percentile_approx",
+             col($(valueColumn)),
+             lit($(lowerPercentile))
+           ) as "leftBound"
+         ))
+    val filterFunc =
+      if (isDisabledLower) col($(valueColumn)) < $"rightBound"
+      else col($(valueColumn)) > $"leftBound" && col($(valueColumn)) < $"rightBound"
+
+    val dropCols = if (isDisabledLower) Seq("rightBound") else Seq("rightBound", "leftBound")
 
     val columns = Seq(
       $(variantColumn),
@@ -59,14 +78,14 @@ class OutlierRemoveTransformer(override val uid: String)
     val percentilesBound = dataset
       .groupBy(columns.head, columns: _*)
       .agg(
-        callUDF("percentile_approx", col($(valueColumn)), lit($(lowerPercentile))) as "leftBound",
-        callUDF("percentile_approx", col($(valueColumn)), lit($(upperPercentile))) as "rightBound"
+        aggFunc.head,
+        aggFunc.tail: _*
       )
 
     dataset
       .join(broadcast(percentilesBound), columns)
-      .filter(col($(valueColumn)) > $"leftBound" && col($(valueColumn)) < $"rightBound")
-      .drop("leftBound", "rightBound")
+      .filter(filterFunc)
+      .drop(dropCols: _*)
   }
 
   override def copy(extra: ParamMap): Transformer = defaultCopy(extra)

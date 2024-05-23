@@ -35,12 +35,11 @@ trait BaseStatisticTransformer
 
   override def transformSchema(schema: StructType): StructType = outputSchema
 
-  def srm(controlSize: Int, treatmentSize: Int, alpha: Double): Boolean = {
+  def srm(controlSize: Int, treatmentSize: Int): Double = {
     val uniform = (treatmentSize + controlSize).toDouble / 2
     TestUtils.chiSquareTest(
       Array(uniform, uniform),
       Array(controlSize, treatmentSize),
-      alpha
     )
   }
 
