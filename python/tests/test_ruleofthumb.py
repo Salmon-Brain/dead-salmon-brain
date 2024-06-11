@@ -20,6 +20,9 @@ def data_sample_for_outlier(spark: SparkSession):
         [
             ("common", "all", "feedback", "1", "exp", "treatment", i, "shows", True)
             for i in range(100)
+        ] + [
+            ("common", "all", "feedback", "1", "exp", "treatment", i, "clicks", True)
+            for i in range(100)
         ],
         [
             "categoryName",
@@ -158,8 +161,13 @@ def test_autoStatisticsTransformer(data_sample: DataFrame):
 
 
 def test_outlierRemoveTransformer(data_sample_for_outlier: DataFrame):
-    outlier = OutlierRemoveTransformer(lowerPercentile=0.05, upperPercentile=0.95)
+    outlier = OutlierRemoveTransformer(lowerPercentile=0.05, upperPercentile=0.95, excludedMetrics=["clicks"])
     result = outlier.transform(data_sample_for_outlier)
 
-    values = [i["metricValue"] for i in result.select("metricValue").collect()]
-    assert len(values) == 89
+    result.show()
+
+    countViews = result.filter("metricName = 'shows'").count()
+    countClicks = result.filter("metricName = 'clicks'").count()
+    assert countViews == 89
+    assert countClicks == 100
+
