@@ -1,18 +1,14 @@
 package ai.salmonbrain.ruleofthumb
 
-import helpers.ExperimentDataGenerator.{
-  experimentDataGenerator,
-  generateDataForWelchTest,
-  seqExpDataToDataFrame
-}
-import helpers.SparkHelper
+import helpers.ExperimentDataGenerator.{experimentDataGenerator, generateDataForWelchTest, seqExpDataToDataFrame}
+import helpers.SharedSparkSession
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.first
-import org.scalactic.{ Equality, TolerantNumerics }
+import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
-class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matchers {
+class StatisticsTransformerSpec extends AnyFlatSpec with SharedSparkSession  with Matchers {
   import spark.implicits._
   val epsilon = 1e-4f
   val statWelch = new WelchStatisticsTransformer()
@@ -29,7 +25,7 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     .setRatioNames(Array("ctr"))
     .setNumBuckets(256)
 
-  private val metricsWithUplift: DataFrame = cumWithBuckets.transform(
+  private lazy val metricsWithUplift: DataFrame = cumWithBuckets.transform(
     seqExpDataToDataFrame(
       experimentDataGenerator(
         uplift = 0.2,
@@ -40,7 +36,7 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     )
   )
 
-  private val metricsWithoutUplift: DataFrame = cumWithBuckets.transform(
+  private lazy val metricsWithoutUplift: DataFrame = cumWithBuckets.transform(
     seqExpDataToDataFrame(
       experimentDataGenerator(
         uplift = 0.0,
@@ -54,8 +50,8 @@ class StatisticsTransformerSpec extends AnyFlatSpec with SparkHelper with Matche
     seqExpDataToDataFrame(
       experimentDataGenerator(
         uplift = 0.0,
-        controlSize = 3000,
-        treatmentSize = 3000,
+        controlSize = 300,
+        treatmentSize = 300,
         treatmentSkew = 10,
         controlSkew = 10
       )

@@ -1,6 +1,6 @@
 package ai.salmonbrain.inputs
 
-import helpers.SparkHelper
+import helpers.SharedSparkSession
 import org.apache.spark.sql.DataFrame
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
@@ -9,12 +9,11 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class NginxRawLogTransformerSpec extends AnyFlatSpec with SparkHelper with Matchers {
-
+class NginxRawLogTransformerSpec extends AnyFlatSpec with SharedSparkSession with Matchers {
+  import spark.implicits._
   private val logsResource: String = getClass.getResource("/nginx_sample_1.txt").getPath
 
   "NginxRawLogTransformer" should "be" in {
-    import sqlc.implicits._
     val rawLogs: DataFrame = CsvHelper.readCsv(spark, Seq(logsResource))
 
     val transformer = new NginxRawLogTransformer()

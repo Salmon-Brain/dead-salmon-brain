@@ -49,10 +49,9 @@ dependencies {
     testImplementation "org.mockito:mockito-scala_$scalaVersionShort:1.16.42"
 }
 
-
-
 test{
     maxHeapSize = '1G'
+    maxParallelForks = 1
 }
 
 task pythonTest(type: Exec) {

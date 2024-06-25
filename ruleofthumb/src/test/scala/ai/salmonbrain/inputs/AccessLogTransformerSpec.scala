@@ -1,16 +1,15 @@
 package ai.salmonbrain.inputs;
 
 import ai.salmonbrain.ruleofthumb.ExpData
-import helpers.SparkHelper
+import helpers.SharedSparkSession
 import org.apache.spark.sql.DataFrame
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
-class AccessLogTransformerSpec extends AnyFlatSpec with SparkHelper with Matchers {
-
+class AccessLogTransformerSpec extends AnyFlatSpec with SharedSparkSession with Matchers {
+  import spark.implicits._
   "AccessLogTransformer" should "be" in {
-    import sqlc.implicits._
     val logsDF: DataFrame = sc
       .parallelize(
         Seq(

@@ -1,15 +1,15 @@
 package ai.salmonbrain.ruleofthumb
 
-import helpers.ExperimentDataGenerator.{ experimentDataGenerator, seqExpDataToDataFrame }
-import helpers.SparkHelper
+import helpers.ExperimentDataGenerator.{experimentDataGenerator, seqExpDataToDataFrame}
+import helpers.SharedSparkSession
 import org.apache.spark.ml.Pipeline
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
-class ComputingFlowSpec extends AnyFlatSpec with SparkHelper with Matchers {
+class ComputingFlowSpec extends AnyFlatSpec with SharedSparkSession with Matchers {
   "ComputingFlow" should "be" in {
     import spark.implicits._
-    val metrics =
+    lazy val metrics =
       seqExpDataToDataFrame(
         experimentDataGenerator(
           uplift = 0,

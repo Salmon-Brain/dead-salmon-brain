@@ -1,16 +1,14 @@
 package ai.salmonbrain.ruleofthumb
 
-import helpers.ExperimentDataGenerator.{
-  experimentDataGenerator,
-  generateDataForWelchTest,
-  seqExpDataToDataFrame
-}
-import helpers.SparkHelper
+import helpers.ExperimentDataGenerator.{experimentDataGenerator, generateDataForWelchTest, seqExpDataToDataFrame}
+import helpers.SharedSparkSession
 import org.apache.spark.ml.Pipeline
+import org.apache.spark.sql.SparkSession
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
-class OutlierRemoveTransformerSpec extends AnyFlatSpec with SparkHelper with Matchers {
+class OutlierRemoveTransformerSpec extends AnyFlatSpec with SharedSparkSession with Matchers {
+  implicit val sparkSession: SparkSession = spark
   "OutlierRemoveTransformerSpec" should "be" in {
     val data = generateDataForWelchTest()
     val clearData = new OutlierRemoveTransformer().transform(data)
