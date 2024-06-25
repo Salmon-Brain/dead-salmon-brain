@@ -20,7 +20,7 @@ def scalaVersion = findProperty("scalaVersion") ?: "2.12.11"
 println "Scala version: $scalaVersion"
 def scalaVersionShort = "${VersionNumber.parse(scalaVersion).getMajor()}.${VersionNumber.parse(scalaVersion).getMinor()}"
 
-def sparkVersion = findProperty("sparkVersion") ?: "3.1.2"
+def sparkVersion = findProperty("sparkVersion") ?: "3.2.0"
 println "Spark version: $sparkVersion"
 
 
