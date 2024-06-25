@@ -1,7 +1,7 @@
 package ai.salmonbrain.ruleofthumb
 
 import org.apache.spark.ml.Transformer
-import org.apache.spark.ml.param.{ Param, ParamMap }
+import org.apache.spark.ml.param.{ Param, ParamMap, StringArrayParam }
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.functions.{ broadcast, callUDF, col, lit }
 import org.apache.spark.sql.types.StructType
@@ -30,6 +30,13 @@ class OutlierRemoveTransformer(override val uid: String)
   )
   setDefault(upperPercentile, 0.99)
 
+  val excludedMetrics: StringArrayParam = new StringArrayParam(
+    this,
+    "excludedMetrics",
+    "metrics excluded from filtering"
+  )
+  setDefault(excludedMetrics, Array[String]())
+
   /** @group setParam */
   def setLowerPercentile(value: Double): this.type =
     set(lowerPercentile, value)
@@ -37,6 +44,10 @@ class OutlierRemoveTransformer(override val uid: String)
   /** @group setParam */
   def setUpperPercentile(value: Double): this.type =
     set(upperPercentile, value)
+
+  /** @group setParam */
+  def setExcludedMetrics(value: Array[String]): this.type =
+    set(excludedMetrics, value)
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     assert($(upperPercentile) > 0 && $(upperPercentile) < 1, "upperPercentile must be in (0, 1)")
@@ -76,6 +87,7 @@ class OutlierRemoveTransformer(override val uid: String)
       $(entityCategoryValueColumn)
     )
     val percentilesBound = dataset
+      .filter(!col($(metricNameColumn)).isin($(excludedMetrics): _*))
       .groupBy(columns.head, columns: _*)
       .agg(
         aggFunc.head,
@@ -83,8 +95,8 @@ class OutlierRemoveTransformer(override val uid: String)
       )
 
     dataset
-      .join(broadcast(percentilesBound), columns)
-      .filter(filterFunc)
+      .join(broadcast(percentilesBound), columns, "left")
+      .filter(filterFunc || col($(metricNameColumn)).isin($(excludedMetrics): _*))
       .drop(dropCols: _*)
   }
 

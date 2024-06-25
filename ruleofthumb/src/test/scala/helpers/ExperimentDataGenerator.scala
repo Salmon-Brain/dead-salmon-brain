@@ -1,14 +1,10 @@
 package helpers
 
 import ai.salmonbrain.ruleofthumb.ExpData
-import org.apache.commons.math3.distribution.{
-  BetaDistribution,
-  BinomialDistribution,
-  NormalDistribution
-}
+import org.apache.commons.math3.distribution.{BetaDistribution, BinomialDistribution, NormalDistribution}
 import org.apache.commons.math3.random.Well19937a
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.from_unixtime
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.functions.{from_unixtime, when}
 
 import java.sql.Timestamp
 import java.time.LocalDate
@@ -18,11 +14,10 @@ import scala.util.Random
  Inspired by
  https://vkteam.medium.com/practitioners-guide-to-statistical-tests-ed2d580ef04f#609f
  */
-object ExperimentDataGenerator extends SparkHelper {
-  import spark.implicits._
+object ExperimentDataGenerator {
   val randomGenerator = new Well19937a(777)
 
-  def generateDataForWelchTest(): DataFrame = {
+  def generateDataForWelchTest()(implicit spark: SparkSession): DataFrame = {
     //sigma = 1,N = 10
     val controlMetricValues = Seq(19.8, 20.4, 19.6, 17.8, 18.5, 18.9, 18.3, 18.9, 19.5, 22)
     //sigma = 16, N = 20
@@ -134,8 +129,9 @@ object ExperimentDataGenerator extends SparkHelper {
     }
   }
 
-  def seqExpDataToDataFrame(data: Seq[ExpData]): DataFrame = {
-    sc
+  def seqExpDataToDataFrame(data: Seq[ExpData])(implicit spark: SparkSession): DataFrame = {
+    import spark.implicits._
+    spark.sparkContext
       .parallelize(data)
       .toDF
       .withColumn("date", from_unixtime($"timestamp" / 1000).cast("date"))

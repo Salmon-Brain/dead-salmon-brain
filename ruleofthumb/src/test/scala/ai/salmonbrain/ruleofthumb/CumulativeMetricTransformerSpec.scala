@@ -1,15 +1,14 @@
 package ai.salmonbrain.ruleofthumb
 
-import helpers.ExperimentDataGenerator.{ experimentDataGenerator, seqExpDataToDataFrame }
-import helpers.SparkHelper
+import helpers.ExperimentDataGenerator.{experimentDataGenerator, seqExpDataToDataFrame}
+import helpers.SharedSparkSession
 import org.apache.spark.sql.functions.first
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
-class CumulativeMetricTransformerSpec extends AnyFlatSpec with SparkHelper with Matchers {
+class CumulativeMetricTransformerSpec extends AnyFlatSpec with SharedSparkSession with Matchers {
   "CumulativeMetricTransformer" should "be" in {
-    val metrics = seqExpDataToDataFrame(experimentDataGenerator(withAggregation = false))
-
+    lazy val metrics = seqExpDataToDataFrame(experimentDataGenerator(withAggregation = false))
     val cumulativeData = new CumulativeMetricTransformer()
       .setNumeratorNames(Array("clicks"))
       .setDenominatorNames(Array("views"))

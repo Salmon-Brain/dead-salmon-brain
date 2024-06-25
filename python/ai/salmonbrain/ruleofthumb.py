@@ -272,6 +272,13 @@ class OutlierRemoveTransformer(
         typeConverter=TypeConverters.toFloat,
     )
 
+    excludedMetrics = Param(
+        Params._dummy(),
+        "excludedMetrics",
+        "metrics excluded from filtering",
+        typeConverter=TypeConverters.toListString,
+    )
+
     @keyword_only
     def __init__(
         self,
@@ -286,7 +293,8 @@ class OutlierRemoveTransformer(
         entityCategoryNameColumn="categoryName",
         entityCategoryValueColumn="categoryValue",
         lowerPercentile=0.01,
-        upperPercentile=0.99
+        upperPercentile=0.99,
+        excludedMetrics=[]
     ):
         super(OutlierRemoveTransformer, self).__init__()
         self._java_obj = self._new_java_obj(
@@ -294,6 +302,7 @@ class OutlierRemoveTransformer(
         )
         self._setDefault(lowerPercentile=0.01)
         self._setDefault(upperPercentile=0.99)
+        self._setDefault(excludedMetrics=[])
         kwargs = self._input_kwargs
         self.setParams(**kwargs)
 
@@ -311,7 +320,8 @@ class OutlierRemoveTransformer(
         entityCategoryNameColumn="categoryName",
         entityCategoryValueColumn="categoryValue",
         lowerPercentile=0.01,
-        upperPercentile=0.99
+        upperPercentile=0.99,
+        excludedMetrics=[]
     ):
         kwargs = self._input_kwargs
         return self._set(**kwargs)
@@ -321,3 +331,6 @@ class OutlierRemoveTransformer(
 
     def setUpperPercentile(self, value):
         return self._set(upperPercentile=value)
+
+    def setExcludedMetrics(self, value):
+        return self._set(excludedMetrics=value)
