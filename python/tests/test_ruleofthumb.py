@@ -1,7 +1,7 @@
 import pytest
 from pyspark.sql import SparkSession, DataFrame
 
-from ai.salmonbrain.ruleofthumb import (
+from com.salmonbrain.ruleofthumb import (
     CumulativeMetricTransformer,
     WelchStatisticsTransformer,
     OutlierRemoveTransformer,

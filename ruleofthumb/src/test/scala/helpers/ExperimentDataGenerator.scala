@@ -1,6 +1,6 @@
 package helpers
 
-import ai.salmonbrain.ruleofthumb.ExpData
+import com.salmonbrain.ruleofthumb.ExpData
 import org.apache.commons.math3.distribution.{BetaDistribution, BinomialDistribution, NormalDistribution}
 import org.apache.commons.math3.random.Well19937a
 import org.apache.spark.sql.{DataFrame, SparkSession}

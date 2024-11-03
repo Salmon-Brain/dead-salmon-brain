@@ -23,7 +23,7 @@ Java/Scala/Python
 ```
 
 ### Add as library
-[Maven Central](https://mvnrepository.com/artifact/ai.salmonbrain/)
+[Maven Central](https://mvnrepository.com/artifact/com.salmonbrain/)
 
 [PIP](https://pypi.org/project/dead-salmon-brain/)
 
@@ -51,7 +51,7 @@ case class ExpData(
 ```scala
 import org.apache.commons.math3.distribution.NormalDistribution
 import org.apache.spark.ml.Pipeline
-import ai.salmonbrain.computing.{ExpData, CumulativeMetricTransformer, OutlierRemoveTransformer, AutoStatisticsTransformer}
+import com.salmonbrain.computing.{ExpData, CumulativeMetricTransformer, OutlierRemoveTransformer, AutoStatisticsTransformer}
 
 
 val control = new NormalDistribution(1, 1)
@@ -116,7 +116,7 @@ report.select(
 
 ### Extra features
 ```scala
-import ai.salmon.computing.RatioMetricData
+import com.salmon.computing.RatioMetricData
 
 val cum = new CumulativeMetricTransformer()
           .setNumBuckets(256) // you can split your data by buckets and use buckets like new entity

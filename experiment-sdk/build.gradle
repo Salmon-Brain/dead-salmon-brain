@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'ai.salmonbrain'
+group 'com.salmonbrain'
 version '0.0.2'
 
 repositories {

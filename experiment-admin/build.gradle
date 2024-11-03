@@ -30,7 +30,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'ai.salmonbrain.admin.App'
+    mainClass = 'com.salmonbrain.admin.App'
 }
 
 bootRun {
